@@ -1,3 +1,4 @@
+* basic dash layout, test beeping, loading price history
 
 # 2021-05-30 02:32:35.340810: clock-in: T-1h 
 

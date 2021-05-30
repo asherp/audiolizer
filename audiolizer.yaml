@@ -1,0 +1,74 @@
+import:
+  dcc: dash_core_components
+  html: dash_html_components
+
+app:
+  jupyter_dash.JupyterDash:
+    external_stylesheets:
+      - https://codepen.io/chriddyp/pen/bWLwgP.css
+    title: psidash demo
+    suppress_callback_exceptions: True
+
+layout:
+  html.Div:
+    children:
+    - html.H1: Market Audiolizer
+    - html.Button:
+        children: Play
+        id: play
+    - html.Div:
+        className: row
+        children:
+          - html.Div:
+              className: three columns
+              children:
+                - dcc.DatePickerRange:
+                    id: date-range
+                    min_date_allowed: 2001-01-01
+                    max_date_allowed:
+                    initial_visible_month: 2021-01-01
+                    start_date: 2021-01-01
+                    end_date:
+                - dcc.Dropdown:
+                    id: frequency
+                    options:
+                      - label: weekly
+                        value: 1W
+                      - label: daily
+                        value: 1D
+                      - label: hourly
+                        value: 1H
+                    clearable: False
+                    value: 1W
+    - html.Div:
+        id: debug
+    - dcc.Graph:
+        id: candlestick-chart
+
+callbacks:
+  candlestick:
+    input:
+      - id: date-range
+        attr: start_date
+      - id: date-range
+        attr: end_date
+      - id: frequency
+        attr: value
+    output:
+      - id: candlestick-chart
+        attr: figure
+  play:
+    input:
+      - id: date-range
+        attr: start_date
+      - id: date-range
+        attr: end_date
+      - id: frequency
+        attr: value
+      - id: play
+        attr: n_clicks
+    output:
+      - id: debug
+        attr: children
+
+
