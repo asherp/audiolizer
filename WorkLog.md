@@ -1,3 +1,6 @@
+
+# 2021-05-30 17:28:19.136269: clock-in
+
 # 2021-05-30 02:33:40.434820: clock-out
 
 * basic dash layout, test beeping, loading price history
