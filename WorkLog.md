@@ -1,3 +1,4 @@
+* merged pitches, added rests, tone pitch dropdown
 
 # 2021-06-09 22:56:32.687035: clock-in
 

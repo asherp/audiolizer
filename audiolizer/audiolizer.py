@@ -104,26 +104,82 @@ from psidash.psidash import get_callbacks, load_conf, load_dash, load_components
 
 new.tail()
 
-A0 = np.log10(27.5)
-C2 = np.log10(65.40639)
-C3 = np.log10(130.8128)
-C4 = np.log10(262)
-C5 = np.log10(523.2511)
-C6 = np.log10(1046.502)
-C7 = np.log10(2093.005)
-C8 = np.log10(4186) # high C on piano
+# +
+A4 = 440 # tuning
+C0 = A4*pow(2, -4.75)
 
-frequency_marks = {
-    A0: 'A0',
-    C2: 'C2',
-    C3: 'C3',
-    C4: 'C4',
-    C5: 'C5',
-    C6: 'C6',
-    C7: 'C7',
-    C8: 'C8',
-}
+frequencies = dict(
+#     A4 = A4,
+#     C0 = C0,
+    A0 = 27.5,
+    C2 = 65.40639,
+    C3 = 130.8128,
+    C4 = 262,
+    C5 = 523.2511,
+    C6 = 1046.502,
+    C7 = 2093.005,
+    C8 = 4186, # high C on piano
+)
+# -
+
+frequency_marks = {np.log10(v): k for k,v in frequencies.items()}
 frequency_marks
+
+
+# +
+def pitch(freq):
+    """convert from frequency to pitch
+    
+    Borrowed from John D. Cook https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
+    """
+    name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    h = round(12*log2(freq/C0))
+    octave = h // 12
+    n = h % 12
+    return name[n] + str(octave)
+
+def freq(note, A4=A4):
+    """ convert from pitch to frequency
+    
+    based on https://gist.github.com/CGrassin/26a1fdf4fc5de788da9b376ff717516e
+    """
+    notes = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
+
+    octave = int(note[2]) if len(note) == 3 else int(note[1])
+        
+    keyNumber = notes.index(note[0:-1]);
+    
+    if (keyNumber < 3) :
+        keyNumber = keyNumber + 12 + ((octave - 1) * 12) + 1; 
+    else:
+        keyNumber = keyNumber + ((octave - 1) * 12) + 1; 
+
+    return A4 * 2** ((keyNumber- 49) / 12)
+
+
+# +
+def merge_pitches(beeps):
+    merged = []
+    last_freq = 0
+    last_amp = 0
+    for freq, amp, dur in beeps:
+        if freq == last_freq:
+            merged[-1][1] = (amp + last_amp)/2 # todo: use moving average
+            merged[-1][2] += dur
+            continue
+        merged.append([freq, amp, dur])
+        last_freq = freq
+        last_amp = amp
+    return merged
+
+def quiet(beeps, min_amp):
+    silenced = []
+    for freq, amp, dur in beeps:
+        if amp < min_amp:
+            amp = 0
+        silenced.append((freq, amp, dur))
+    return silenced        
+
 
 # +
 conf = load_conf('../audiolizer.yaml')
@@ -142,8 +198,8 @@ def update_graph(start, end, frequency):
     new_ = new[start:end]
     return candlestick_plot(refactor(new_, frequency))
 
-def beeper(freq, amplitude=1):
-    return (amplitude*_ for _ in audiogen_p3.beep(freq))
+def beeper(freq, amplitude=1, duration=.25):
+    return (amplitude*_ for _ in audiogen_p3.beep(freq, duration))
 
 def get_frequency(price, min_price, max_price, log_frequency_range):
     return np.interp(price, [min_price, max_price], [10**_ for _ in log_frequency_range])
@@ -153,7 +209,7 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.play
-def play(start, end, cadence, log_freq_range):
+def play(start, end, cadence, log_freq_range, mode):
     start_ = pd.to_datetime(start)
     
     if end is not None:
@@ -161,8 +217,8 @@ def play(start, end, cadence, log_freq_range):
     else:
         end_ = new.iloc[-1].name
 
-    fname = 'BTC_{}_{}_{}_{}_{}.wav'.format(
-        start, end_.date(), cadence, *['{}'.format(int(10**_)) for _ in log_freq_range])
+    fname = 'BTC_{}_{}_{}_{}_{}_{}.wav'.format(
+        start, end_.date(), cadence, *['{}'.format(pitch(10**_).replace('#','sharp')) for _ in log_freq_range], mode)
     
     if os.path.exists(fname):
         return app.get_asset_url(fname)
@@ -172,45 +228,33 @@ def play(start, end, cadence, log_freq_range):
     max_vol = new_.volume.max()
     min_close = new_.close.min()
     max_close = new_.close.max()
-
+    duration = .25 # seconds
+    quantile = .25 # quiet lowest by volume
+    min_vol = new_.volume.quantile(quantile)
+    
+    if mode == 'tone':
+        beeps = [(get_frequency(close_, min_close, max_close, log_freq_range),
+                  volume_/max_vol,
+                  duration) for close_, volume_ in new_[['close', 'volume']].values]
+        
+    elif mode == 'pitch':
+        beeps = [(freq(pitch(get_frequency(close_, min_close, max_close, log_freq_range))),
+                  volume_/max_vol,
+                  duration) for close_, volume_ in new_[['close', 'volume']].values]
+        beeps = merge_pitches(beeps)
+        beeps = quiet(beeps, min_vol/max_vol)
+        
+    print(mode, 'unique frequencies:', len(np.unique([_[0] for _ in beeps])))
+        
+    audio = [beeper(*beep) for beep in beeps]
     
     with open('assets/'+fname, "wb") as f:
-        audiogen_p3.sampler.write_wav(
-            f,
-            itertools.chain(*[
-                beeper(get_frequency(close_, min_close, max_close, log_freq_range),
-                       volume_/max_vol) for close_, volume_ in new_[['close', 'volume']].values]))
+        audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
     return app.get_asset_url(fname)
     
 
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
-# -
-
-from dash_audio_components import DashAudioComponents
-
-# +
-# DashAudioComponents?
-# -
-
-# Borrowed from John D. Cook https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
-#
-# Given an input frequency, we can calculate a pitch. 
-
-# +
-from math import log2, pow
-
-A4 = 440
-C0 = A4*pow(2, -4.75)
-name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-    
-def pitch(freq):
-    h = round(12*log2(freq/C0))
-    octave = h // 12
-    n = h % 12
-    return name[n] + str(octave)
-
-
 # -
 
 pitch(C0)
