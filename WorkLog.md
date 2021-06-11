@@ -1,3 +1,6 @@
+
+# 2021-06-10 20:33:18.558354: clock-in
+
 # 2021-06-10 01:05:01.630823: clock-out
 
 * merged pitches, added rests, tone pitch dropdown
