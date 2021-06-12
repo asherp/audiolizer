@@ -1,3 +1,6 @@
+
+# 2021-06-12 12:50:03.490012: clock-in
+
 # 2021-06-10 22:50:35.107916: clock-out
 
 * merging by amplitude
