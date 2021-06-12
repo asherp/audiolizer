@@ -160,6 +160,16 @@ def freq(note, A4=A4):
     return A4 * 2** ((keyNumber- 49) / 12)
 
 
+# -
+
+a = [_ for _ in range(5)]
+a
+for i, _ in enumerate(a):
+    a[i] = 0
+
+a
+
+
 # +
 def merge_pitches(beeps, amp_min):
     merged = []
@@ -213,20 +223,26 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.play
-def play(start, end, cadence, log_freq_range, mode, quantile):
+def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, toggle_merge, silence):
     start_ = pd.to_datetime(start)
     if end is not None:
         end_ = pd.to_datetime(end)
     else:
         end_ = new.iloc[-1].name
 
-    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+    if toggle_merge:
+        merged = 'merged'
+    else:
+        merged = ''
+    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
         start,
         end_.date(),
         cadence,
         *['{}'.format(pitch(10**_).replace('#','sharp')) for _ in log_freq_range],
         mode,
-        quantile,
+        drop_quantile,
+        beat_quantile,
+        merged,
     )
     
     if os.path.exists(fname):
@@ -234,12 +250,12 @@ def play(start, end, cadence, log_freq_range, mode, quantile):
     
     new_ = refactor(new[start_:end_], cadence)
     
-    max_vol = new_.volume.max()
-    min_close = new_.close.min()
-    max_close = new_.close.max()
-    duration = .25 # seconds
-    amp_min = .75
-    min_vol = new_.volume.quantile(quantile/100)
+    max_vol = new_.volume.max() # normalizes peak amplitude
+    min_close = new_.close.min() # sets lower frequency bound
+    max_close = new_.close.max() # sets upper frequency bound
+    duration = .25 # length of the beat in seconds
+    amp_min = beat_quantile/100 # threshold amplitude to merge beats
+    min_vol = new_.volume.quantile(drop_quantile/100)
     
     if mode == 'tone':
         beeps = [(get_frequency(close_, min_close, max_close, log_freq_range),
@@ -250,8 +266,10 @@ def play(start, end, cadence, log_freq_range, mode, quantile):
         beeps = [(freq(pitch(get_frequency(close_, min_close, max_close, log_freq_range))),
                   volume_/max_vol,
                   duration) for close_, volume_ in new_[['close', 'volume']].values]
-        beeps = merge_pitches(beeps, amp_min)
-        beeps = quiet(beeps, min_vol/max_vol)
+        if toggle_merge:
+            beeps = merge_pitches(beeps, amp_min)
+        if silence:
+            beeps = quiet(beeps, min_vol/max_vol)
         
 #     print(mode, 'unique frequencies:', len(np.unique([_[0] for _ in beeps])))
         
@@ -265,5 +283,4 @@ def play(start, end, cadence, log_freq_range, mode, quantile):
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
-
 
