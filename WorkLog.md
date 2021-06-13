@@ -1,3 +1,5 @@
+# 2021-06-12 23:15:40.277053: clock-out
+
 * added rests toggle
 
 # 2021-06-12 23:04:15.082670: clock-in
