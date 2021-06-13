@@ -57,9 +57,13 @@ import sys
 def beeper(freq, amplitude = 1):
     return (amplitude*_ for _ in audiogen_p3.beep(freq))
 
-audiogen_p3.sampler.play(itertools.chain(
-    *[beeper(100*(1+i), 1./(1+i)) for i in range(8)]
-))
+try:
+    audiogen_p3.sampler.play(itertools.chain(
+        *[beeper(100*(1+i), 1./(1+i)) for i in range(8)]
+    ))
+except:
+    print('could not play sampler')
+    pass
 # -
 
 import dash_html_components as html
@@ -169,16 +173,6 @@ def freq(note, A4=A4):
         keyNumber = keyNumber + ((octave - 1) * 12) + 1; 
 
     return A4 * 2** ((keyNumber- 49) / 12)
-
-
-# -
-
-a = [_ for _ in range(5)]
-a
-for i, _ in enumerate(a):
-    a[i] = 0
-
-a
 
 
 # +
@@ -294,12 +288,18 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
     
     with open('assets/'+fname, "wb") as f:
         audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
-    return app.get_asset_url(fname)
+    src = app.get_asset_url(fname)+'#t=1,4'
+    print(src)
+    return src
     
 
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
-# ls
+from dash_audio_components import DashAudioComponents
+
+# +
+# DashAudioComponents?
+# -
 
 
