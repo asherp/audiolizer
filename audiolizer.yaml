@@ -1,6 +1,10 @@
 import:
   dcc: dash_core_components
   html: dash_html_components
+  daq: dash_daq
+  dac: dash_audio_components
+
+
 
 app:
   jupyter_dash.JupyterDash:
@@ -9,13 +13,27 @@ app:
     title: psidash demo
     suppress_callback_exceptions: True
 
+
+A0: 1.4393326938302626 # low A (log10)
+C3: 2.116650241674698
+C5: 2.7187101500034196
+C8: 3.6217992240026677 # high C (log10)
+
+run_server:
+  host: '0.0.0.0'
+  port: 8050
+  extra_files:
+    - audiolizer.yaml
+  debug: True
+  dev_tools_hot_reload: False
+
 layout:
   html.Div:
     children:
+    - dcc.Location:
+        id: url
+        refresh: False
     - html.H1: Market Audiolizer
-    - html.Button:
-        children: Play
-        id: play
     - html.Div:
         className: row
         children:
@@ -27,10 +45,10 @@ layout:
                     min_date_allowed: 2001-01-01
                     max_date_allowed:
                     initial_visible_month: 2021-01-01
-                    start_date: 2021-01-01
+                    start_date: 2021-05-20
                     end_date:
                 - dcc.Dropdown:
-                    id: frequency
+                    id: cadence
                     options:
                       - label: weekly
                         value: 1W
@@ -40,6 +58,76 @@ layout:
                         value: 1H
                     clearable: False
                     value: 1W
+          - html.Div:
+              className: two columns
+              children:
+                - dcc.RangeSlider:
+                    id: frequency-drag
+                    min: ${A0}
+                    max: ${C8}
+                    step: .1
+                    value:
+                      - ${C3}
+                      - ${C5}
+          - html.Div:
+              className: one columns
+              children:
+                - daq.NumericInput:
+                    id: drop-quantile
+                    min: 0
+                    max: 100
+                    value: 25
+                    label: drop quantile
+          - html.Div:
+              className: one columns
+              children:
+                - daq.NumericInput:
+                    id: beat-quantile
+                    min: 0
+                    max: 100
+                    value: 75
+                    label: beat quantile
+          - html.Div:
+              className: three columns
+              children:
+                - dac.DashAudioComponents:
+                    id: audio_player
+                    src: output.wav
+                    autoPlay: True
+                    controls: True
+          - html.Div:
+              className: two columns
+              children:
+                - dcc.Dropdown:
+                    id: mode
+                    clearable: False
+                    options:
+                      - label: tone
+                        value: tone
+                      - label: pitch
+                        value: pitch
+                    value: pitch
+                - html.Div:
+                    className: row
+                    children:
+                    - html.Div:
+                        className: six columns
+                        children:
+                        - daq.ToggleSwitch:
+                            id: toggle-merge
+                            label: merge
+                            value: True
+                            labelPosition: bottom
+                    - html.Div:
+                        className: six columms
+                        children:
+                        - daq.ToggleSwitch:
+                            className: six columms
+                            id: toggle-silence
+                            label: rests
+                            value: True
+                            labelPosition: bottom
+
     - html.Div:
         id: debug
     - dcc.Graph:
@@ -52,7 +140,7 @@ callbacks:
         attr: start_date
       - id: date-range
         attr: end_date
-      - id: frequency
+      - id: cadence
         attr: value
     output:
       - id: candlestick-chart
@@ -63,12 +151,35 @@ callbacks:
         attr: start_date
       - id: date-range
         attr: end_date
-      - id: frequency
+      - id: cadence
         attr: value
-      - id: play
-        attr: n_clicks
+      - id: frequency-drag
+        attr: value
+      - id: mode
+        attr: value
+      - id: drop-quantile
+        attr: value
+      - id: beat-quantile
+        attr: value
+      - id: toggle-merge
+        attr: value
+      - id: toggle-silence
+        attr: value
     output:
-      - id: debug
-        attr: children
+      - id: audio_player
+        attr: src
+  slider_marks:
+    input:
+      - id: url
+        attr: pathname
+    output:
+      - id: frequency-drag
+        attr: marks
 
+
+# @app.callback(
+#     Output('selected-data', 'children'),
+#     Input('basic-interactions', 'selectedData'))
+# def display_selected_data(selectedData):
+#     return json.dumps(selectedData, indent=2)
 
