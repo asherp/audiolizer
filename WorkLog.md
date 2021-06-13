@@ -1,3 +1,4 @@
+* added rests toggle
 
 # 2021-06-12 23:04:15.082670: clock-in
 

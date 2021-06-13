@@ -234,7 +234,12 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         merged = 'merged'
     else:
         merged = ''
-    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+    if silence:
+        silences = 'rests'
+    else:
+        silences = ''
+        
+    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
         start,
         end_.date(),
         cadence,
@@ -243,6 +248,7 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         drop_quantile,
         beat_quantile,
         merged,
+        silences,
     )
     
     if os.path.exists(fname):
