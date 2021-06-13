@@ -1,3 +1,5 @@
+# 2021-06-13 13:11:47.189135: clock-out: T-10m 
+
 * building in docker
 
 # 2021-06-13 11:44:34.643876: clock-in
