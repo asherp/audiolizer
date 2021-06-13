@@ -21,22 +21,33 @@ from dash.exceptions import PreventUpdate
 
 from Historic_Crypto import HistoricalData
 
-start_date = pd.to_datetime('2021-01-01-00-00')
+import os
+import pandas as pd
 
-start_date.strftime('%Y-%m-%d-%H-%M')
+audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './')
+audiolizer_temp_dir
+
+granularity = 300 # seconds
+
+start_date = pd.to_datetime('2021-01-01-00-00')
+ticker = 'BTC-USD'
+
 
 # +
-# new = HistoricalData('BTC-USD', 300, '2021-01-01-00-00').retrieve_data()
+def get_history(ticker, start_date):
+    default_history = audiolizer_temp_dir + '/{}.csv'.format(ticker)
 
-# new.to_csv('temp.csv')
-# -
+    if os.path.exists(default_history):
+        new = pd.read_csv(default_history, index_col='time', parse_dates=True)
+    else:
+        new = HistoricalData(ticker,
+                             granularity,
+                             start_date.strftime('%Y-%m-%d-%H-%M')
+                            ).retrieve_data()
+        new.to_csv(default_history)
+    return new
 
-import pandas as pd
-new = pd.read_csv('temp.csv', index_col='time', parse_dates=True)
-
-new.tail()
-
-import numpy as np
+new = get_history(ticker, start_date)
 
 # +
 import audiogen_p3
@@ -289,4 +300,6 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
+# ls
+
 

@@ -1,3 +1,4 @@
+* building in docker
 
 # 2021-06-13 11:44:34.643876: clock-in
 
