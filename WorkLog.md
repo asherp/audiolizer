@@ -1,3 +1,6 @@
+
+# 2021-06-13 22:32:12.627082: clock-in
+
 # 2021-06-13 16:40:53.909382: clock-out
 
 * testing start,end playback
