@@ -175,6 +175,12 @@ def freq(note, A4=A4):
     return A4 * 2** ((keyNumber- 49) / 12)
 
 
+# -
+
+def get_beats(start, end, freq):
+    return len(pd.date_range(start, end, freq=freq))
+
+
 # +
 def merge_pitches(beeps, amp_min):
     merged = []
@@ -228,7 +234,7 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.play
-def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, toggle_merge, silence):
+def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, toggle_merge, silence, selectedData):
     start_ = pd.to_datetime(start)
     if end is not None:
         end_ = pd.to_datetime(end)
@@ -256,15 +262,29 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         silences,
     )
     
+    duration = .25 # length of the beat in seconds
+    
+    play_time=''
+    
+    if selectedData is not None:
+        start_select, end_select = selectedData['range']['x']
+        # need the number of beats from beginning to start_select
+        start_time = duration*get_beats(start_, start_select, cadence)
+        end_time = duration*(get_beats(start_, end_select, cadence)-1)
+#         print('selected start, end time:', start_time, end_time)
+        play_time='#t={},{}'.format(start_time, end_time)
+    
     if os.path.exists(fname):
-        return app.get_asset_url(fname)
+        return app.get_asset_url(fname)+play_time
     
     new_ = refactor(new[start_:end_], cadence)
+    
+#     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
     
     max_vol = new_.volume.max() # normalizes peak amplitude
     min_close = new_.close.min() # sets lower frequency bound
     max_close = new_.close.max() # sets upper frequency bound
-    duration = .25 # length of the beat in seconds
+    
     amp_min = beat_quantile/100 # threshold amplitude to merge beats
     min_vol = new_.volume.quantile(drop_quantile/100)
     
@@ -288,18 +308,12 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
     
     with open('assets/'+fname, "wb") as f:
         audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
-    src = app.get_asset_url(fname)+'#t=1,4'
-    print(src)
-    return src
+ 
+    return app.get_asset_url(fname)+play_time
     
 
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
-# -
-from dash_audio_components import DashAudioComponents
-
-# +
-# DashAudioComponents?
 # -
 
 
