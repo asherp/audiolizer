@@ -1,3 +1,6 @@
+
+# 2021-06-14 22:03:32.676556: clock-in
+
 # 2021-06-13 23:38:42.855196: clock-out: T-10m 
 
 * added sub range select
