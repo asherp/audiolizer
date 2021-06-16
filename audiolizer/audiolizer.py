@@ -34,20 +34,33 @@ ticker = 'BTC-USD'
 
 
 # +
-def get_history(ticker, start_date):
-    default_history = audiolizer_temp_dir + '/{}.csv'.format(ticker)
+def get_history(ticker, start_date, end_date = None, granularity=granularity):
+    start_date = pd.to_datetime(start_date).tz_localize(None)
+    if end_date is None:
+        end_date = pd.Timestamp.now().tz_localize(None)
+        
+    fnames = []
+    for int_ in pd.interval_range(start_date,
+                                  end_date):
+        fname = audiolizer_temp_dir + '/{}-{}.csv'.format(
+            ticker, int_.left.strftime('%Y-%m-%d'))
 
-    if os.path.exists(default_history):
-        new = pd.read_csv(default_history, index_col='time', parse_dates=True)
-    else:
-        new = HistoricalData(ticker,
-                             granularity,
-                             start_date.strftime('%Y-%m-%d-%H-%M')
-                            ).retrieve_data()
-        new.to_csv(default_history)
-    return new
+        if not os.path.exists(fname):
+            int_df = HistoricalData(ticker,
+                                     granularity,
+                                     int_.left.strftime('%Y-%m-%d-%H-%M'),
+                                     int_.right.strftime('%Y-%m-%d-%H-%M'),
+                                     ).retrieve_data()
+            int_df.to_csv(fname)
+        fnames.append(fname)
+    return pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
+                         fnames)).drop_duplicates()
+
 
 new = get_history(ticker, start_date)
+# -
+
+new.iloc[[0,-1]]
 
 # +
 import audiogen_p3
@@ -75,6 +88,10 @@ import dash_core_components as dcc
 from datetime import datetime
 
 import plotly.graph_objs as go
+
+new
+
+new
 
 
 # +
@@ -110,16 +127,17 @@ def candlestick_plot(df):
                     yaxis2=dict(
                         title='BTC volume [BTC]',
                         overlaying = 'y',
-                        side='right')
+                        side='right'),
+                    dragmode='select',
                    ))
 
 new_ = refactor(new)
-candlestick_plot(new_)
+new_.head()
 # -
 
-from psidash.psidash import get_callbacks, load_conf, load_dash, load_components
+candlestick_plot(new_)
 
-new.tail()
+from psidash.psidash import get_callbacks, load_conf, load_dash, load_components
 
 # +
 A4 = 440 # tuning
@@ -178,7 +196,10 @@ def freq(note, A4=A4):
 # -
 
 def get_beats(start, end, freq):
-    return len(pd.date_range(start, end, freq=freq))
+    return len(pd.date_range(pd.to_datetime(start),
+                             pd.to_datetime(end) + pd.Timedelta(freq),
+                             freq=freq, closed=None,
+                             ))
 
 
 # +
@@ -269,10 +290,13 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
     if selectedData is not None:
         start_select, end_select = selectedData['range']['x']
         # need the number of beats from beginning to start_select
-        start_time = duration*get_beats(start_, start_select, cadence)
+        start_time = duration*(get_beats(start_, start_select, cadence)-1)
+        # number of beats from beginning to end_select
         end_time = duration*(get_beats(start_, end_select, cadence)-1)
-#         print('selected start, end time:', start_time, end_time)
+        total_time = duration*(get_beats(start_, end_, cadence)-1)
+#         print('selected start, end time, total time:', start_time, end_time, total_time)
         play_time='#t={},{}'.format(start_time, end_time)
+#         print(start_select, end_select, play_time)
     
     if os.path.exists(fname):
         return app.get_asset_url(fname)+play_time
@@ -315,5 +339,8 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
+
+
+hist.
 
 
