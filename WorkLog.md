@@ -1,3 +1,5 @@
+# 2021-06-15 23:29:37.846516: clock-out
+
 * saving historical data in daily files
 
 # 2021-06-15 21:52:35.466441: clock-in
