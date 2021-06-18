@@ -1,3 +1,6 @@
+
+# 2021-06-17 22:29:08.889910: clock-in
+
 # 2021-06-17 21:59:46.147344: clock-out
 
 * allowing date range to load on the fly
