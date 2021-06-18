@@ -1,3 +1,5 @@
+# 2021-06-18 00:25:05.504006: clock-out
+
 * updating instructions
 * running from audiolizer subdir
 
