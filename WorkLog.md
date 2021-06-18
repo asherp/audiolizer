@@ -1,3 +1,4 @@
+* running from audiolizer subdir
 * setting environment variable
 * moving install paths
 * creating cache directories

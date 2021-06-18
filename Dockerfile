@@ -16,9 +16,9 @@ RUN pip install MIDIUtil
 
 COPY . /home/audiolizer
 
-WORKDIR /home/audiolizer
+WORKDIR /home/audiolizer/audiolizer
 
 ENV AUDIOLIZER_TEMP /home/audiolizer/audiolizer/history
 
-CMD python audiolizer/audiolizer.py
+CMD python audiolizer.py
 # CMD jupyter notebook audiolizer/audiolizer.py --port=8888 --no-browser --ip=0.0.0.0 --allow-root
