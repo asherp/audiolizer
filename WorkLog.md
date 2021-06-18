@@ -1,3 +1,4 @@
+* moving install paths
 * creating cache directories
 * building docker image
 * building docker image from clean git repo

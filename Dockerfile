@@ -14,9 +14,9 @@ RUN conda install pyaudio
 RUN pip install audiogen-p3
 RUN pip install MIDIUtil
 
-COPY . /home
+COPY . /home/audiolizer
 
 WORKDIR /home/audiolizer
 
-CMD python audiolizer.py
+CMD python audiolizer/audiolizer.py
 # CMD jupyter notebook audiolizer/audiolizer.py --port=8888 --no-browser --ip=0.0.0.0 --allow-root

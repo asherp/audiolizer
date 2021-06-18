@@ -25,7 +25,7 @@ import os
 import pandas as pd
 
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
-audiolizer_temp_dir
+print('audiolizer temp data:', audiolizer_temp_dir)
 
 granularity = 300 # seconds
 
@@ -62,6 +62,7 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
 
 
 new = get_history(ticker, start_date)
+new
 
 # +
 import audiogen_p3
