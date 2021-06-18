@@ -15,7 +15,6 @@ RUN pip install audiogen-p3
 RUN pip install MIDIUtil
 
 COPY . /home
-COPY audiolizer/BTC-USD.csv /home/audiolizer/BTC-USD.csv
 
 WORKDIR /home/audiolizer
 

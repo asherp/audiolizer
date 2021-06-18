@@ -1,7 +1,15 @@
+* building docker image
+* building docker image from clean git repo
+
+```console
+git archive --format=tar --prefix=audiolizer/ HEAD | (cd /tmp && tar xf -)
+docker build -t apembroke/audiolizer -f /tmp/audiolizer/Dockerfile /tmp/audiolizer
+```
 * adding midi
 * tempo in yaml
 * added tempo
 * midi example
+
 ```python
 from midiutil import MIDIFile
 
