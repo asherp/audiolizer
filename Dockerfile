@@ -10,11 +10,14 @@ RUN pip install git+https://github.com/predsci/psidash.git
 RUN pip install pandas
 RUN pip install Historic-Crypto
 
-# RUN mkdir /temp
-# ENV AUDIOLIZER_TEMP /temp
+RUN conda install pyaudio
+RUN pip install audiogen-p3
+RUN pip install MIDIUtil
 
 COPY . /home
+COPY audiolizer/BTC-USD.csv /home/audiolizer/BTC-USD.csv
 
-WORKDIR /home
+WORKDIR /home/audiolizer
 
-CMD jupyter notebook audiolizer/audiolizer.py --port=8888 --no-browser --ip=0.0.0.0 --allow-root
+CMD python audiolizer.py
+# CMD jupyter notebook audiolizer/audiolizer.py --port=8888 --no-browser --ip=0.0.0.0 --allow-root

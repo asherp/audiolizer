@@ -1,3 +1,4 @@
+* adding midi
 * tempo in yaml
 * added tempo
 * midi example
