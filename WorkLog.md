@@ -1,3 +1,8 @@
+
+# 2021-06-18 18:47:04.388103: clock-in
+
+* you can calculate the % data loaded by comparing list of missing files to those present
+
 # 2021-06-18 00:25:05.504006: clock-out
 
 * updating instructions
