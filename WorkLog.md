@@ -1,3 +1,9 @@
+* allowing date range to load on the fly
+Check out ableton, midi
+
+8 measures, 4/4 time, 
+push the tempo.. 1440 beats per minute
+3 hour candles? 8 beats
 
 # 2021-06-17 21:34:12.651429: clock-in
 

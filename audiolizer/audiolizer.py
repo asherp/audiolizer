@@ -38,6 +38,8 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
     start_date = pd.to_datetime(start_date).tz_localize(None)
     if end_date is None:
         end_date = pd.Timestamp.now().tz_localize(None)
+    else:
+        end_date = pd.to_datetime(end_date).tz_localize(None)
         
     fnames = []
     for int_ in pd.interval_range(start_date,
@@ -236,7 +238,6 @@ if 'callbacks' in conf:
     callbacks = get_callbacks(app, conf['callbacks'])
 
 
-@callbacks.candlestick
 def update_graph(start, end, frequency):
     start = pd.to_datetime(start)
     end = pd.to_datetime(end)
@@ -256,11 +257,9 @@ def update_marks(url):
 
 @callbacks.play
 def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, toggle_merge, silence, selectedData):
-    start_ = pd.to_datetime(start)
-    if end is not None:
-        end_ = pd.to_datetime(end)
-    else:
-        end_ = new.iloc[-1].name
+
+    new = get_history(ticker, start, end)
+    start_, end_ = new.index[[0, -1]]
 
     if toggle_merge:
         merged = 'merged'
@@ -272,7 +271,7 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         silences = ''
         
     fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
-        start,
+        start_.date(),
         end_.date(),
         cadence,
         *['{}'.format(pitch(10**_).replace('#','sharp')) for _ in log_freq_range],
@@ -298,10 +297,12 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         play_time='#t={},{}'.format(start_time, end_time)
 #         print(start_select, end_select, play_time)
     
-    if os.path.exists(fname):
-        return app.get_asset_url(fname)+play_time
-    
     new_ = refactor(new[start_:end_], cadence)
+    
+    if os.path.exists(fname):
+        return candlestick_plot(new_), app.get_asset_url(fname)+play_time
+    
+    
     
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
     
@@ -333,14 +334,10 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
     with open('assets/'+fname, "wb") as f:
         audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
  
-    return app.get_asset_url(fname)+play_time
+    return candlestick_plot(new_), app.get_asset_url(fname)+play_time
     
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=8050, mode='external', debug=True, dev_tools_hot_reload=False)
+    app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
-
-
-hist.
-
 
