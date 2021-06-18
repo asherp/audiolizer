@@ -24,7 +24,7 @@ from Historic_Crypto import HistoricalData
 import os
 import pandas as pd
 
-audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './')
+audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
 audiolizer_temp_dir
 
 granularity = 300 # seconds
@@ -36,10 +36,12 @@ ticker = 'BTC-USD'
 # +
 def get_history(ticker, start_date, end_date = None, granularity=granularity):
     start_date = pd.to_datetime(start_date).tz_localize(None)
+    
+    today = pd.Timestamp.now().tz_localize(None)
     if end_date is None:
-        end_date = pd.Timestamp.now().tz_localize(None)
+        end_date = today
     else:
-        end_date = pd.to_datetime(end_date).tz_localize(None)
+        end_date = min(today, pd.to_datetime(end_date).tz_localize(None))
         
     fnames = []
     for int_ in pd.interval_range(start_date,
@@ -60,9 +62,6 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
 
 
 new = get_history(ticker, start_date)
-# -
-
-new.iloc[[0,-1]]
 
 # +
 import audiogen_p3
@@ -90,10 +89,6 @@ import dash_core_components as dcc
 from datetime import datetime
 
 import plotly.graph_objs as go
-
-new
-
-new
 
 
 # +
@@ -133,11 +128,9 @@ def candlestick_plot(df):
                     dragmode='select',
                    ))
 
-new_ = refactor(new)
-new_.head()
-# -
 
-candlestick_plot(new_)
+
+# -
 
 from psidash.psidash import get_callbacks, load_conf, load_dash, load_components
 
@@ -256,7 +249,7 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.play
-def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, toggle_merge, silence, selectedData):
+def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, tempo, toggle_merge, silence, selectedData):
 
     new = get_history(ticker, start, end)
     start_, end_ = new.index[[0, -1]]
@@ -270,7 +263,7 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
     else:
         silences = ''
         
-    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
         start_.date(),
         end_.date(),
         cadence,
@@ -278,11 +271,12 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         mode,
         drop_quantile,
         beat_quantile,
+        '{}bpm'.format(tempo),
         merged,
         silences,
     )
     
-    duration = .25 # length of the beat in seconds
+    duration = 60./tempo # length of the beat in seconds (tempo in beats per minute)
     
     play_time=''
     
@@ -340,4 +334,6 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
+# ls history
+
 
