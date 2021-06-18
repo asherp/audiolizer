@@ -1,3 +1,4 @@
+* setting environment variable
 * moving install paths
 * creating cache directories
 * building docker image
