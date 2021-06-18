@@ -334,6 +334,4 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
-# ls history
-
 

@@ -70,23 +70,35 @@ layout:
                       - ${C3}
                       - ${C5}
           - html.Div:
-              className: one columns
+              className: two columns
               children:
-                - daq.NumericInput:
-                    id: drop-quantile
-                    min: 0
-                    max: 100
-                    value: 25
-                    label: rest quantile
-          - html.Div:
-              className: one columns
-              children:
-                - daq.NumericInput:
-                    id: beat-quantile
-                    min: 0
-                    max: 100
-                    value: 75
-                    label: beat quantile
+              - html.Div:
+                  className: four columns
+                  children:
+                    - daq.NumericInput:
+                        id: drop-quantile
+                        min: 0
+                        max: 100
+                        value: 25
+                        label: rest quantile
+              - html.Div:
+                  className: four columns
+                  children:
+                    - daq.NumericInput:
+                        id: beat-quantile
+                        min: 0
+                        max: 100
+                        value: 75
+                        label: beat quantile
+              - html.Div:
+                  className: four columns
+                  children:
+                    - daq.NumericInput:
+                        id: tempo
+                        min: 24
+                        max: 240
+                        value: 110
+                        label: tempo BPM
           - html.Div:
               className: three columns
               children:
@@ -134,17 +146,6 @@ layout:
         id: candlestick-chart
 
 callbacks:
-  candlestick:
-    input:
-      - id: date-range
-        attr: start_date
-      - id: date-range
-        attr: end_date
-      - id: cadence
-        attr: value
-    output:
-      - id: candlestick-chart
-        attr: figure
   play:
     input:
       - id: date-range
@@ -161,6 +162,8 @@ callbacks:
         attr: value
       - id: beat-quantile
         attr: value
+      - id: tempo
+        attr: value
       - id: toggle-merge
         attr: value
       - id: toggle-silence
@@ -168,6 +171,8 @@ callbacks:
       - id: candlestick-chart
         attr: selectedData
     output:
+      - id: candlestick-chart
+        attr: figure
       - id: audio_player
         attr: src
   slider_marks:
