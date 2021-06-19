@@ -1,3 +1,4 @@
+* documentation improvements
 
 # 2021-06-18 22:10:09.398018: clock-in
 

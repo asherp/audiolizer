@@ -14,8 +14,8 @@ os.environ['AUDIOLIZER_TEMP'] = '/tmp/price_data'
 
 ```python
 from audiolizer.audiolizer import get_history
-
-btc = get_history('BTC-USD', 'June 1, 2021', 'June 18, 2021', 300)
+ticker='BTC-USD'
+btc = get_history(ticker, 'June 1, 2021', 'June 18, 2021', 300)
 btc.head()
 ```
 
@@ -29,6 +29,7 @@ btc.head()
 
 
 <details> <summary> help(get_history) </summary>
+    
 ```console
 Help on function get_history in module audiolizer.audiolizer:
 
@@ -56,7 +57,7 @@ write_plot(fig, 'plot_div_06-16-2021_300s.html')
 {! plot_div_06-16-2021_300s.html !}
 
 
-## Rebinning price dada
+## Rebinning price history
 
 The above resolution may be too high to search for patterns. Let's rebin it to a lower resolution.
 
@@ -87,37 +88,152 @@ write_plot(fig, 'plot_div_06-16-2021_3h.html')
 {! plot_div_06-16-2021_3h.html !}
 
 
-## From Price to frequency
+## From price to frequency
 
-Now that we have a more managable price history, we're ready to start audiolizing.
+Now that we have a more managable price history, we're ready to start audiolizing. We start with a simple linear map between price and frequency. The min/max price closing price is scaled to min and max pitches.
 
 ```python
 from audiolizer.audiolizer import frequencies, get_frequency
-```
 
-```python
 C2_log = np.log10(frequencies['C2'])
 C3_log = np.log10(frequencies['C3'])
+
+btc3h['frequency'] = get_frequency(
+    btc3h.close.values,
+    btc3h.close.min(),
+    btc3h.close.values.max(),
+    [C2_log, C3_log])
+btc3h[['close', 'frequency']]
+```
+
+| time                |   close |   frequency |
+|:--------------------|--------:|------------:|
+| 2021-06-16 00:00:00 | 40049.2 |    123.664  |
+| 2021-06-16 03:00:00 | 40257.5 |    130.813  |
+| 2021-06-16 06:00:00 | 40048.2 |    123.632  |
+| 2021-06-16 09:00:00 | 39098.9 |     91.0648 |
+| 2021-06-16 12:00:00 | 38854.5 |     82.6796 |
+| 2021-06-16 15:00:00 | 39180   |     93.8467 |
+| 2021-06-16 18:00:00 | 38533.5 |     71.6676 |
+| 2021-06-16 21:00:00 | 38351   |     65.4064 |
+
+
+## From volume to amplitude
+
+The amplitude of each beat will be set by volume, normalized by the maximum volume in the time range.
+
+For the moment, the duration of each note will be fixed.
+
+```python
+duration=.25 #sec
+btc3h['amplitude']=btc3h.volume/btc3h.volume.max()
+btc3h['duration'] = duration
+btc3h[['close', 'frequency', 'volume', 'amplitude', 'duration']]
 ```
 
 ```python
-def get_frequency(price, min_price, max_price, log_frequency_range):
-    return np.interp(price, [min_price, max_price], [10**_ for _ in log_frequency_range])
+beeps = [(frequency,
+          amplitude,
+          duration) for frequency, amplitude, duration in btc3h[['frequency', 'amplitude', 'duration']].values]
+```
+
+Given our collection of beeps, we can now turn them into an audio file
+
+```python
+from audiolizer.audiolizer import beeper, audiogen_p3, itertools
+
+audio = [beeper(*beep) for beep in beeps]
+with open('beeps_tonal.wav', "wb") as f:
+    audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
+```
+
+<audio controls>
+  <source src="/beeps_tonal.wav" type="audio/WAV">
+  Your browser does not support the audio tag.
+</audio>
+
+
+## From tone to pitch
+
+So far we have produced a sequence of pure tones. Let's turn them into pitches to make them a bit easier to hear. This has the effect of rebinning the price.
+
+```python
+from audiolizer.audiolizer import pitch, freq
+btc = btc.loc['June 16, 2021'].copy()
+btc['frequency'] = get_frequency(
+    btc.close.values,
+    btc.close.min(),
+    btc.close.values.max(),
+    [C2_log, C3_log])
+btc['note'] = [pitch(_) for _ in btc.frequency]
+btc['pitch'] = [freq(_) for _ in btc.note]
+# print(btc[['close', 'frequency', 'note', 'pitch']].head().to_markdown())
+```
+
+| time                |   close |   frequency | note   |   pitch |
+|:--------------------|--------:|------------:|:-------|--------:|
+| 2021-06-16 00:00:00 | 40057.9 |     119.646 | A#2    | 116.541 |
+| 2021-06-16 00:05:00 | 40076.9 |     120.19  | B2     | 123.471 |
+| 2021-06-16 00:10:00 | 40116.9 |     121.338 | B2     | 123.471 |
+| 2021-06-16 00:15:00 | 40088.3 |     120.517 | B2     | 123.471 |
+| 2021-06-16 00:20:00 | 40057.5 |     119.633 | A#2    | 116.541 |
+
+
+## Duration
+
+The note duration may be controlled by merging pitches that are the same based on volume. Here's our merging function:
+
+```python
+def merge_pitches(beeps, amp_min):
+    merged = []
+    last_freq = 0
+    last_amp = 0
+    for freq, amp, dur in beeps:
+        if freq == last_freq:
+            if merged[-1][1] < amp_min:
+                merged[-1][1] = (amp + last_amp)/2 # todo: use moving average
+                merged[-1][2] += dur
+            continue
+        merged.append([freq, amp, dur])
+        last_freq = freq
+        last_amp = amp
+    return merged
+```
+
+As we cycle through the stack of beeps, we check if the last beep's frequency matches the current one. If so, we check if the last beep's amplitude is above the `amp_min` threshold. If so, we set the last beep's amplitude to the average of the last and current and we increase the last beep's duration by the current beep's duration.
+
+The point of doing this is that low amplitude indicates low (sideways) trading volume so we play a longer note, whereas high trade volume will get the minimum duration, and the melody will be "faster".
+
+The `quiet` function is similar:
+
+```python
+def quiet(beeps, min_amp):
+    silenced = []
+    for freq, amp, dur in beeps:
+        if amp < min_amp:
+            amp = 0
+        silenced.append((freq, amp, dur))
+    return silenced   
+```
+
+Here we just set the amplitude to 0 if it's below the `min_amp` threshold.
+
+```python
+candlestick_plot(btc)
 ```
 
 ```python
-10**C2_log, 10**C3_log
+beeps = [(pitch,
+          volume/btc.volume.max(),
+          duration) for pitch, volume in btc[['pitch', 'volume']].values]
+beeps = quiet(merge_pitches(beeps, .25), .25)
+
+audio = [beeper(*beep) for beep in beeps]
+with open('beeps_pitch.wav', "wb") as f:
+    audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
 ```
 
-```python
-np.interp(2000, [0, 10000], [10**C2_log, 10**C3_log])
-```
-
-```python
-# this should have returned the same as above
-get_frequency(2000, 0, 10000, [C2_log, C2_log])
-```
-
-```python
-
-```
+<audio controls>
+  <source src="/beeps_pitch.wav" type="audio/WAV">
+  Your browser does not support the audio tag.
+</audio>

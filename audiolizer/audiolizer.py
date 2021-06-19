@@ -154,7 +154,6 @@ def write_plot(fig, fname):
         f.write('\n')
 
 
-
 # -
 
 from psidash.psidash import get_callbacks, load_conf, load_dash, load_components
