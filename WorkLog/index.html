@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2021-06-19-002838532399-clock-out" class="md-skip">
+        <a href="#2021-06-19-004359135736-clock-out" class="md-skip">
           Skip to content
         </a>
       
@@ -227,6 +227,20 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-19-004359135736-clock-out" class="md-nav__link">
+    2021-06-19 00:43:59.135736: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-19-004316152887-clock-in-t-14m" class="md-nav__link">
+    2021-06-19 00:43:16.152887: clock-in: T-14m
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#2021-06-19-002838532399-clock-out" class="md-nav__link">
@@ -579,6 +593,20 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-19-004359135736-clock-out" class="md-nav__link">
+    2021-06-19 00:43:59.135736: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-19-004316152887-clock-in-t-14m" class="md-nav__link">
+    2021-06-19 00:43:16.152887: clock-in: T-14m
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#2021-06-19-002838532399-clock-out" class="md-nav__link">
@@ -938,10 +966,13 @@
             </script>
         </div>
 
+<h3 id="2021-06-19-004359135736-clock-out">2021-06-19 00:43:59.135736: clock-out<a class="headerlink" href="#2021-06-19-004359135736-clock-out" title="Permanent link">&para;</a></h3>
 <ul>
+<li>added code highlighting</li>
 <li>sample audio</li>
 <li>fixed site name</li>
 </ul>
+<h3 id="2021-06-19-004316152887-clock-in-t-14m">2021-06-19 00:43:16.152887: clock-in: T-14m<a class="headerlink" href="#2021-06-19-004316152887-clock-in-t-14m" title="Permanent link">&para;</a></h3>
 <h3 id="2021-06-19-002838532399-clock-out">2021-06-19 00:28:38.532399: clock-out<a class="headerlink" href="#2021-06-19-002838532399-clock-out" title="Permanent link">&para;</a></h3>
 <ul>
 <li>added worklog</li>
@@ -966,49 +997,44 @@
 <li>updating instructions</li>
 <li>running from audiolizer subdir</li>
 </ul>
-<p>Running without temp directories:</p>
-<pre><code class="language-console">docker run -p 8051:8051 -it apembroke/audiolizer
-
-</code></pre>
+<p>Running without temp directories:
+<div class="highlight"><pre><span></span><code><span class="go">docker run -p 8051:8051 -it apembroke/audiolizer</span>
+</code></pre></div></p>
 <p>Running from temp directories:</p>
-<pre><code class="language-console">docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
-</code></pre>
-<ul>
-<li>setting environment variable</li>
-<li>moving install paths</li>
-<li>creating cache directories</li>
-<li>building docker image</li>
-<li>building docker image from clean git repo</li>
-</ul>
-<pre><code class="language-console">git archive --format=tar --prefix=audiolizer/ HEAD | (cd /tmp &amp;&amp; tar xf -)
-docker build -t apembroke/audiolizer -f /tmp/audiolizer/Dockerfile /tmp/audiolizer
-</code></pre>
-<ul>
-<li>adding midi</li>
-<li>tempo in yaml</li>
-<li>added tempo</li>
-<li>midi example</li>
-</ul>
-<pre><code class="language-python">from midiutil import MIDIFile
+<p><div class="highlight"><pre><span></span><code><span class="go">docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer</span>
+</code></pre></div>
+* setting environment variable
+* moving install paths
+* creating cache directories
+* building docker image
+* building docker image from clean git repo</p>
+<p><div class="highlight"><pre><span></span><code><span class="go">git archive --format=tar --prefix=audiolizer/ HEAD | (cd /tmp &amp;&amp; tar xf -)</span>
+<span class="go">docker build -t apembroke/audiolizer -f /tmp/audiolizer/Dockerfile /tmp/audiolizer</span>
+</code></pre></div>
+* adding midi
+* tempo in yaml
+* added tempo
+* midi example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">midiutil</span> <span class="kn">import</span> <span class="n">MIDIFile</span>
 
-degrees  = [60, 62, 64, 65, 67, 69, 71, 72]  # MIDI note number
-track    = 0
-channel  = 0
-time     = 0    # In beats
-duration = 1    # In beats
-tempo    = 60   # In BPM
-volume   = 100  # 0-127, as per the MIDI standard
+<span class="n">degrees</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">72</span><span class="p">]</span>  <span class="c1"># MIDI note number</span>
+<span class="n">track</span>    <span class="o">=</span> <span class="mi">0</span>
+<span class="n">channel</span>  <span class="o">=</span> <span class="mi">0</span>
+<span class="n">time</span>     <span class="o">=</span> <span class="mi">0</span>    <span class="c1"># In beats</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># In beats</span>
+<span class="n">tempo</span>    <span class="o">=</span> <span class="mi">60</span>   <span class="c1"># In BPM</span>
+<span class="n">volume</span>   <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># 0-127, as per the MIDI standard</span>
 
-MyMIDI = MIDIFile(1)  # One track, defaults to format 1 (tempo track is created
-                      # automatically)
-MyMIDI.addTempo(track, time, tempo)
+<span class="n">MyMIDI</span> <span class="o">=</span> <span class="n">MIDIFile</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># One track, defaults to format 1 (tempo track is created</span>
+                      <span class="c1"># automatically)</span>
+<span class="n">MyMIDI</span><span class="o">.</span><span class="n">addTempo</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tempo</span><span class="p">)</span>
 
-for i, pitch in enumerate(degrees):
-    MyMIDI.addNote(track, channel, pitch, time + i, duration, volume)
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pitch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">degrees</span><span class="p">):</span>
+    <span class="n">MyMIDI</span><span class="o">.</span><span class="n">addNote</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">time</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
 
-with open(&quot;major-scale.mid&quot;, &quot;wb&quot;) as output_file:
-    MyMIDI.writeFile(output_file)
-</code></pre>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;major-scale.mid&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output_file</span><span class="p">:</span>
+    <span class="n">MyMIDI</span><span class="o">.</span><span class="n">writeFile</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+</code></pre></div>
 <h3 id="2021-06-17-222908889910-clock-in">2021-06-17 22:29:08.889910: clock-in<a class="headerlink" href="#2021-06-17-222908889910-clock-in" title="Permanent link">&para;</a></h3>
 <h3 id="2021-06-17-215946147344-clock-out">2021-06-17 21:59:46.147344: clock-out<a class="headerlink" href="#2021-06-17-215946147344-clock-out" title="Permanent link">&para;</a></h3>
 <ul>

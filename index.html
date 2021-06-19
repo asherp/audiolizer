@@ -306,12 +306,12 @@
 * mkdocs (pip)
 * tabulate (pip)</p>
 <h1 id="running-from-docker">Running from Docker<a class="headerlink" href="#running-from-docker" title="Permanent link">&para;</a></h1>
-<p>Running without temp directories:</p>
-<pre><code class="language-console">docker run -p 8051:8051 -it apembroke/audiolizer
-</code></pre>
+<p>Running without temp directories:
+<div class="highlight"><pre><span></span><code><span class="go">docker run -p 8051:8051 -it apembroke/audiolizer</span>
+</code></pre></div></p>
 <p>Running with mounted temp directories:</p>
-<pre><code class="language-console">docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="go">docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer</span>
+</code></pre></div>
                 
               
               
