@@ -1,0 +1,27 @@
+site_name: Kamodo Analysis Suite
+
+site_url: http://0.0.0.0:8000
+
+nav:
+- Home: README.md
+- How it works: About.md
+
+theme: material
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - tables
+  # - mdx_math:
+  #     enable_dollar_delimiter: True 
+  - toc:
+      permalink: true
+  - markdown_include.include:
+      base_path: docs
+
+extra_javascript: 
+  # - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
+    

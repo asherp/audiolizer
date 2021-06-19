@@ -13,6 +13,10 @@ Market audiolization dashboard
 * pyaudio (conda)
 * audiogen (pip)
 
+docs dependences (optional)
+* mkdocs (pip)
+* tabulate (pip)
+
 # Running from Docker
 
 Running without temp directories:
