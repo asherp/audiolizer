@@ -16,6 +16,7 @@
 import pandas as pd
 import numpy as np
 import os
+from plotly.offline import plot
 
 from dash.exceptions import PreventUpdate
 
@@ -35,6 +36,15 @@ ticker = 'BTC-USD'
 
 # +
 def get_history(ticker, start_date, end_date = None, granularity=granularity):
+    """Fetch/load historical data from Coinbase API at specified granularity
+
+    params:
+        start_date: (str) (see pandas.to_datetime for acceptable formats)
+        end_date: (str)
+        granularity: (int) seconds (default: 300)
+
+    price data is saved by ticker and date and stored in audiolizer_temp_dir
+    """
     start_date = pd.to_datetime(start_date).tz_localize(None)
     
     today = pd.Timestamp.now().tz_localize(None)
@@ -61,8 +71,8 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
                          fnames)).drop_duplicates()
 
 
-new = get_history(ticker, start_date)
-new
+# new = get_history(ticker, start_date)
+# new
 
 # +
 import audiogen_p3
@@ -94,6 +104,11 @@ import plotly.graph_objs as go
 
 # +
 def refactor(df, frequency = '1W'):
+    """Refactor/rebin the data to a lower cadence
+
+    The data is regrouped using pd.Grouper
+    """
+    
     low = df.low.groupby(pd.Grouper(freq=frequency)).min()
     
     high = df.high.groupby(pd.Grouper(freq=frequency)).max()
@@ -112,13 +127,16 @@ def candlestick_plot(df):
             x=df.index,
             y=df.volume,
             marker_color='rgba(158,202,225,.5)',
-            yaxis='y2'),
+            yaxis='y2',
+            showlegend=False,
+        ),
         go.Candlestick(
             x=df.index,
             open=df.open,
             high=df.high,
             low=df.low,
-            close=df.close),
+            close=df.close,
+            showlegend=False),
         ],
         
         layout=dict(yaxis=dict(title='BTC price [USD]'),
@@ -128,6 +146,12 @@ def candlestick_plot(df):
                         side='right'),
                     dragmode='select',
                    ))
+
+def write_plot(fig, fname):
+    plot_div = plot(fig, output_type='div', include_plotlyjs='cdn')
+    with open(fname, 'w') as f:
+        f.write(plot_div)
+        f.write('\n')
 
 
 
@@ -161,7 +185,7 @@ from math import log2
 
 def pitch(freq):
     """convert from frequency to pitch
-    
+
     Borrowed from John D. Cook https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
     """
     name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]

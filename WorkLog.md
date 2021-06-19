@@ -1,3 +1,4 @@
+* removed legend, added docs
 
 # 2021-06-18 18:47:04.388103: clock-in
 
