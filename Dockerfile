@@ -13,6 +13,7 @@ RUN pip install Historic-Crypto
 RUN conda install pyaudio
 RUN pip install audiogen-p3
 RUN pip install MIDIUtil
+RUN pip install mkdocs mkdocs-material
 
 COPY . /home/audiolizer
 

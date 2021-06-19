@@ -5,6 +5,7 @@ site_url: http://0.0.0.0:8000
 nav:
 - Home: README.md
 - How it works: About.md
+- WorkLog: WorkLog.md
 
 theme: material
 

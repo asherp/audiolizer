@@ -4,8 +4,6 @@ import:
   daq: dash_daq
   dac: dash_audio_components
 
-
-
 app:
   jupyter_dash.JupyterDash:
     external_stylesheets:
