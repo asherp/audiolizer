@@ -1,8 +1,9 @@
+* added code highlighting
+* sample audio
+* fixed site name
 
 ### 2021-06-19 00:43:16.152887: clock-in: T-14m 
 
-* sample audio
-* fixed site name
 ### 2021-06-19 00:28:38.532399: clock-out
 
 * added worklog

@@ -15,6 +15,9 @@ plugins:
 markdown_extensions:
   - admonition
   - tables
+  - pymdownx.highlight
+  - pymdownx.superfences
+
   # - mdx_math:
   #     enable_dollar_delimiter: True 
   - toc:
