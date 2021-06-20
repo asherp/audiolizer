@@ -1,4 +1,10 @@
+* looking at html midi players
 * added midi download
+* html midi players
+
+- https://github.com/cifkao/html-midi-player javascript - but how to embed?
+- https://surikov.github.io/webaudiofont/ this is a really beautiful html-only midi system.
+  we could build a dash component around this
 
 ### 2021-06-19 21:56:47.016441: clock-in
 
