@@ -8,6 +8,7 @@ app:
   jupyter_dash.JupyterDash:
     external_stylesheets:
       - https://codepen.io/chriddyp/pen/bWLwgP.css
+      - https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.22.0/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.2.2
     title: Market Audiolizer
     suppress_callback_exceptions: True
 
@@ -95,7 +96,7 @@ layout:
                         id: tempo
                         min: 24
                         max: 240
-                        value: 110
+                        value: 240
                         label: tempo BPM
           - html.Div:
               className: three columns
@@ -105,6 +106,11 @@ layout:
                     src: output.wav
                     autoPlay: True
                     controls: True
+                - html.A:
+                    id: midi_download
+                    children: Download MIDI
+                    href: ''
+                    download: ''
           - html.Div:
               className: two columns
               children:
@@ -173,6 +179,10 @@ callbacks:
         attr: figure
       - id: audio_player
         attr: src
+      - id: midi_download
+        attr: href
+      - id: midi_download
+        attr: download
   slider_marks:
     input:
       - id: url

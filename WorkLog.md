@@ -1,10 +1,9 @@
-* looking at html midi players
-* added midi download
-* html midi players
+* pushing docker version
+* looking at html midi players:
+* https://github.com/cifkao/html-midi-player javascript - but how to embed?
+* https://surikov.github.io/webaudiofont/ this is a really beautiful html-only midi system. we could build a dash component around this. That would open the door to custom instruments, etc.
 
-- https://github.com/cifkao/html-midi-player javascript - but how to embed?
-- https://surikov.github.io/webaudiofont/ this is a really beautiful html-only midi system.
-  we could build a dash component around this
+* added midi download
 
 ### 2021-06-19 21:56:47.016441: clock-in
 
