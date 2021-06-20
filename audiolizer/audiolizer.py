@@ -25,6 +25,8 @@ from Historic_Crypto import HistoricalData
 import os
 import pandas as pd
 
+from midiutil import MIDIFile
+
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
 print('audiolizer temp data:', audiolizer_temp_dir)
 
@@ -247,6 +249,32 @@ def quiet(beeps, min_amp):
 
 
 # +
+def freq_to_degrees(freq):
+    """convert input frequency to midi degree standard
+    
+    midi degrees are in the range [0, 127]
+    """
+    return min(127, max(0, int(69+np.floor(12*np.log2(freq/440.)))))
+
+def write_midi(beeps, tempo, fname, time=0, track=0, channel=0):
+    # duration = 60/tempo
+    midi_file = MIDIFile(1)  # One track, defaults to format 1 (tempo track is created
+                          # automatically)
+    beat_duration = 60./tempo
+    
+    midi_file.addTempo(track, time, tempo)
+    
+    for freq, amp, dur in beeps: # Hz, [0,1], sec            
+        pitch = freq_to_degrees(freq) # MIDI note number
+        duration = dur/beat_duration # convert from seconds to beats
+        volume = min(127, int(amp*127))  # 0-127, as per the MIDI standard
+        midi_file.addNote(track, channel, pitch, time, duration, volume)
+        time += duration
+    with open(fname, "wb") as output_file:
+        midi_file.writeFile(output_file)
+
+
+# +
 conf = load_conf('../audiolizer.yaml')
 app = load_dash(__name__, conf['app'], conf.get('import'))
 app.layout = load_components(conf['layout'], conf.get('import'))
@@ -273,7 +301,9 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.play
-def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile, tempo, toggle_merge, silence, selectedData):
+def play(start, end, cadence, log_freq_range,
+         mode, drop_quantile, beat_quantile,
+         tempo, toggle_merge, silence, selectedData):
 
     new = get_history(ticker, start, end)
     start_, end_ = new.index[[0, -1]]
@@ -300,6 +330,8 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
         silences,
     )
     
+    midi_file = fname.split('.wav')[0] + '.midi'
+    
     duration = 60./tempo # length of the beat in seconds (tempo in beats per minute)
     
     play_time=''
@@ -316,12 +348,11 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
 #         print(start_select, end_select, play_time)
     
     new_ = refactor(new[start_:end_], cadence)
+    midi_asset = app.get_asset_url(midi_file)
     
     if os.path.exists(fname):
-        return candlestick_plot(new_), app.get_asset_url(fname)+play_time
-    
-    
-    
+        return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
     
     max_vol = new_.volume.max() # normalizes peak amplitude
@@ -351,11 +382,11 @@ def play(start, end, cadence, log_freq_range, mode, drop_quantile, beat_quantile
     
     with open('assets/'+fname, "wb") as f:
         audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
- 
-    return candlestick_plot(new_), app.get_asset_url(fname)+play_time
     
-
+    
+    write_midi(beeps, tempo, 'assets/' + midi_file)
+ 
+    return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+    
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
-# -
-
