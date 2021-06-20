@@ -94,6 +94,7 @@ Now that we have a more managable price history, we're ready to start audiolizin
 
 ```python
 from audiolizer.audiolizer import frequencies, get_frequency
+import numpy as np
 
 C2_log = np.log10(frequencies['C2'])
 C3_log = np.log10(frequencies['C3'])
@@ -103,7 +104,7 @@ btc3h['frequency'] = get_frequency(
     btc3h.close.min(),
     btc3h.close.values.max(),
     [C2_log, C3_log])
-btc3h[['close', 'frequency']]
+# btc3h[['close', 'frequency']]
 ```
 
 | time                |   close |   frequency |
@@ -148,7 +149,7 @@ with open('beeps_tonal.wav', "wb") as f:
 ```
 
 <audio controls>
-  <source src="/beeps_tonal.wav" type="audio/WAV">
+  <source src="https://github.com/asherp/audiolizer/blob/master/docs/beeps_tonal.wav?raw=true" type="audio/WAV">
   Your browser does not support the audio tag.
 </audio>
 
@@ -159,24 +160,27 @@ So far we have produced a sequence of pure tones. Let's turn them into pitches t
 
 ```python
 from audiolizer.audiolizer import pitch, freq
-btc = btc.loc['June 16, 2021'].copy()
-btc['frequency'] = get_frequency(
-    btc.close.values,
-    btc.close.min(),
-    btc.close.values.max(),
-    [C2_log, C3_log])
-btc['note'] = [pitch(_) for _ in btc.frequency]
-btc['pitch'] = [freq(_) for _ in btc.note]
-# print(btc[['close', 'frequency', 'note', 'pitch']].head().to_markdown())
+
+C4_log = np.log10(frequencies['C4'])
+C5_log = np.log10(frequencies['C5'])
+btc_hourly= refactor(btc.loc['June 16, 2021'].copy(), '1h')
+btc_hourly['frequency'] = get_frequency(
+    btc_hourly.close.values,
+    btc_hourly.close.min(),
+    btc_hourly.close.values.max(),
+    [C4_log, C5_log])
+btc_hourly['note'] = [pitch(_) for _ in btc_hourly.frequency]
+btc_hourly['pitch'] = [freq(_) for _ in btc_hourly.note]
+# print(btc_hourly[['close', 'frequency', 'note', 'pitch']].head().to_markdown())
 ```
 
 | time                |   close |   frequency | note   |   pitch |
 |:--------------------|--------:|------------:|:-------|--------:|
-| 2021-06-16 00:00:00 | 40057.9 |     119.646 | A#2    | 116.541 |
-| 2021-06-16 00:05:00 | 40076.9 |     120.19  | B2     | 123.471 |
-| 2021-06-16 00:10:00 | 40116.9 |     121.338 | B2     | 123.471 |
-| 2021-06-16 00:15:00 | 40088.3 |     120.517 | B2     | 123.471 |
-| 2021-06-16 00:20:00 | 40057.5 |     119.633 | A#2    | 116.541 |
+| 2021-06-16 00:00:00 | 39886.9 |     458.764 | A#4    | 466.164 |
+| 2021-06-16 01:00:00 | 40109.4 |     487.269 | B4     | 493.883 |
+| 2021-06-16 02:00:00 | 40049.2 |     479.554 | A#4    | 466.164 |
+| 2021-06-16 03:00:00 | 40026   |     476.591 | A#4    | 466.164 |
+| 2021-06-16 04:00:00 | 40271.8 |     508.076 | B4     | 493.883 |
 
 
 ## Duration
@@ -219,19 +223,22 @@ def quiet(beeps, min_amp):
 Here we just set the amplitude to 0 if it's below the `min_amp` threshold.
 
 ```python
-candlestick_plot(btc)
+candlestick_plot(btc_hourly)
 ```
 
 ```python
+max_vol = btc_hourly.volume.max()
 beeps = [(pitch,
-          volume/btc.volume.max(),
-          duration) for pitch, volume in btc[['pitch', 'volume']].values]
+          volume/max_vol,
+          duration) for pitch, volume in btc_hourly[['pitch', 'volume']].values]
 beeps = quiet(merge_pitches(beeps, .25), .25)
 
 audio = [beeper(*beep) for beep in beeps]
 with open('beeps_pitch.wav', "wb") as f:
     audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
 ```
+
+The following sample is an audiolization of the above candlestick plot. The first 2.5 seconds are silent since the first half of the day's trades had relatively low volume.
 
 <audio controls>
   <source src="/beeps_pitch.wav" type="audio/WAV">

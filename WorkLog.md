@@ -1,3 +1,4 @@
+* a better sample illustrating duration
 
 ### 2021-06-19 19:37:22.200467: clock-in
 
