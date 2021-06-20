@@ -1,3 +1,5 @@
+### 2021-06-20 00:38:28.710038: clock-out
+
 * pushing docker version
 * looking at html midi players:
 * https://github.com/cifkao/html-midi-player javascript - but how to embed?
