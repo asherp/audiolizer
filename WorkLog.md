@@ -1,3 +1,6 @@
+
+### 2021-06-19 20:13:50.087569: clock-in: T-4m 
+
 ### 2021-06-19 20:08:24.558530: clock-out
 
 * a better sample illustrating duration

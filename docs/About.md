@@ -241,6 +241,6 @@ with open('beeps_pitch.wav', "wb") as f:
 The following sample is an audiolization of the above candlestick plot. The first 2.5 seconds are silent since the first half of the day's trades had relatively low volume.
 
 <audio controls>
-  <source src="/beeps_pitch.wav" type="audio/WAV">
+  <source src="https://github.com/asherp/audiolizer/blob/master/docs/beeps_pitch.wav?raw=true" type="audio/WAV">
   Your browser does not support the audio tag.
 </audio>
