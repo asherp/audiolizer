@@ -1,3 +1,23 @@
+* meeting with Randy
+
+1. add floor function to normalize frequencies - accomplished through pitch conversion
+1. slider that controls modulus on frequency [1, 100] so melody can cycle
+1. 3 market displays - monthly, weekly, daily - put into a dial - multiple rows
+1. umbrel as a distribution mechanism - be a good citizen w.r.t. disk space
+1. estimate footprint of settings (size of files generated)
+1. icon and screen shots
+1. umbrel uses tor - is that a problem for coinbase price api? Consider privacy - Can this expose user's ip address?
+1. scales - ease of use toggle between cmajor and aminor work well together
+1. how to achieve harmony and melody is in the relationship between major and minor scales
+1. market data would be like trebble clef (middle c and above) and another market feed as the bass clef (middle c and below) - lower case c is middle c - automated sheet music will help alot
+1. weekly candles could be base cleff. hourly could be trebble
+1. allow open/high/low/close selection - this is the same in music
+1. audiolizer sounds great on the phone!
+1. btc ledger as data source? umbrel platform gives access to all kinds of btc data...
+
+required reading
+On the Sensations of Tone - Helmholtz
+The Study of Counterpoint: From Johann Joseph Fux's Gradus Ad Parnassum
 
 ### 2021-06-20 14:39:47.114093: clock-in
 
