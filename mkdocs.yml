@@ -7,7 +7,9 @@ nav:
 - How it works: About.md
 - WorkLog: WorkLog.md
 
-theme: material
+theme:
+  name: material
+  logo: assets/audiolizer_icon.jpg
 
 plugins:
   - search

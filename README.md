@@ -3,6 +3,7 @@
 
 Market audiolization dashboard
 
+![Market audiolizer screenshot](https://github.com/asherp/audiolizer/raw/master/audiolizer0.2_screen_shot.png)
 
 ## Requirements
 
