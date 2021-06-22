@@ -1,3 +1,4 @@
+* adding screen shot
 * ignoring wav and midi
 * added cache setting
 * filling data gaps
