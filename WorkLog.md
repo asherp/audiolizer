@@ -1,3 +1,4 @@
+* adding sample midi
 ### 2021-06-21 23:36:47.974003: clock-out
 
 * added favicon
