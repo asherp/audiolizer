@@ -36,6 +36,14 @@ start_date = pd.to_datetime('2021-01-01-00-00')
 ticker = 'BTC-USD'
 
 
+def load_date(ticker, granularity, int_):
+    return HistoricalData(ticker,
+                          granularity,
+                          int_.left.strftime('%Y-%m-%d-%H-%M'),
+                          int_.right.strftime('%Y-%m-%d-%H-%M'),
+                          ).retrieve_data()
+
+
 # +
 def get_history(ticker, start_date, end_date = None, granularity=granularity):
     """Fetch/load historical data from Coinbase API at specified granularity
@@ -62,15 +70,30 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
             ticker, int_.left.strftime('%Y-%m-%d'))
 
         if not os.path.exists(fname):
-            int_df = HistoricalData(ticker,
-                                     granularity,
-                                     int_.left.strftime('%Y-%m-%d-%H-%M'),
-                                     int_.right.strftime('%Y-%m-%d-%H-%M'),
-                                     ).retrieve_data()
+            int_df = load_date(ticker, granularity, int_)
             int_df.to_csv(fname)
         fnames.append(fname)
-    return pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
+    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
                          fnames)).drop_duplicates()
+    gaps = df[df.close.isna()]
+    if len(gaps) > 0:
+        print('found data gaps')
+        print(gaps)
+        # fetch the data for each date
+        for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
+            print('\tfetching {}'.format(start_date))
+            int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
+
+            fname = audiolizer_temp_dir + '/{}-{}.csv'.format(
+                ticker, int_.left.strftime('%Y-%m-%d'))
+
+            int_df = load_date(ticker, granularity, int_)
+            int_df.to_csv(fname)
+
+    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
+                         fnames)).drop_duplicates()
+
+    return df
 
 
 # new = get_history(ticker, start_date)
@@ -390,3 +413,8 @@ def play(start, end, cadence, log_freq_range,
     
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
+# -
+
+
+
+
