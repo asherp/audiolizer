@@ -1,3 +1,5 @@
+### 2021-06-21 23:36:47.974003: clock-out
+
 * added favicon
 * moving into assets
 * icon courtesy of SiLVa
