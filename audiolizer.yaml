@@ -106,11 +106,29 @@ layout:
                     src: output.wav
                     autoPlay: True
                     controls: True
-                - html.A:
-                    id: midi_download
-                    children: Download MIDI
-                    href: ''
-                    download: ''
+                - html.Div:
+                    className: row
+                    children:
+                    - html.A:
+                        id: midi_download
+                        children: Download MIDI
+                        href: ''
+                        download: ''
+                        className: four columns
+                    - daq.NumericInput:
+                        id: wav_threshold
+                        max: 50
+                        value: 10
+                        label: max wav [Mb]
+                        labelPosition: bottom
+                        className: four columns
+                    - daq.NumericInput:
+                        id: midi_threshold
+                        max: 50
+                        value: 10
+                        label: max midi [Mb]
+                        labelPosition: bottom
+                        className: four columns
           - html.Div:
               className: two columns
               children:
@@ -174,6 +192,10 @@ callbacks:
         attr: value
       - id: candlestick-chart
         attr: selectedData
+      - id: wav_threshold
+        attr: value
+      - id: midi_threshold
+        attr: value
     output:
       - id: candlestick-chart
         attr: figure

@@ -298,6 +298,36 @@ def write_midi(beeps, tempo, fname, time=0, track=0, channel=0):
 
 
 # +
+import glob
+from collections import defaultdict
+
+def get_files(fname_glob="assets/*.wav"):
+    """retrieve files and metadata"""
+    fnames = glob.glob(fname_glob)
+    results = defaultdict(list)
+    for fname in fnames:
+        results['fname'].append(fname)
+        results['size'].append(os.path.getsize(fname))
+        results['accessed'].append(datetime.datetime.fromtimestamp(os.path.getatime(fname)))
+    if len(results) > 0:
+        df = pd.DataFrame(results).set_index('accessed').sort_index(ascending=False)
+        df['cumulative'] = df['size'].cumsum()
+        return df
+
+def clear_files(fname_glob="assets/*.wav", max_storage=10e6):
+    """keep files up to a maximum in storage size (bytes)"""
+    df = get_files(fname_glob)
+    if df is not None:
+        removable = df[df.cumulative>max_storage].fname.values
+        for fname in removable:
+            if os.path.exists(fname):
+                os.remove(fname)
+        return removable
+    else:
+        return []
+
+
+# +
 conf = load_conf('../audiolizer.yaml')
 app = load_dash(__name__, conf['app'], conf.get('import'))
 app.layout = load_components(conf['layout'], conf.get('import'))
@@ -326,7 +356,14 @@ def update_marks(url):
 @callbacks.play
 def play(start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
-         tempo, toggle_merge, silence, selectedData):
+         tempo, toggle_merge, silence, selectedData, wav_threshold, midi_threshold):
+    
+    cleared = clear_files('assets/*.wav', max_storage=wav_threshold*1e6)
+    if len(cleared) > 0:
+        print('cleared {} wav files'.format(len(cleared)))
+    cleared = clear_files('assets/*.midi', max_storage=midi_threshold*1e6)
+    if len(cleared) > 0:
+        print('cleared {} midi files'.format(len(cleared)))
 
     new = get_history(ticker, start, end)
     start_, end_ = new.index[[0, -1]]
@@ -339,7 +376,7 @@ def play(start, end, cadence, log_freq_range,
         silences = 'rests'
     else:
         silences = ''
-        
+
     fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
         start_.date(),
         end_.date(),
@@ -352,13 +389,13 @@ def play(start, end, cadence, log_freq_range,
         merged,
         silences,
     )
-    
+
     midi_file = fname.split('.wav')[0] + '.midi'
-    
+
     duration = 60./tempo # length of the beat in seconds (tempo in beats per minute)
-    
+
     play_time=''
-    
+
     if selectedData is not None:
         start_select, end_select = selectedData['range']['x']
         # need the number of beats from beginning to start_select
@@ -369,22 +406,22 @@ def play(start, end, cadence, log_freq_range,
 #         print('selected start, end time, total time:', start_time, end_time, total_time)
         play_time='#t={},{}'.format(start_time, end_time)
 #         print(start_select, end_select, play_time)
-    
+
     new_ = refactor(new[start_:end_], cadence)
     midi_asset = app.get_asset_url(midi_file)
-    
+
     if os.path.exists(fname):
         return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
 
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
-    
+
     max_vol = new_.volume.max() # normalizes peak amplitude
     min_close = new_.close.min() # sets lower frequency bound
     max_close = new_.close.max() # sets upper frequency bound
-    
+
     amp_min = beat_quantile/100 # threshold amplitude to merge beats
     min_vol = new_.volume.quantile(drop_quantile/100)
-    
+
     if mode == 'tone':
         beeps = [(get_frequency(close_, min_close, max_close, log_freq_range),
                   volume_/max_vol,
@@ -398,23 +435,23 @@ def play(start, end, cadence, log_freq_range,
             beeps = merge_pitches(beeps, amp_min)
         if silence:
             beeps = quiet(beeps, min_vol/max_vol)
-        
+
 #     print(mode, 'unique frequencies:', len(np.unique([_[0] for _ in beeps])))
-        
+
     audio = [beeper(*beep) for beep in beeps]
     
     with open('assets/'+fname, "wb") as f:
         audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
-    
-    
+
+
     write_midi(beeps, tempo, 'assets/' + midi_file)
  
     return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
-    
+
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
 # -
 
-
+# ls -lh assets/*.wav
 
 

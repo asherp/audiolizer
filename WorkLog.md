@@ -1,3 +1,4 @@
+* added cache setting
 * filling data gaps
 * irig 2 setup
 
