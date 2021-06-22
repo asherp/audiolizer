@@ -308,7 +308,7 @@ def get_files(fname_glob="assets/*.wav"):
     for fname in fnames:
         results['fname'].append(fname)
         results['size'].append(os.path.getsize(fname))
-        results['accessed'].append(datetime.datetime.fromtimestamp(os.path.getatime(fname)))
+        results['accessed'].append(datetime.fromtimestamp(os.path.getatime(fname)))
     if len(results) > 0:
         df = pd.DataFrame(results).set_index('accessed').sort_index(ascending=False)
         df['cumulative'] = df['size'].cumsum()
