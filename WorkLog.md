@@ -1,3 +1,4 @@
+* moving into assets
 * icon courtesy of SiLVa
 * adding screen shot
 * ignoring wav and midi
