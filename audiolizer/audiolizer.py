@@ -311,9 +311,9 @@ def get_files(fname_glob="assets/*.wav"):
         results['size'].append(os.path.getsize(fname))
         results['accessed'].append(datetime.fromtimestamp(os.path.getatime(fname)))
     if len(results) > 0:
-        df = pd.DataFrame(results).set_index('accessed').sort_index(ascending=False)
-        df['cumulative'] = df['size'].cumsum()
-        return df
+        files = pd.DataFrame(results).set_index('accessed').sort_index(ascending=False)
+        files['cumulative'] = files['size'].cumsum()
+        return files
 
 def clear_files(fname_glob="assets/*.wav", max_storage=10e6):
     """keep files up to a maximum in storage size (bytes)"""

@@ -17,3 +17,6 @@ services:
       - type: bind
         source: /tmp/price_data
         target: /home/audiolizer/audiolizer/history
+      - type: bind
+        source: ${PWD}
+        target: /home/audiolizer
