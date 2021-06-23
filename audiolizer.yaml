@@ -68,6 +68,20 @@ layout:
                     value:
                       - ${C3}
                       - ${C5}
+                - dcc.RadioItems:
+                    id: price_type
+                    options:
+                      - label: open
+                        value: open
+                      - label: close
+                        value: close
+                      - label: high
+                        value: high
+                      - label: low
+                        value: low
+                    value: close
+                    labelStyle:
+                      display: inline-block
           - html.Div:
               className: two columns
               children:
@@ -195,6 +209,8 @@ callbacks:
       - id: wav_threshold
         attr: value
       - id: midi_threshold
+        attr: value
+      - id: price_type
         attr: value
     output:
       - id: candlestick-chart

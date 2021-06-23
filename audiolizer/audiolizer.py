@@ -254,7 +254,8 @@ def merge_pitches(beeps, amp_min):
     for freq, amp, dur in beeps:
         if freq == last_freq:
             if merged[-1][1] < amp_min:
-                merged[-1][1] = (amp + last_amp)/2 # todo: use moving average
+                # todo: use moving average
+                merged[-1][1] = (amp + last_amp)/2
                 merged[-1][2] += dur
             continue
         merged.append([freq, amp, dur])
@@ -268,13 +269,13 @@ def quiet(beeps, min_amp):
         if amp < min_amp:
             amp = 0
         silenced.append((freq, amp, dur))
-    return silenced        
+    return silenced     
 
 
 # +
 def freq_to_degrees(freq):
     """convert input frequency to midi degree standard
-    
+
     midi degrees are in the range [0, 127]
     """
     return min(127, max(0, int(69+np.floor(12*np.log2(freq/440.)))))
@@ -284,9 +285,9 @@ def write_midi(beeps, tempo, fname, time=0, track=0, channel=0):
     midi_file = MIDIFile(1)  # One track, defaults to format 1 (tempo track is created
                           # automatically)
     beat_duration = 60./tempo
-    
+
     midi_file.addTempo(track, time, tempo)
-    
+
     for freq, amp, dur in beeps: # Hz, [0,1], sec            
         pitch = freq_to_degrees(freq) # MIDI note number
         duration = dur/beat_duration # convert from seconds to beats
@@ -316,15 +317,14 @@ def get_files(fname_glob="assets/*.wav"):
 
 def clear_files(fname_glob="assets/*.wav", max_storage=10e6):
     """keep files up to a maximum in storage size (bytes)"""
-    df = get_files(fname_glob)
-    if df is not None:
-        removable = df[df.cumulative>max_storage].fname.values
+    files = get_files(fname_glob)
+    if files is not None:
+        removable = files[files.cumulative > max_storage].fname.values
         for fname in removable:
             if os.path.exists(fname):
                 os.remove(fname)
         return removable
-    else:
-        return []
+    return []
 
 
 # +
@@ -336,12 +336,12 @@ if 'callbacks' in conf:
     callbacks = get_callbacks(app, conf['callbacks'])
 
 
-def update_graph(start, end, frequency):
-    start = pd.to_datetime(start)
-    end = pd.to_datetime(end)
-    
-    new_ = new[start:end]
-    return candlestick_plot(refactor(new_, frequency))
+# def update_graph(start, end, frequency):
+#     start = pd.to_datetime(start)
+#     end = pd.to_datetime(end)
+
+#     new_ = new[start:end]
+#     return candlestick_plot(refactor(new_, frequency))
 
 def beeper(freq, amplitude=1, duration=.25):
     return (amplitude*_ for _ in audiogen_p3.beep(freq, duration))
@@ -356,8 +356,9 @@ def update_marks(url):
 @callbacks.play
 def play(start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
-         tempo, toggle_merge, silence, selectedData, wav_threshold, midi_threshold):
-    
+         tempo, toggle_merge, silence, selectedData,
+         wav_threshold, midi_threshold, price_type):
+
     cleared = clear_files('assets/*.wav', max_storage=wav_threshold*1e6)
     if len(cleared) > 0:
         print('cleared {} wav files'.format(len(cleared)))
@@ -377,11 +378,12 @@ def play(start, end, cadence, log_freq_range,
     else:
         silences = ''
 
-    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+        price_type,
         start_.date(),
         end_.date(),
         cadence,
-        *['{}'.format(pitch(10**_).replace('#','sharp')) for _ in log_freq_range],
+        *['{}'.format(pitch(10**_).replace('#', 'sharp')) for _ in log_freq_range],
         mode,
         drop_quantile,
         beat_quantile,
@@ -394,7 +396,7 @@ def play(start, end, cadence, log_freq_range,
 
     duration = 60./tempo # length of the beat in seconds (tempo in beats per minute)
 
-    play_time=''
+    play_time = ''
 
     if selectedData is not None:
         start_select, end_select = selectedData['range']['x']
@@ -404,7 +406,7 @@ def play(start, end, cadence, log_freq_range,
         end_time = duration*(get_beats(start_, end_select, cadence)-1)
         total_time = duration*(get_beats(start_, end_, cadence)-1)
 #         print('selected start, end time, total time:', start_time, end_time, total_time)
-        play_time='#t={},{}'.format(start_time, end_time)
+        play_time = '#t={},{}'.format(start_time, end_time)
 #         print(start_select, end_select, play_time)
 
     new_ = refactor(new[start_:end_], cadence)
@@ -416,21 +418,21 @@ def play(start, end, cadence, log_freq_range,
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
 
     max_vol = new_.volume.max() # normalizes peak amplitude
-    min_close = new_.close.min() # sets lower frequency bound
-    max_close = new_.close.max() # sets upper frequency bound
+    min_price = new_[price_type].min() # sets lower frequency bound
+    max_price = new_[price_type].max() # sets upper frequency bound
 
     amp_min = beat_quantile/100 # threshold amplitude to merge beats
     min_vol = new_.volume.quantile(drop_quantile/100)
 
     if mode == 'tone':
-        beeps = [(get_frequency(close_, min_close, max_close, log_freq_range),
+        beeps = [(get_frequency(close_, min_price, max_price, log_freq_range),
                   volume_/max_vol,
-                  duration) for close_, volume_ in new_[['close', 'volume']].values]
-        
+                  duration) for close_, volume_ in new_[[price_type, 'volume']].values]
+
     elif mode == 'pitch':
-        beeps = [(freq(pitch(get_frequency(close_, min_close, max_close, log_freq_range))),
+        beeps = [(freq(pitch(get_frequency(close_, min_price, max_price, log_freq_range))),
                   volume_/max_vol,
-                  duration) for close_, volume_ in new_[['close', 'volume']].values]
+                  duration) for close_, volume_ in new_[[price_type, 'volume']].values]
         if toggle_merge:
             beeps = merge_pitches(beeps, amp_min)
         if silence:
@@ -439,13 +441,13 @@ def play(start, end, cadence, log_freq_range,
 #     print(mode, 'unique frequencies:', len(np.unique([_[0] for _ in beeps])))
 
     audio = [beeper(*beep) for beep in beeps]
-    
+
     with open('assets/'+fname, "wb") as f:
         audiogen_p3.sampler.write_wav(f, itertools.chain(*audio))
 
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
- 
+
     return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
 
 if __name__ == '__main__':
