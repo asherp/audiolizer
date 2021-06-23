@@ -1,0 +1,19 @@
+
+version: "3.2"
+
+services:
+  audiolizer:
+    image: apembroke/audiolizer
+    ports:
+      - "8051:8051"
+    environment:
+      # JUPYTER_PASSWORD: ${JUPYTER_PASSWORD}
+      AUDIOLIZER_TEMP: /home/audiolizer/audiolizer/history
+    command: ["python", "audiolizer.py"]
+    volumes:
+      - type: bind
+        source: /tmp/audio_files
+        target: /home/audiolizer/audiolizer/assets
+      - type: bind
+        source: /tmp/price_data
+        target: /home/audiolizer/audiolizer/history
