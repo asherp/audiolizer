@@ -14,6 +14,7 @@ RUN conda install pyaudio
 RUN pip install audiogen-p3
 RUN pip install MIDIUtil
 RUN pip install mkdocs mkdocs-material
+RUN pip install jupytext
 
 COPY . /home/audiolizer
 
