@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.11.2
+#       jupytext_version: 1.11.3
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -357,14 +357,9 @@ def update_marks(url):
 def update_date_range(date_select):
     period, cadence = date_select.split('-')
     today = pd.Timestamp.now().tz_localize(None)
-    print(period, cadence, today)
-    # if period == '24H':
-    #     start_date = today-
-    return '2021-01-01', cadence
-# min_date_allowed: 2001-01-01
-# max_date_allowed:
-# initial_visible_month: 2021-01-01
-# start_date: 2021-05-20
+    start_date = (today-pd.Timedelta(period)).strftime('%Y-%m-%d')
+    print(start_date, cadence)
+    return start_date, cadence
 
 @callbacks.play
 def play(start, end, cadence, log_freq_range,
@@ -474,5 +469,8 @@ if __name__ == '__main__':
         )
 
 
+
+
+# -
 
 

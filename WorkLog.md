@@ -1,3 +1,4 @@
+* got date radio buttons working
 * adding date range radio options
 * adding jupytext
 
@@ -25,6 +26,7 @@
 ### 2021-06-21 23:57:58.681256: clock-in
 
 * adding sample midi
+
 ### 2021-06-21 23:36:47.974003: clock-out
 
 * added favicon

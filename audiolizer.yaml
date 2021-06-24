@@ -45,16 +45,12 @@ layout:
                       - label: '24H'
                         value: '24H-1H'
                       - label: '1W'
-                        value: '1W-1W'
-                      - label: '1M'
-                        value: '1M-1D'
-                      - label: '6M'
-                        value: '6M-2D'
-                      - label: '1Y'
-                        value: '1Y-1W'
-                      - label: custom
-                        value: custom
-                    value: '24h-1H'
+                        value: '1W-1d'
+                      - label: '30D'
+                        value: '30D-1D'
+                      - label: '365D'
+                        value: '365D-1W'
+                    value: '24H-1H'
                     labelStyle:
                       display: inline-block
                 - dcc.DatePickerRange:
