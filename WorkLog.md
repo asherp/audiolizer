@@ -1,4 +1,8 @@
+### 2021-06-24 13:30:10.823467: clock-out
+
 * meeting with Randy
+* include version number in interface
+* arpeggio?
 
 ### 2021-06-24 13:06:50.585857: clock-in
 
