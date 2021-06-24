@@ -353,6 +353,19 @@ def get_frequency(price, min_price, max_price, log_frequency_range):
 def update_marks(url):
     return frequency_marks
 
+@callbacks.update_date_range
+def update_date_range(date_select):
+    period, cadence = date_select.split('-')
+    today = pd.Timestamp.now().tz_localize(None)
+    print(period, cadence, today)
+    # if period == '24H':
+    #     start_date = today-
+    return '2021-01-01', cadence
+# min_date_allowed: 2001-01-01
+# max_date_allowed:
+# initial_visible_month: 2021-01-01
+# start_date: 2021-05-20
+
 @callbacks.play
 def play(start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
@@ -451,4 +464,15 @@ def play(start, end, cadence, log_freq_range,
     return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=8051, mode='external', debug=True, dev_tools_hot_reload=False)
+    app.run_server(
+        host='0.0.0.0',
+        port=8051,
+        mode='external',
+        debug=True,
+        dev_tools_hot_reload=False,
+        extra_files=['../audiolizer.yaml']
+        )
+
+
+
+

@@ -39,6 +39,24 @@ layout:
           - html.Div:
               className: three columns
               children:
+                - dcc.RadioItems:
+                    id: date-select
+                    options:
+                      - label: '24H'
+                        value: '24H-1H'
+                      - label: '1W'
+                        value: '1W-1W'
+                      - label: '1M'
+                        value: '1M-1D'
+                      - label: '6M'
+                        value: '6M-2D'
+                      - label: '1Y'
+                        value: '1Y-1W'
+                      - label: custom
+                        value: custom
+                    value: '24h-1H'
+                    labelStyle:
+                      display: inline-block
                 - dcc.DatePickerRange:
                     id: date-range
                     min_date_allowed: 2001-01-01
@@ -182,6 +200,15 @@ layout:
         id: candlestick-chart
 
 callbacks:
+  update_date_range:
+    input:
+      - id: date-select
+        attr: value
+    output:
+      - id: date-range
+        attr: start_date
+      - id: cadence
+        attr: value
   play:
     input:
       - id: date-range
