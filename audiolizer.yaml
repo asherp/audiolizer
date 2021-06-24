@@ -8,7 +8,8 @@ app:
   jupyter_dash.JupyterDash:
     external_stylesheets:
       - https://codepen.io/chriddyp/pen/bWLwgP.css
-      - https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.22.0/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.2.2
+      # - https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.22.0/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.2.2
+      - https://cdn.clarkhacks.com/OpenDyslexic/v3/OpenDyslexic.css
     title: Market Audiolizer
     suppress_callback_exceptions: True
 

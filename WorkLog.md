@@ -1,3 +1,4 @@
+* adding open-dyslexic font
 * disabled draggable select
 * higher cadence options
 
