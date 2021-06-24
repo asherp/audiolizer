@@ -42,15 +42,17 @@ layout:
                 - dcc.RadioItems:
                     id: date-select
                     options:
-                      - label: '24H'
-                        value: '24H-1H'
+                      - label: '1D'
+                        value: '24H-20T'
                       - label: '1W'
-                        value: '1W-1d'
-                      - label: '30D'
+                        value: '1W-3H'
+                      - label: '1M'
                         value: '30D-1D'
-                      - label: '365D'
+                      - label: '6M'
+                        value: '180D-1D'
+                      - label: '1Y'
                         value: '365D-1W'
-                    value: '24H-1H'
+                    value: '24H-20T'
                     labelStyle:
                       display: inline-block
                 - dcc.DatePickerRange:
@@ -67,8 +69,12 @@ layout:
                         value: 1W
                       - label: daily
                         value: 1D
-                      - label: hourly
+                      - label: 3hour
+                        value: 3H
+                      - label: 1hour
                         value: 1H
+                      - label: 20m
+                        value: 20T
                     clearable: False
                     value: 1W
           - html.Div:
