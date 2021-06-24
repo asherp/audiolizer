@@ -223,8 +223,15 @@ def quiet(beeps, min_amp):
 Here we just set the amplitude to 0 if it's below the `min_amp` threshold.
 
 ```python
-candlestick_plot(btc_hourly)
+fig = candlestick_plot(btc_hourly)
+fig
 ```
+
+```python
+write_plot(fig, 'plot_div_06-16-2021_1h.html')
+```
+
+{! plot_div_06-16-2021_1h.html !}
 
 ```python
 max_vol = btc_hourly.volume.max()

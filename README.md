@@ -7,6 +7,8 @@ Market audiolization dashboard
 
 Here is the [midi file](https://github.com/asherp/audiolizer/raw/master/docs/assets/BTC_2020-09-01_2021-06-21_1W_C3_C5_pitch_25_75_240bpm_merged_rests.midi) for the above plot.
 
+Visit the documenation site to learn [how it works](https://asherp.github.io/audiolizer/About/)!
+
 ## Requirements
 
 * numpy
@@ -19,6 +21,30 @@ Here is the [midi file](https://github.com/asherp/audiolizer/raw/master/docs/ass
 docs dependences (optional)
 * mkdocs (pip)
 * tabulate (pip)
+
+# Running from python
+
+```console
+git clone https://github.com/asherp/audiolizer
+cd audiolizer
+python audiolizer.py
+```
+
+You should see something like the following output
+```
+audiolizer temp data: ./history/
+Dash is running on http://0.0.0.0:8051/
+
+ * Serving Flask app 'audiolizer' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+
+```
+Open your browser to localhost:8051.
+
+You may hear a startup sound when the application starts. If you don't, that's ok - the dashboard will still play through the browser! 
 
 # Running from Docker
 
