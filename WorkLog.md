@@ -1,3 +1,4 @@
+* disabled draggable select
 * higher cadence options
 
 ### 2021-06-24 17:37:26.100709: clock-in
