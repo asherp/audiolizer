@@ -1,3 +1,6 @@
+
+### 2021-06-24 13:06:50.585857: clock-in
+
 ### 2021-06-23 23:26:02.451923: clock-out
 
 * got date radio buttons working
