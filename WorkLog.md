@@ -1,3 +1,6 @@
+
+### 2021-06-23 22:10:34.591225: clock-in
+
 ### 2021-06-23 02:30:03.974096: clock-out: T-30m 
 
 * mounting source into container
