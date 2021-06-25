@@ -59,7 +59,7 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
     
     today = pd.Timestamp.now().tz_localize(None)
     if end_date is None:
-        end_date = today
+        end_date = today + pd.Timedelta('1D')
     else:
         end_date = min(today, pd.to_datetime(end_date).tz_localize(None))
         
@@ -469,7 +469,4 @@ if __name__ == '__main__':
         )
 
 
-
-
-# -
 
