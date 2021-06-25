@@ -1,3 +1,4 @@
+* added csv compression, price files cache limit, initial start date
 * adding hourly promo
 * added python install instructions, fixed graph
 * adding open-dyslexic font

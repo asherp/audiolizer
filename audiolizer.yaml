@@ -61,7 +61,7 @@ layout:
                     min_date_allowed: 2001-01-01
                     max_date_allowed:
                     initial_visible_month: 2021-01-01
-                    start_date: 2021-05-20
+                    start_date: 2021-01-01
                     end_date:
                 - dcc.Dropdown:
                     id: cadence
@@ -149,21 +149,28 @@ layout:
                         children: Download MIDI
                         href: ''
                         download: ''
-                        className: four columns
+                        className: three columns
+                    - daq.NumericInput:
+                        id: price_threshold
+                        max: 50
+                        value: 10
+                        label: max price [Mb]
+                        labelPosition: bottom
+                        className: three columns
                     - daq.NumericInput:
                         id: wav_threshold
                         max: 50
                         value: 10
                         label: max wav [Mb]
                         labelPosition: bottom
-                        className: four columns
+                        className: three columns
                     - daq.NumericInput:
                         id: midi_threshold
                         max: 50
                         value: 10
                         label: max midi [Mb]
                         labelPosition: bottom
-                        className: four columns
+                        className: three columns
           - html.Div:
               className: two columns
               children:
@@ -212,6 +219,8 @@ callbacks:
         attr: start_date
       - id: cadence
         attr: value
+      - id: date-range
+        attr: initial_visible_month
   play:
     input:
       - id: date-range
@@ -239,6 +248,8 @@ callbacks:
       - id: wav_threshold
         attr: value
       - id: midi_threshold
+        attr: value
+      - id: price_threshold
         attr: value
       - id: price_type
         attr: value

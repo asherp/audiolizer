@@ -66,12 +66,12 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
     fnames = []
     for int_ in pd.interval_range(start_date,
                                   end_date):
-        fname = audiolizer_temp_dir + '/{}-{}.csv'.format(
+        fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
             ticker, int_.left.strftime('%Y-%m-%d'))
 
         if not os.path.exists(fname):
             int_df = load_date(ticker, granularity, int_)
-            int_df.to_csv(fname)
+            int_df.to_csv(fname, compression='gzip')
         fnames.append(fname)
     df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
                          fnames)).drop_duplicates()
@@ -83,14 +83,12 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
         for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
             print('\tfetching {}'.format(start_date))
             int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
-
-            fname = audiolizer_temp_dir + '/{}-{}.csv'.format(
-                ticker, int_.left.strftime('%Y-%m-%d'))
-
             int_df = load_date(ticker, granularity, int_)
-            int_df.to_csv(fname)
+            fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
+                ticker, int_.left.strftime('%Y-%m-%d'))
+            int_df.to_csv(fname, compression='gzip')
 
-    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
+    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True, compression='gzip'),
                          fnames)).drop_duplicates()
 
     return df
@@ -358,14 +356,13 @@ def update_date_range(date_select):
     period, cadence = date_select.split('-')
     today = pd.Timestamp.now().tz_localize(None)
     start_date = (today-pd.Timedelta(period)).strftime('%Y-%m-%d')
-    print(start_date, cadence)
-    return start_date, cadence
+    return start_date, cadence, start_date
 
 @callbacks.play
 def play(start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
          tempo, toggle_merge, silence, selectedData,
-         wav_threshold, midi_threshold, price_type):
+         wav_threshold, midi_threshold, price_threshold, price_type):
 
     cleared = clear_files('assets/*.wav', max_storage=wav_threshold*1e6)
     if len(cleared) > 0:
@@ -373,6 +370,9 @@ def play(start, end, cadence, log_freq_range,
     cleared = clear_files('assets/*.midi', max_storage=midi_threshold*1e6)
     if len(cleared) > 0:
         print('cleared {} midi files'.format(len(cleared)))
+    cleared = clear_files('history/*.csv.gz', max_storage=price_threshold*1e6)
+    if len(cleared) > 0:
+        print('cleared {} price files'.format(len(cleared)))
 
     new = get_history(ticker, start, end)
     start_, end_ = new.index[[0, -1]]
@@ -472,5 +472,4 @@ if __name__ == '__main__':
 
 
 # -
-
 
