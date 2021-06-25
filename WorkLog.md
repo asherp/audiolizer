@@ -1,3 +1,4 @@
+* switching to bootstrap
 * adding to current time to include more data
 
 ### 2021-06-24 21:51:49.598071: clock-in
