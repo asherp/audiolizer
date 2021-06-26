@@ -1,3 +1,5 @@
+* responsive resizing
+* `app.clientside_callback`?
 
 ### 2021-06-26 16:29:02.448030: clock-in
 
