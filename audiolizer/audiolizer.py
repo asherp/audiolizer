@@ -37,11 +37,22 @@ ticker = 'BTC-USD'
 
 
 def load_date(ticker, granularity, int_):
-    return HistoricalData(ticker,
-                          granularity,
-                          int_.left.strftime('%Y-%m-%d-%H-%M'),
-                          int_.right.strftime('%Y-%m-%d-%H-%M'),
-                          ).retrieve_data()
+    start_ = int_.left.strftime('%Y-%m-%d-%H-%M')
+    end_ = int_.right.strftime('%Y-%m-%d-%H-%M')
+    try:
+        return HistoricalData(ticker,
+                              granularity,
+                              start_,
+                              end_,
+                              ).retrieve_data()
+    except:
+        print('could not load using {} {}'.format(start_, end_))
+        raise
+
+
+def get_gaps(df, granularity):
+    new_ = refactor(df, '{}s'.format(granularity))
+    return new_[new_.close.isna()]
 
 
 # +
@@ -68,21 +79,21 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
                                   end_date):
         fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
             ticker, int_.left.strftime('%Y-%m-%d'))
-
         if not os.path.exists(fname):
             int_df = load_date(ticker, granularity, int_)
             int_df.to_csv(fname, compression='gzip')
         fnames.append(fname)
     df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
                          fnames)).drop_duplicates()
-    gaps = df[df.close.isna()]
+    gaps = get_gaps(df, granularity)
+
     if len(gaps) > 0:
         print('found data gaps')
-        print(gaps)
         # fetch the data for each date
         for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
             print('\tfetching {}'.format(start_date))
             int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
+            int_ = pd.Interval(int_.left[0], int_.right[0])
             int_df = load_date(ticker, granularity, int_)
             fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
                 ticker, int_.left.strftime('%Y-%m-%d'))
@@ -211,6 +222,7 @@ def pitch(freq):
     Borrowed from John D. Cook https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
     """
     name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    print(C0, freq)
     h = round(12*log2(freq/C0))
     octave = h // 12
     n = h % 12
@@ -333,14 +345,6 @@ app.layout = load_components(conf['layout'], conf.get('import'))
 if 'callbacks' in conf:
     callbacks = get_callbacks(app, conf['callbacks'])
 
-
-# def update_graph(start, end, frequency):
-#     start = pd.to_datetime(start)
-#     end = pd.to_datetime(end)
-
-#     new_ = new[start:end]
-#     return candlestick_plot(refactor(new_, frequency))
-
 def beeper(freq, amplitude=1, duration=.25):
     return (amplitude*_ for _ in audiogen_p3.beep(freq, duration))
 
@@ -373,7 +377,7 @@ def play(start, end, cadence, log_freq_range,
     cleared = clear_files('history/*.csv.gz', max_storage=price_threshold*1e6)
     if len(cleared) > 0:
         print('cleared {} price files'.format(len(cleared)))
-
+    print('start, end {} {}'.format(start, end))
     new = get_history(ticker, start, end)
     start_, end_ = new.index[[0, -1]]
 
@@ -432,15 +436,24 @@ def play(start, end, cadence, log_freq_range,
     amp_min = beat_quantile/100 # threshold amplitude to merge beats
     min_vol = new_.volume.quantile(drop_quantile/100)
 
-    if mode == 'tone':
-        beeps = [(get_frequency(close_, min_price, max_price, log_freq_range),
-                  volume_/max_vol,
-                  duration) for close_, volume_ in new_[[price_type, 'volume']].values]
-
-    elif mode == 'pitch':
-        beeps = [(freq(pitch(get_frequency(close_, min_price, max_price, log_freq_range))),
-                  volume_/max_vol,
-                  duration) for close_, volume_ in new_[[price_type, 'volume']].values]
+    beeps = []
+    for t, (price, volume_) in new_[[price_type, 'volume']].iterrows():
+        if ~np.isnan(price):
+            freq_ = get_frequency(price, min_price, max_price, log_freq_range)
+            if mode == 'tone':
+                pass
+            elif mode == 'pitch':
+                freq_ = freq(pitch(freq_)) 
+            else:
+                raise NotImplementedError(mode)   
+            beep = freq_, volume_/max_vol, duration
+            beeps.append(beep)
+        else:
+            freq_ = get_frequency(min_price, min_price, max_price, log_freq_range)
+            beep = freq_, 0, duration
+            beeps.append(beep)
+            print('Warning: found nan price {}, {}, {}'.format(t, price, volume_))
+    if mode == 'pitch':
         if toggle_merge:
             beeps = merge_pitches(beeps, amp_min)
         if silence:
@@ -468,5 +481,5 @@ if __name__ == '__main__':
         extra_files=['../audiolizer.yaml']
         )
 
-
+# -
 
