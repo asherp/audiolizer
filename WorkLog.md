@@ -1,3 +1,4 @@
+* found price nans
 * shrinking RUN command
 * compressing docker image
 
