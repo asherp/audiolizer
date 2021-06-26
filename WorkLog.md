@@ -1,3 +1,4 @@
+* compressing docker image
 
 ### 2021-06-25 21:55:24.815029: clock-in
 

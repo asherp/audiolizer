@@ -1,20 +1,10 @@
 FROM continuumio/miniconda3:latest
 
-RUN conda install jupyter
-
-RUN conda install -c conda-forge -c plotly jupyter-dash
-
-RUN pip install dash-daq
-RUN pip install dash-audio-components
-RUN pip install git+https://github.com/predsci/psidash.git
-RUN pip install pandas
-RUN pip install Historic-Crypto
-
-RUN conda install pyaudio
-RUN pip install audiogen-p3
-RUN pip install MIDIUtil
-RUN pip install mkdocs mkdocs-material
-RUN pip install jupytext
+RUN conda install -c conda-forge jupyter -c plotly jupyter-dash pyaudio && \
+	pip install dash-daq dash-audio-components pandas \
+	Historic-Crypto audiogen-p3 MIDIUtil mkdocs \
+	mkdocs-material jupytext dash-bootstrap-components \
+	&& pip install git+https://github.com/predsci/psidash.git
 
 COPY . /home/audiolizer
 
