@@ -1,3 +1,8 @@
+
+### 2021-06-26 16:29:02.448030: clock-in
+
+* alternative price data: bitstamp, crypto.com
+
 ### 2021-06-26 01:25:53.646217: clock-out
 
 * fixed data gap
