@@ -1,4 +1,6 @@
-* reading up on react-dash
+### 2021-06-27 10:19:16.480666: clock-out: T-15m 
+
+* reading up on react-dash https://dash.plotly.com/react-for-python-developers
 
 ### 2021-06-27 09:30:13.979558: clock-in
 
