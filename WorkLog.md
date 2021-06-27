@@ -1,3 +1,4 @@
+* added ticker options
 
 ### 2021-06-26 19:09:39.374354: clock-in
 

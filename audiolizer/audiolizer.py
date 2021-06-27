@@ -22,6 +22,18 @@ from dash.exceptions import PreventUpdate
 
 from Historic_Crypto import HistoricalData
 
+from Historic_Crypto import Cryptocurrencies
+
+# +
+from Historic_Crypto import Cryptocurrencies
+
+data = Cryptocurrencies(coin_search = '', extended_output=True).find_crypto_pairs()
+# -
+
+crypto_dict = {}
+for base, group in data.groupby('base_currency'):
+    crypto_dict[base] = list(group.quote_currency.unique())
+
 import os
 import pandas as pd
 
@@ -31,9 +43,6 @@ audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
 print('audiolizer temp data:', audiolizer_temp_dir)
 
 granularity = 300 # seconds
-
-start_date = pd.to_datetime('2021-01-01-00-00')
-ticker = 'BTC-USD'
 
 
 def load_date(ticker, granularity, int_):
@@ -155,7 +164,7 @@ def refactor(df, frequency = '1W'):
     
     return pd.DataFrame(dict(low=low, high=high, open=open_, close=close, volume=volume))
 
-def candlestick_plot(df):    
+def candlestick_plot(df, base, quote):    
     return go.Figure(data=[
         go.Bar(
             x=df.index,
@@ -173,9 +182,9 @@ def candlestick_plot(df):
             showlegend=False),
         ],
         
-        layout=dict(yaxis=dict(title='BTC price [USD]'),
+        layout=dict(yaxis=dict(title='{} price [{}]'.format(base, quote)),
                     yaxis2=dict(
-                        title='BTC volume [BTC]',
+                        title='{base} volume [{base}]'.format(base=base),
                         overlaying = 'y',
                         side='right'),
                     dragmode='select',
@@ -222,7 +231,6 @@ def pitch(freq):
     Borrowed from John D. Cook https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
     """
     name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-    print(C0, freq)
     h = round(12*log2(freq/C0))
     octave = h // 12
     n = h % 12
@@ -338,6 +346,7 @@ def clear_files(fname_glob="assets/*.wav", max_storage=10e6):
 
 
 # +
+
 conf = load_conf('../audiolizer.yaml')
 app = load_dash(__name__, conf['app'], conf.get('import'))
 app.layout = load_components(conf['layout'], conf.get('import'))
@@ -351,6 +360,20 @@ def beeper(freq, amplitude=1, duration=.25):
 def get_frequency(price, min_price, max_price, log_frequency_range):
     return np.interp(price, [min_price, max_price], [10**_ for _ in log_frequency_range])
 
+@callbacks.update_base_options
+def update_base_options(url):
+    return [{'label': base, 'value': base} for base in crypto_dict]
+
+@callbacks.update_quote_options
+def update_quote_options(base, quote_prev):
+    quotes = crypto_dict[base]
+    options = [{'label': quote, 'value': quote} for quote in quotes]
+    if quote_prev in quotes:
+        quote = quote_prev
+    else:
+        quote = quotes[0]
+    return quote, options
+
 @callbacks.slider_marks
 def update_marks(url):
     return frequency_marks
@@ -363,11 +386,13 @@ def update_date_range(date_select):
     return start_date, cadence, start_date
 
 @callbacks.play
-def play(start, end, cadence, log_freq_range,
+def play(base, quote, start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
          tempo, toggle_merge, silence, selectedData,
          wav_threshold, midi_threshold, price_threshold, price_type):
 
+    ticker = '{}-{}'.format(base, quote)
+    print('ticker: {}'.format(ticker))
     cleared = clear_files('assets/*.wav', max_storage=wav_threshold*1e6)
     if len(cleared) > 0:
         print('cleared {} wav files'.format(len(cleared)))
@@ -390,7 +415,8 @@ def play(start, end, cadence, log_freq_range,
     else:
         silences = ''
 
-    fname = 'BTC_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+    fname = '{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.wav'.format(
+        ticker,
         price_type,
         start_.date(),
         end_.date(),
@@ -425,7 +451,7 @@ def play(start, end, cadence, log_freq_range,
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):
-        return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+        return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
 
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
 
@@ -469,7 +495,7 @@ def play(start, end, cadence, log_freq_range,
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
-    return candlestick_plot(new_), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
 
 if __name__ == '__main__':
     app.run_server(
@@ -482,4 +508,5 @@ if __name__ == '__main__':
         )
 
 # -
+
 

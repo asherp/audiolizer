@@ -28,99 +28,205 @@ run_server:
   debug: True
   dev_tools_hot_reload: False
 
-date_settings:
-- dbc.Row:
+
+nav:
+  dbc.Navbar:
     children:
-      - dbc.Col:
+      - html.A:
+          children:
+            - dbc.Row:
+                justify: between
+                children:
+                  - dbc.Col:
+                      width: 4
+                      children:
+                      - html.Img:
+                          src: /assets/favicon.ico
+                          height: 30px
+                  - dbc.Col:
+                      width: 4
+                      children:
+                      - dbc.NavbarBrand:
+                          children: How It Works
+                          # className: ml-3
+          href: https://asherp.github.io/audiolizer/About/
+    color: dark
+    dark: True
+
+player_settings:
+  - dbc.Col:
+      width: 3
+      children:
+        - html.H2: Market Audiolizer
+  - dbc.Col:
+      align: center
+      width:
+        size: 3
+        offset: 3
+      children:
+        - dac.DashAudioComponents:
+            id: audio_player
+            src: output.wav
+            autoPlay: True
+            controls: True
+        - html.A:
+            id: midi_download
+            children: Download MIDI
+            href: ''
+            download: ''
+  - dbc.Col:
+      width: 1
+      children:
+      - daq.NumericInput:
+          id: price_threshold
+          max: 50
+          value: 10
+          label: max price [Mb]
+          labelPosition: bottom
+  - dbc.Col:
+      width: 1
+      children:
+      - daq.NumericInput:
+          id: wav_threshold
+          max: 50
+          value: 10
+          label: max wav [Mb]
+          labelPosition: bottom
+  - dbc.Col:
+      width: 1
+      children:
+      - daq.NumericInput:
+          id: midi_threshold
+          max: 50
+          value: 10
+          label: max midi [Mb]
+          labelPosition: bottom
+
+date_settings:
+  - dbc.Row:
+      align: center
+      no_gutters: True
+      children:
+        - dbc.Col:
+            align: center
+            width: auto
+            children:
+              - dbc.Select:
+                  id: base
+                  options:
+                    - label: BTC
+                      value: BTC
+                  value: BTC
+                  required: True
+                  bs_size: lg
+        - dbc.Col:
+            align: center
+            width: auto
+            children: /
+        - dbc.Col:
+            align: center
+            width: auto
+            children:
+              - dbc.Select:
+                  id: quote
+                  options:
+                    - label: USD
+                      value: USD
+                  value: USD
+                  required: True
+                  bs_size: lg
+  - dbc.Row:
+      children:
+        - dbc.Col:
+            width:
+              size: 10
+              offset: 1
+            children:
+            - dbc.RadioItems:
+                id: date-select
+                options:
+                  - label: '1D'
+                    value: '24H-20T'
+                  - label: '1W'
+                    value: '1W-3H'
+                  - label: '1M'
+                    value: '30D-1D'
+                  - label: '6M'
+                    value: '180D-1D'
+                  - label: '1Y'
+                    value: '365D-1W'
+                value: '24H-20T'
+                inline: True
+  - dbc.Row:
+      children:
+        dbc.Col:
+          width: auto
+          children:
+          - dcc.DatePickerRange:
+              id: date-range
+              min_date_allowed: 2001-01-01
+              max_date_allowed:
+              initial_visible_month: 2021-01-01
+              start_date: 2021-01-01
+              end_date:
+  - dbc.Row:
+      children:
+        dbc.Col:
+          width:
+            size: 6
+          children:
+          - dbc.Select:
+              id: cadence
+              options:
+                - label: weekly
+                  value: 1W
+                - label: daily
+                  value: 1D
+                - label: 3hour
+                  value: 3H
+                - label: 1hour
+                  value: 1H
+                - label: 20m
+                  value: 20T
+              required: True
+              value: 1W
+              bs_size: lg
+
+scale_settings:
+  - dbc.Row:
+      children:
+        dbc.Col:
+          width:
+            size: 10
+          children:
+          - dcc.RangeSlider:
+              id: frequency-drag
+              min: ${A0}
+              max: ${C8}
+              step: .1
+              value:
+                - ${C3}
+                - ${C5}
+  - dbc.Row:
+      children:
+        dbc.Col:
           width:
             size: 10
             offset: 1
-          children:
+          children:  
           - dbc.RadioItems:
-              id: date-select
+              id: price_type
               options:
-                - label: '1D'
-                  value: '24H-20T'
-                - label: '1W'
-                  value: '1W-3H'
-                - label: '1M'
-                  value: '30D-1D'
-                - label: '6M'
-                  value: '180D-1D'
-                - label: '1Y'
-                  value: '365D-1W'
-              value: '24H-20T'
+                - label: open
+                  value: open
+                - label: close
+                  value: close
+                - label: high
+                  value: high
+                - label: low
+                  value: low
+              value: close
               inline: True
-- dbc.Row:
-    children:
-      dbc.Col:
-        width: auto
-        children:
-        - dcc.DatePickerRange:
-            id: date-range
-            min_date_allowed: 2001-01-01
-            max_date_allowed:
-            initial_visible_month: 2021-01-01
-            start_date: 2021-01-01
-            end_date:
-- dbc.Row:
-    children:
-      dbc.Col:
-        width:
-          size: 6
-        children:
-        - dbc.Select:
-            id: cadence
-            options:
-              - label: weekly
-                value: 1W
-              - label: daily
-                value: 1D
-              - label: 3hour
-                value: 3H
-              - label: 1hour
-                value: 1H
-              - label: 20m
-                value: 20T
-            required: True
-            value: 1W
-            bs_size: lg
-
-scale_settings:
-- dbc.Row:
-    children:
-      dbc.Col:
-        width:
-          size: 10
-        children:
-        - dcc.RangeSlider:
-            id: frequency-drag
-            min: ${A0}
-            max: ${C8}
-            step: .1
-            value:
-              - ${C3}
-              - ${C5}
-- dbc.Row:
-    children:
-      dbc.Col:
-        width:
-          size: 10
-          offset: 1
-        children:  
-        - dbc.RadioItems:
-            id: price_type
-            options:
-              - label: open
-                value: open
-              - label: close
-                value: close
-              - label: high
-                value: high
-              - label: low
-                value: low
-            value: close
-            inline: True
 
 duration_settings:
   dbc.Row:
@@ -192,8 +298,6 @@ pitch_settings:
               value: True
               labelPosition: bottom
 
-
-
 layout:
   dbc.Container:
     fluid: True
@@ -201,88 +305,37 @@ layout:
     - dcc.Location:
         id: url
         refresh: False
+    - ${nav}
     - dbc.Row:
-        children:
-        - dbc.Col:
-            width: 4
-            children:
-              - html.H1: Market Audiolizer
-    - dbc.Row:
-        children:
-        - dbc.Col:
-            width:
-              size: 3
-              offset: 3
-            children:
-              - dac.DashAudioComponents:
-                  id: audio_player
-                  src: output.wav
-                  autoPlay: True
-                  controls: True
-
-        - dbc.Col:
-            width: auto
-            children:
-            - html.A:
-                id: midi_download
-                children: Download MIDI
-                href: ''
-                download: ''
-        - dbc.Col:
-            width: auto
-            children:
-            - daq.NumericInput:
-                id: price_threshold
-                max: 50
-                value: 10
-                label: max price [Mb]
-                labelPosition: bottom
-        - dbc.Col:
-            width: auto
-            children:
-            - daq.NumericInput:
-                id: wav_threshold
-                max: 50
-                value: 10
-                label: max wav [Mb]
-                labelPosition: bottom
-        - dbc.Col:
-            width: auto
-            children:
-            - daq.NumericInput:
-                id: midi_threshold
-                max: 50
-                value: 10
-                label: max midi [Mb]
-                labelPosition: bottom
+        children: ${player_settings}
     - html.Hr:
     - dbc.Row:
         no_gutters: True
         children:
           - dbc.Col:
-              xs: 6
-              sm: 6
+              xs: 12
+              sm: 12
               md: 6
               lg: 6
               xl: 3
               children: ${date_settings}
           - dbc.Col:
-              xs: 6
-              sm: 6
+              xs: 12
+              sm: 12
               md: 6
               lg: 6
               xl: 3
               children: ${scale_settings}
           - dbc.Col:
-              xs: 6
-              sm: 6
+              xs: 12
+              sm: 12
               md: 6
               lg: 6
               xl: 3
               children: ${duration_settings}
           - dbc.Col:
-              xs: 6
-              sm: 6
+              xs: 12
+              sm: 12
               md: 6
               lg: 6
               xl: 3
@@ -298,6 +351,25 @@ layout:
                   id: candlestick-chart
 
 callbacks:
+  update_base_options:
+    input:
+      - id: url
+        attr: pathname
+    output:
+      - id: base
+        attr: options
+  update_quote_options:
+    input:
+      - id: base
+        attr: value
+    state:
+      - id: quote
+        attr: value
+    output:
+      - id: quote
+        attr: value
+      - id: quote
+        attr: options
   update_date_range:
     input:
       - id: date-select
@@ -311,6 +383,10 @@ callbacks:
         attr: initial_visible_month
   play:
     input:
+      - id: base
+        attr: value
+      - id: quote
+        attr: value
       - id: date-range
         attr: start_date
       - id: date-range
