@@ -1,3 +1,5 @@
+### 2021-06-29 21:49:15.649821: clock-out
+
 * multi stage fixes
 * adding bash init
 * keeping environment active
