@@ -1,6 +1,8 @@
 FROM continuumio/miniconda3 AS builder
 
+
 RUN conda create -n audiolizer python==3.8
+RUN conda init bash
 RUN conda activate audiolizer
 RUN conda install -c conda-forge jupyter conda-pack
 RUN conda install -c plotly jupyter-dash

@@ -1,3 +1,4 @@
+* correcting conda init
 * switching to named environment audiolizer
 * correcting environment name
 * formatting
