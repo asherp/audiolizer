@@ -31,6 +31,7 @@ run_server:
 
 nav:
   dbc.Navbar:
+    color: dark
     children:
       - html.A:
           children:
@@ -50,57 +51,77 @@ nav:
                           children: How It Works
                           # className: ml-3
           href: https://asherp.github.io/audiolizer/About/
-    color: dark
     dark: True
 
 player_settings:
   - dbc.Col:
-      width: 3
-      children:
+      width: 5
+      children: 
         - html.H2: Market Audiolizer
   - dbc.Col:
-      align: center
       width:
-        size: 3
-        offset: 3
+        xs: 12
+        sm: 12
+        md: 12
+        lg: 4
+        xl: 4
       children:
-        - dac.DashAudioComponents:
-            id: audio_player
-            src: output.wav
-            autoPlay: True
-            controls: True
-        - html.A:
-            id: midi_download
-            children: Download MIDI
-            href: ''
-            download: ''
+        - dbc.Row:
+            children:
+            - dbc.Col:
+                width: 12
+                children:
+                - dac.DashAudioComponents:
+                    id: audio_player
+                    src: output.wav
+                    autoPlay: True
+                    controls: True
+            - dbc.Col:
+                width: 12
+                children:
+                - html.A:
+                    id: midi_download
+                    children: Download MIDI
+                    href: ''
+                    download: ''
   - dbc.Col:
-      width: 1
+      width:
+        xs: 12
+        sm: 12
+        md: 12
+        lg: 3
+        xl: 3
       children:
-      - daq.NumericInput:
-          id: price_threshold
-          max: 50
-          value: 10
-          label: max price [Mb]
-          labelPosition: bottom
-  - dbc.Col:
-      width: 1
-      children:
-      - daq.NumericInput:
-          id: wav_threshold
-          max: 50
-          value: 10
-          label: max wav [Mb]
-          labelPosition: bottom
-  - dbc.Col:
-      width: 1
-      children:
-      - daq.NumericInput:
-          id: midi_threshold
-          max: 50
-          value: 10
-          label: max midi [Mb]
-          labelPosition: bottom
+        - html.H4: Cache settings
+        - dbc.Row:
+            children:
+              - dbc.Col:
+                  width: 4
+                  children:
+                  - daq.NumericInput:
+                      id: price_threshold
+                      max: 50
+                      value: 10
+                      label: price [Mb]
+                      labelPosition: bottom
+              - dbc.Col:
+                  width: 4
+                  children:
+                  - daq.NumericInput:
+                      id: wav_threshold
+                      max: 50
+                      value: 10
+                      label: wav [Mb]
+                      labelPosition: bottom
+              - dbc.Col:
+                  width: 4
+                  children:
+                  - daq.NumericInput:
+                      id: midi_threshold
+                      max: 50
+                      value: 10
+                      label: midi [Mb]
+                      labelPosition: bottom
 
 date_settings:
   - dbc.Row:
@@ -307,6 +328,8 @@ layout:
         refresh: False
     - ${nav}
     - dbc.Row:
+        justify: left
+        align: left
         children: ${player_settings}
     - html.Hr:
     - dbc.Row:

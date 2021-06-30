@@ -188,6 +188,7 @@ def candlestick_plot(df, base, quote):
                         overlaying = 'y',
                         side='right'),
                     dragmode='select',
+                    margin=dict(l=5, r=5, t=10, b=10),
                    ))
 
 def write_plot(fig, fname):
