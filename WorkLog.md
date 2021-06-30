@@ -1,3 +1,4 @@
+* keeping environment active
 * correcting conda init
 * switching to named environment audiolizer
 * correcting environment name
