@@ -1,3 +1,16 @@
+* slimming down pip packages
+Trying to conda install the following
+
+```Dockerfile
+RUN source /venv/bin/activate \
+ && pip install  \
+	audiogen-p3 MIDIUtil \
+	dash-bootstrap-components \
+ && pip install git+https://github.com/predsci/psidash.git
+```
+* dash-daq has a conda-forge recipe
+* building Historic-Crypto from conda skeleton
+
 
 ### 2021-06-29 23:17:03.409827: clock-in
 
