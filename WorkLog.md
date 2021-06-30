@@ -1,3 +1,4 @@
+* adding bash init
 * keeping environment active
 * correcting conda init
 * switching to named environment audiolizer
