@@ -1,3 +1,4 @@
+* multi stage fixes
 * adding bash init
 * keeping environment active
 * correcting conda init

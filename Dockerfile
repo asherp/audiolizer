@@ -1,17 +1,21 @@
 FROM continuumio/miniconda3 AS builder
 
-RUN conda create -n audiolizer python==3.8
-RUN conda init bash \
- && conda activate audiolizer \
- && conda install -c conda-forge conda-pack \
- && conda install -c conda-forge jupyter \
- && conda install -c plotly jupyter-dash \
- && conda install pyaudio \
- && pip install dash-daq dash-audio-components pandas \
-	Historic-Crypto audiogen-p3 MIDIUtil mkdocs \
-	mkdocs-material jupytext dash-bootstrap-components \
- && pip install git+https://github.com/predsci/psidash.git \
- && conda-pack -n audiolizer -o /tmp/env.tar && \
+RUN conda create -n audiolizer python==3.7
+
+# Make RUN commands use the new environment:
+RUN echo "conda activate audiolizer" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN conda install defaults::conda-pack
+RUN conda install pandas
+RUN conda install -c conda-forge jupyter 
+RUN conda install -c plotly jupyter-dash 
+RUN conda install pyaudio
+RUN conda install git
+
+FROM builder AS build1
+
+RUN conda-pack -n audiolizer -o /tmp/env.tar && \
   mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
   rm /tmp/env.tar
 
@@ -21,10 +25,21 @@ RUN conda init bash \
 
 RUN /venv/bin/conda-unpack
 
-FROM python:3.8-slim-buster AS runtime
+FROM python:3.7-slim-buster AS runtime
 
 # Copy /venv from the previous stage:
-COPY --from=builder /venv /venv
+COPY --from=build1 /venv /venv
+
+SHELL ["/bin/bash", "-c"]
+RUN source /venv/bin/activate
+
+
+# Don't know how to install with conda
+RUN pip install dash-daq dash-audio-components pandas \
+	Historic-Crypto audiogen-p3 MIDIUtil mkdocs \
+	mkdocs-material jupytext dash-bootstrap-components 
+RUN pip install git+https://github.com/predsci/psidash.git
+
 
 COPY . /home/audiolizer
 
