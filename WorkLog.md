@@ -1,3 +1,7 @@
+* multi-stage build
+
+
+* using conda-pack to slim down images https://pythonspeed.com/articles/conda-docker-image-size/
 
 ### 2021-06-29 17:57:57.782630: clock-in
 
