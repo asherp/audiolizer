@@ -8,7 +8,7 @@ RUN pip install Historic-Crypto audiogen-p3 MIDIUtil mkdocs
 RUN pip install mkdocs-material jupytext dash-bootstrap-components
 RUN pip install git+https://github.com/predsci/psidash.git
 
-RUN conda-pack -n audiolizer -o /tmp/env.tar && \
+RUN conda-pack -n base -o /tmp/env.tar && \
   mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
   rm /tmp/env.tar
 

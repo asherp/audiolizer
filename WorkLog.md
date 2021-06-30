@@ -1,3 +1,4 @@
+* correcting environment name
 * formatting
 * multi-stage build
 
