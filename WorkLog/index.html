@@ -11,8 +11,8 @@
       
         <link rel="canonical" href="http://0.0.0.0:8000/WorkLog/">
       
-      <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.6">
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.cb6bc1d0.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ca7ac06f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.39b8e14a.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.f1a3b89f.min.css">
         
       
     
@@ -33,13 +33,15 @@
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
       
     
     
     
     
       
+
+
     
     
   </head>
@@ -51,8 +53,9 @@
     
     
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
-      
   
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -60,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2021-06-24-193626101766-clock-out" class="md-skip">
+        <a href="#2021-07-01-002148695052-clock-out" class="md-skip">
           Skip to content
         </a>
       
@@ -69,26 +72,24 @@
       
     </div>
     
-      
-
-<header class="md-header" data-md-component="header">
-  <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="http://0.0.0.0:8000" title="Market Audiolizer" class="md-header-nav__button md-logo" aria-label="Market Audiolizer">
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Market Audiolizer" class="md-header__button md-logo" aria-label="Market Audiolizer" data-md-component="logo">
       
   <img src="../assets/audiolizer_icon.jpg" alt="logo">
 
     </a>
-    <label class="md-header-nav__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
-    <div class="md-header-nav__title" data-md-component="header-title">
-      <div class="md-header-nav__ellipsis">
-        <div class="md-header-nav__topic">
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
           <span class="md-ellipsis">
             Market Audiolizer
           </span>
         </div>
-        <div class="md-header-nav__topic">
+        <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
               WorkLog
@@ -98,8 +99,10 @@
       </div>
     </div>
     
-      <label class="md-header-nav__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
       </label>
       
 <div class="md-search" data-md-component="search" role="dialog">
@@ -108,11 +111,11 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
       </button>
     </form>
     <div class="md-search__output">
@@ -142,17 +145,15 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
 
 
-
-
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="http://0.0.0.0:8000" title="Market Audiolizer" class="md-nav__button md-logo" aria-label="Market Audiolizer">
+    <a href=".." title="Market Audiolizer" class="md-nav__button md-logo" aria-label="Market Audiolizer" data-md-component="logo">
       
   <img src="../assets/audiolizer_icon.jpg" alt="logo">
 
@@ -206,6 +207,7 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+      
         <label class="md-nav__link md-nav__link--active" for="__toc">
           WorkLog
           <span class="md-nav__icon md-icon"></span>
@@ -220,11 +222,166 @@
   
   
   
+  
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2021-07-01-002148695052-clock-out" class="md-nav__link">
+    2021-07-01 00:21:48.695052: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-232737784010-clock-in" class="md-nav__link">
+    2021-06-30 23:27:37.784010: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-215817069562-clock-out-t-30m" class="md-nav__link">
+    2021-06-30 21:58:17.069562: clock-out: T-30m
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-211729237422-clock-in" class="md-nav__link">
+    2021-06-30 21:17:29.237422: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-002543952103-clock-out" class="md-nav__link">
+    2021-06-30 00:25:43.952103: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-29-231703409827-clock-in" class="md-nav__link">
+    2021-06-29 23:17:03.409827: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-29-214915649821-clock-out" class="md-nav__link">
+    2021-06-29 21:49:15.649821: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-29-175757782630-clock-in" class="md-nav__link">
+    2021-06-29 17:57:57.782630: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-142434558294-clock-out" class="md-nav__link">
+    2021-06-27 14:24:34.558294: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-113347637563-clock-in" class="md-nav__link">
+    2021-06-27 11:33:47.637563: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-101916480666-clock-out-t-15m" class="md-nav__link">
+    2021-06-27 10:19:16.480666: clock-out: T-15m
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-093013979558-clock-in" class="md-nav__link">
+    2021-06-27 09:30:13.979558: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-221821224806-clock-out" class="md-nav__link">
+    2021-06-26 22:18:21.224806: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-190939374354-clock-in" class="md-nav__link">
+    2021-06-26 19:09:39.374354: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-180956490850-clock-out" class="md-nav__link">
+    2021-06-26 18:09:56.490850: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-162902448030-clock-in" class="md-nav__link">
+    2021-06-26 16:29:02.448030: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-012553646217-clock-out" class="md-nav__link">
+    2021-06-26 01:25:53.646217: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-003214224878-clock-in" class="md-nav__link">
+    2021-06-26 00:32:14.224878: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-25-232840701319-clock-out" class="md-nav__link">
+    2021-06-25 23:28:40.701319: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-25-215524815029-clock-in" class="md-nav__link">
+    2021-06-25 21:55:24.815029: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-24-231845354779-clock-out" class="md-nav__link">
+    2021-06-24 23:18:45.354779: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-24-215149598071-clock-in" class="md-nav__link">
+    2021-06-24 21:51:49.598071: clock-in
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#2021-06-24-193626101766-clock-out" class="md-nav__link">
@@ -746,7 +903,7 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -754,11 +911,166 @@
   
   
   
+  
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2021-07-01-002148695052-clock-out" class="md-nav__link">
+    2021-07-01 00:21:48.695052: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-232737784010-clock-in" class="md-nav__link">
+    2021-06-30 23:27:37.784010: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-215817069562-clock-out-t-30m" class="md-nav__link">
+    2021-06-30 21:58:17.069562: clock-out: T-30m
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-211729237422-clock-in" class="md-nav__link">
+    2021-06-30 21:17:29.237422: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-30-002543952103-clock-out" class="md-nav__link">
+    2021-06-30 00:25:43.952103: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-29-231703409827-clock-in" class="md-nav__link">
+    2021-06-29 23:17:03.409827: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-29-214915649821-clock-out" class="md-nav__link">
+    2021-06-29 21:49:15.649821: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-29-175757782630-clock-in" class="md-nav__link">
+    2021-06-29 17:57:57.782630: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-142434558294-clock-out" class="md-nav__link">
+    2021-06-27 14:24:34.558294: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-113347637563-clock-in" class="md-nav__link">
+    2021-06-27 11:33:47.637563: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-101916480666-clock-out-t-15m" class="md-nav__link">
+    2021-06-27 10:19:16.480666: clock-out: T-15m
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-27-093013979558-clock-in" class="md-nav__link">
+    2021-06-27 09:30:13.979558: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-221821224806-clock-out" class="md-nav__link">
+    2021-06-26 22:18:21.224806: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-190939374354-clock-in" class="md-nav__link">
+    2021-06-26 19:09:39.374354: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-180956490850-clock-out" class="md-nav__link">
+    2021-06-26 18:09:56.490850: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-162902448030-clock-in" class="md-nav__link">
+    2021-06-26 16:29:02.448030: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-012553646217-clock-out" class="md-nav__link">
+    2021-06-26 01:25:53.646217: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-26-003214224878-clock-in" class="md-nav__link">
+    2021-06-26 00:32:14.224878: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-25-232840701319-clock-out" class="md-nav__link">
+    2021-06-25 23:28:40.701319: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-25-215524815029-clock-in" class="md-nav__link">
+    2021-06-25 21:55:24.815029: clock-in
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-24-231845354779-clock-out" class="md-nav__link">
+    2021-06-24 23:18:45.354779: clock-out
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2021-06-24-215149598071-clock-in" class="md-nav__link">
+    2021-06-24 21:51:49.598071: clock-in
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#2021-06-24-193626101766-clock-out" class="md-nav__link">
@@ -1272,7 +1584,7 @@
               </div>
             
           
-          <div class="md-content">
+          <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
@@ -1280,27 +1592,90 @@
                   <h1>WorkLog</h1>
                 
                 <p>Worklog powered by <a href="https://asherp.github.io/hourly/">hourly</a></p>
-<div>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
-                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>    
-            <div id="5860ffa1-dfe8-440e-9a8d-d1dcf73badce" class="plotly-graph-div" style="height:100%; width:100%;"></div>
-            <script type="text/javascript">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>                <div id="3984f52f-0d9a-4c8d-8aaf-983f4cdf838a" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("3984f52f-0d9a-4c8d-8aaf-983f4cdf838a")) {                    Plotly.newPlot(                        "3984f52f-0d9a-4c8d-8aaf-983f4cdf838a",                        [{"mode": "lines", "name": "master", "stackgroup": "one", "text": ["0 days 03:17:53", "0 days 04:30:38", "0 days 00:13:07", "0 days 00:00:00", "0 days 00:00:00", "0 days 00:00:00", "0 days 00:00:00", "0 days 00:00:00", "0 days 00:00:00", "0 days 00:00:00", "0 days 01:48:43", "0 days 02:08:29", "0 days 02:16:38", "0 days 00:00:00", "0 days 01:10:47", "0 days 03:10:31", "0 days 00:47:43", "0 days 01:37:02", "0 days 00:00:00", "0 days 02:21:31", "0 days 04:13:06", "0 days 03:54:55", "0 days 01:23:58", "0 days 04:23:01", "0 days 00:11:29", "0 days 02:28:56", "0 days 03:49:16", "0 days 01:33:16", "0 days 05:43:15", "0 days 03:24:49", "0 days 00:00:00", "0 days 03:51:18", "0 days 01:19:28", "0 days 00:54:11"], "type": "scatter", "x": ["2021-05-29T00:00:00-04:00", "2021-05-30T00:00:00-04:00", "2021-05-31T00:00:00-04:00", "2021-06-01T00:00:00-04:00", "2021-06-02T00:00:00-04:00", "2021-06-03T00:00:00-04:00", "2021-06-04T00:00:00-04:00", "2021-06-05T00:00:00-04:00", "2021-06-06T00:00:00-04:00", "2021-06-07T00:00:00-04:00", "2021-06-08T00:00:00-04:00", "2021-06-09T00:00:00-04:00", "2021-06-10T00:00:00-04:00", "2021-06-11T00:00:00-04:00", "2021-06-12T00:00:00-04:00", "2021-06-13T00:00:00-04:00", "2021-06-14T00:00:00-04:00", "2021-06-15T00:00:00-04:00", "2021-06-16T00:00:00-04:00", "2021-06-17T00:00:00-04:00", "2021-06-18T00:00:00-04:00", "2021-06-19T00:00:00-04:00", "2021-06-20T00:00:00-04:00", "2021-06-21T00:00:00-04:00", "2021-06-22T00:00:00-04:00", "2021-06-23T00:00:00-04:00", "2021-06-24T00:00:00-04:00", "2021-06-25T00:00:00-04:00", "2021-06-26T00:00:00-04:00", "2021-06-27T00:00:00-04:00", "2021-06-28T00:00:00-04:00", "2021-06-29T00:00:00-04:00", "2021-06-30T00:00:00-04:00", "2021-07-01T00:00:00-04:00"], "y": [3.2980555555555555, 4.510555555555555, 0.21861111111111112, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.8119444444444444, 2.141388888888889, 2.277222222222222, 0.0, 1.1797222222222221, 3.1752777777777776, 0.7952777777777778, 1.6172222222222221, 0.0, 2.358611111111111, 4.218333333333334, 3.915277777777778, 1.3994444444444445, 4.383611111111111, 0.1913888888888889, 2.482222222222222, 3.821111111111111, 1.5544444444444445, 5.720833333333333, 3.413611111111111, 0.0, 3.855, 1.3244444444444445, 0.9030555555555555]}, {"mode": "lines", "name": "average", "text": ["1.78", "1.78"], "type": "scatter", "x": ["2021-05-29T00:00:00-04:00", "2021-05-30T00:00:00-04:00", "2021-05-31T00:00:00-04:00", "2021-06-01T00:00:00-04:00", "2021-06-02T00:00:00-04:00", "2021-06-03T00:00:00-04:00", "2021-06-04T00:00:00-04:00", "2021-06-05T00:00:00-04:00", "2021-06-06T00:00:00-04:00", "2021-06-07T00:00:00-04:00", "2021-06-08T00:00:00-04:00", "2021-06-09T00:00:00-04:00", "2021-06-10T00:00:00-04:00", "2021-06-11T00:00:00-04:00", "2021-06-12T00:00:00-04:00", "2021-06-13T00:00:00-04:00", "2021-06-14T00:00:00-04:00", "2021-06-15T00:00:00-04:00", "2021-06-16T00:00:00-04:00", "2021-06-17T00:00:00-04:00", "2021-06-18T00:00:00-04:00", "2021-06-19T00:00:00-04:00", "2021-06-20T00:00:00-04:00", "2021-06-21T00:00:00-04:00", "2021-06-22T00:00:00-04:00", "2021-06-23T00:00:00-04:00", "2021-06-24T00:00:00-04:00", "2021-06-25T00:00:00-04:00", "2021-06-26T00:00:00-04:00", "2021-06-27T00:00:00-04:00", "2021-06-28T00:00:00-04:00", "2021-06-29T00:00:00-04:00", "2021-06-30T00:00:00-04:00", "2021-07-01T00:00:00-04:00"], "y": [1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607, 1.781372549019607]}],                        {"hovermode": "x", "margin": {"pad": 0}, "template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "total hours commited: 60.57"}, "yaxis": {"title": {"text": "hours per 1 d"}}},                        {"responsive": true}                    )                };                            </script>        </div>
 
-                    window.PLOTLYENV=window.PLOTLYENV || {};
-
-                if (document.getElementById("5860ffa1-dfe8-440e-9a8d-d1dcf73badce")) {
-                    Plotly.newPlot(
-                        '5860ffa1-dfe8-440e-9a8d-d1dcf73badce',
-                        [{"mode": "lines", "name": "master", "stackgroup": "one", "text": ["0 days 03:17:53", "0 days 04:30:38", "0 days 00:13:07", "NaT", "NaT", "NaT", "NaT", "NaT", "NaT", "NaT", "0 days 01:48:43", "0 days 02:08:29", "0 days 02:16:38", "NaT", "0 days 01:10:47", "0 days 03:10:31", "0 days 00:47:43", "0 days 01:37:02", "NaT", "0 days 02:21:31", "0 days 04:13:06", "0 days 03:54:55", "0 days 01:23:58", "0 days 04:23:01", "0 days 00:11:29", "0 days 02:28:56", "0 days 02:22:20"], "type": "scatter", "x": ["2021-05-29T00:00:00-04:00", "2021-05-30T00:00:00-04:00", "2021-05-31T00:00:00-04:00", "2021-06-01T00:00:00-04:00", "2021-06-02T00:00:00-04:00", "2021-06-03T00:00:00-04:00", "2021-06-04T00:00:00-04:00", "2021-06-05T00:00:00-04:00", "2021-06-06T00:00:00-04:00", "2021-06-07T00:00:00-04:00", "2021-06-08T00:00:00-04:00", "2021-06-09T00:00:00-04:00", "2021-06-10T00:00:00-04:00", "2021-06-11T00:00:00-04:00", "2021-06-12T00:00:00-04:00", "2021-06-13T00:00:00-04:00", "2021-06-14T00:00:00-04:00", "2021-06-15T00:00:00-04:00", "2021-06-16T00:00:00-04:00", "2021-06-17T00:00:00-04:00", "2021-06-18T00:00:00-04:00", "2021-06-19T00:00:00-04:00", "2021-06-20T00:00:00-04:00", "2021-06-21T00:00:00-04:00", "2021-06-22T00:00:00-04:00", "2021-06-23T00:00:00-04:00", "2021-06-24T00:00:00-04:00"], "y": [3.2980555555555555, 4.510555555555555, 0.21861111111111112, null, null, null, null, null, null, null, 1.8119444444444444, 2.141388888888889, 2.277222222222222, null, 1.1797222222222221, 3.1752777777777776, 0.7952777777777778, 1.6172222222222221, null, 2.358611111111111, 4.218333333333334, 3.915277777777778, 1.3994444444444445, 4.383611111111111, 0.1913888888888889, 2.482222222222222, 2.3722222222222222]}, {"mode": "lines", "name": "average", "text": ["1.57", "1.57"], "type": "scatter", "x": ["2021-05-29T00:00:00-04:00", "2021-05-30T00:00:00-04:00", "2021-05-31T00:00:00-04:00", "2021-06-01T00:00:00-04:00", "2021-06-02T00:00:00-04:00", "2021-06-03T00:00:00-04:00", "2021-06-04T00:00:00-04:00", "2021-06-05T00:00:00-04:00", "2021-06-06T00:00:00-04:00", "2021-06-07T00:00:00-04:00", "2021-06-08T00:00:00-04:00", "2021-06-09T00:00:00-04:00", "2021-06-10T00:00:00-04:00", "2021-06-11T00:00:00-04:00", "2021-06-12T00:00:00-04:00", "2021-06-13T00:00:00-04:00", "2021-06-14T00:00:00-04:00", "2021-06-15T00:00:00-04:00", "2021-06-16T00:00:00-04:00", "2021-06-17T00:00:00-04:00", "2021-06-18T00:00:00-04:00", "2021-06-19T00:00:00-04:00", "2021-06-20T00:00:00-04:00", "2021-06-21T00:00:00-04:00", "2021-06-22T00:00:00-04:00", "2021-06-23T00:00:00-04:00", "2021-06-24T00:00:00-04:00"], "y": [1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551, 1.568384773662551]}],
-                        {"hovermode": "x", "margin": {"pad": 0}, "template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "total hours commited: 42.35"}, "yaxis": {"title": {"text": "hours per 1 d"}}},
-                        {"responsive": true}
-                    )
-                };
-
-            </script>
-        </div>
-
+<h3 id="2021-07-01-002148695052-clock-out">2021-07-01 00:21:48.695052: clock-out<a class="headerlink" href="#2021-07-01-002148695052-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>slimed down image</li>
+</ul>
+<h3 id="2021-06-30-232737784010-clock-in">2021-06-30 23:27:37.784010: clock-in<a class="headerlink" href="#2021-06-30-232737784010-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-30-215817069562-clock-out-t-30m">2021-06-30 21:58:17.069562: clock-out: T-30m<a class="headerlink" href="#2021-06-30-215817069562-clock-out-t-30m" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-30-211729237422-clock-in">2021-06-30 21:17:29.237422: clock-in<a class="headerlink" href="#2021-06-30-211729237422-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-30-002543952103-clock-out">2021-06-30 00:25:43.952103: clock-out<a class="headerlink" href="#2021-06-30-002543952103-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>slimming down pip packages
+Trying to conda install the following</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code><span class="k">RUN</span> <span class="nb">source</span> /venv/bin/activate <span class="se">\</span>
+ <span class="o">&amp;&amp;</span> pip install  <span class="se">\</span>
+    audiogen-p3 MIDIUtil <span class="se">\</span>
+    dash-bootstrap-components <span class="se">\</span>
+ <span class="o">&amp;&amp;</span> pip install git+https://github.com/predsci/psidash.git
+</code></pre></div>
+* dash-daq has a conda-forge recipe
+* building Historic-Crypto from conda skeleton</p>
+<h3 id="2021-06-29-231703409827-clock-in">2021-06-29 23:17:03.409827: clock-in<a class="headerlink" href="#2021-06-29-231703409827-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-29-214915649821-clock-out">2021-06-29 21:49:15.649821: clock-out<a class="headerlink" href="#2021-06-29-214915649821-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>multi stage fixes</li>
+<li>adding bash init</li>
+<li>keeping environment active</li>
+<li>correcting conda init</li>
+<li>switching to named environment audiolizer</li>
+<li>correcting environment name</li>
+<li>formatting</li>
+<li>
+<p>multi-stage build</p>
+</li>
+<li>
+<p>using conda-pack to slim down images https://pythonspeed.com/articles/conda-docker-image-size/</p>
+</li>
+</ul>
+<h3 id="2021-06-29-175757782630-clock-in">2021-06-29 17:57:57.782630: clock-in<a class="headerlink" href="#2021-06-29-175757782630-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-27-142434558294-clock-out">2021-06-27 14:24:34.558294: clock-out<a class="headerlink" href="#2021-06-27-142434558294-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>dash react tutorial</li>
+</ul>
+<h3 id="2021-06-27-113347637563-clock-in">2021-06-27 11:33:47.637563: clock-in<a class="headerlink" href="#2021-06-27-113347637563-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-27-101916480666-clock-out-t-15m">2021-06-27 10:19:16.480666: clock-out: T-15m<a class="headerlink" href="#2021-06-27-101916480666-clock-out-t-15m" title="Permanent link">&para;</a></h3>
+<ul>
+<li>reading up on react-dash https://dash.plotly.com/react-for-python-developers</li>
+</ul>
+<h3 id="2021-06-27-093013979558-clock-in">2021-06-27 09:30:13.979558: clock-in<a class="headerlink" href="#2021-06-27-093013979558-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-26-221821224806-clock-out">2021-06-26 22:18:21.224806: clock-out<a class="headerlink" href="#2021-06-26-221821224806-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>pushed apembroke/audiolizer:0.4</li>
+<li>added ticker options</li>
+</ul>
+<h3 id="2021-06-26-190939374354-clock-in">2021-06-26 19:09:39.374354: clock-in<a class="headerlink" href="#2021-06-26-190939374354-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-26-180956490850-clock-out">2021-06-26 18:09:56.490850: clock-out<a class="headerlink" href="#2021-06-26-180956490850-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>responsive resizing</li>
+<li><code>app.clientside_callback</code>?</li>
+</ul>
+<h3 id="2021-06-26-162902448030-clock-in">2021-06-26 16:29:02.448030: clock-in<a class="headerlink" href="#2021-06-26-162902448030-clock-in" title="Permanent link">&para;</a></h3>
+<ul>
+<li>alternative price data: bitstamp, crypto.com</li>
+</ul>
+<h3 id="2021-06-26-012553646217-clock-out">2021-06-26 01:25:53.646217: clock-out<a class="headerlink" href="#2021-06-26-012553646217-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed data gap</li>
+</ul>
+<h3 id="2021-06-26-003214224878-clock-in">2021-06-26 00:32:14.224878: clock-in<a class="headerlink" href="#2021-06-26-003214224878-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-25-232840701319-clock-out">2021-06-25 23:28:40.701319: clock-out<a class="headerlink" href="#2021-06-25-232840701319-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>found price nans</li>
+<li>shrinking RUN command</li>
+<li>compressing docker image</li>
+</ul>
+<h3 id="2021-06-25-215524815029-clock-in">2021-06-25 21:55:24.815029: clock-in<a class="headerlink" href="#2021-06-25-215524815029-clock-in" title="Permanent link">&para;</a></h3>
+<h3 id="2021-06-24-231845354779-clock-out">2021-06-24 23:18:45.354779: clock-out<a class="headerlink" href="#2021-06-24-231845354779-clock-out" title="Permanent link">&para;</a></h3>
+<ul>
+<li>switching to bootstrap</li>
+<li>adding to current time to include more data</li>
+</ul>
+<h3 id="2021-06-24-215149598071-clock-in">2021-06-24 21:51:49.598071: clock-in<a class="headerlink" href="#2021-06-24-215149598071-clock-in" title="Permanent link">&para;</a></h3>
 <h3 id="2021-06-24-193626101766-clock-out">2021-06-24 19:36:26.101766: clock-out<a class="headerlink" href="#2021-06-24-193626101766-clock-out" title="Permanent link">&para;</a></h3>
 <ul>
 <li>added csv compression, price files cache limit, initial start date</li>
@@ -1570,31 +1945,31 @@ push the tempo.. 1440 beats per minute
             </article>
           </div>
         </div>
+        
       </main>
       
         
 <footer class="md-footer">
   
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
         
-          <a href="../About/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <a href="../About/" class="md-footer__link md-footer__link--prev" aria-label="Previous: How it works" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              How it works
             </div>
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                How it works
-              </div>
-            </div>
-          </a>
-        
-        
-      </nav>
-    </div>
+          </div>
+        </a>
+      
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1604,6 +1979,7 @@ push the tempo.. 1440 beats per minute
         <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs
         </a>
+        
       </div>
       
     </div>
@@ -1611,19 +1987,13 @@ push the tempo.. 1440 beats per minute
 </footer>
       
     </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
     
-      <script src="../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-      
-      <script>
-        app = initialize({
-          base: "..",
-          features: [],
-          search: Object.assign({
-            worker: "../assets/javascripts/worker/search.9c0e82ba.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
+    
+      <script src="../assets/javascripts/bundle.76f349be.min.js"></script>
       
     
   </body>
