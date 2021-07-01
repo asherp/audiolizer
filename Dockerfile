@@ -1,46 +1,20 @@
-FROM continuumio/miniconda3 AS builder
+FROM python:3.7-slim-buster AS builder
 
-RUN conda create -n audiolizer python==3.7
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
 
-# Make RUN commands use the new environment:
-RUN echo "conda activate audiolizer" >> ~/.bashrc
-SHELL ["/bin/bash", "--login", "-c"]
+COPY requirements.txt .
+RUN pip install --user -r requirements.txt
+RUN pip install --user git+https://github.com/predsci/psidash.git
 
-RUN conda install defaults::conda-pack
-RUN conda install pandas
-RUN conda install -c conda-forge jupyter 
-RUN conda install -c plotly jupyter-dash 
-RUN conda install pyaudio
-RUN conda install git
-RUN conda install -c conda-forge dash-daq
-
-# CMD bash
-
-FROM builder AS build1
-
-RUN conda-pack -n audiolizer -o /tmp/env.tar && \
-  mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
-  rm /tmp/env.tar
-
-RUN /venv/bin/conda-unpack
 
 FROM python:3.7-slim-buster AS runtime
 
-# Copy /venv from the previous stage:
-COPY --from=build1 /venv /venv
+COPY --from=builder /root/.local /root/.local
 
-SHELL ["/bin/bash", "-c"]
-
-# Don't know how to install with conda
-
-WORKDIR /home
-
-RUN source /venv/bin/activate \
- && pip install  Historic-Crypto \
-	audiogen-p3 MIDIUtil \
-	dash-bootstrap-components \
- && pip install git+https://github.com/predsci/psidash.git
-
+# Make sure scripts in .local are usable:
+ENV PATH=/root/.local/bin:$PATH
 
 COPY . /home/audiolizer
 
@@ -50,10 +24,6 @@ ENV AUDIOLIZER_TEMP /home/audiolizer/audiolizer/history
 
 # # CMD jupyter notebook audiolizer/audiolizer.py --port=8888 --no-browser --ip=0.0.0.0 --allow-root
 
-# When image is run, run the code with the environment
-# activated:
-SHELL ["/bin/bash", "-c"]
-ENTRYPOINT source /venv/bin/activate && \
-           python audiolizer.py
+CMD python audiolizer.py
 
 

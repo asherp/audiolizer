@@ -1,3 +1,4 @@
+* slimed down image
 
 ### 2021-06-30 23:27:37.784010: clock-in
 
