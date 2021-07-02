@@ -1,4 +1,6 @@
+* activating jupytext
 * adding jupytext
+* running docker in docker: `docker run -ti -v /var/run/docker.sock:/var/run/docker.sock docker`
 
 ### 2021-07-02 01:20:37.871837: clock-in
 
