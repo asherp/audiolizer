@@ -1,3 +1,6 @@
+
+### 2021-07-02 01:20:37.871837: clock-in
+
 ### 2021-07-01 21:54:04.012894: clock-out: T-10m 
 
 * fixed up environment variables
