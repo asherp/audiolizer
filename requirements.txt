@@ -43,6 +43,7 @@ jupyter-core==4.7.1
 jupyter-dash==0.4.0
 jupyterlab-pygments==0.1.2
 jupyterlab-widgets==1.0.0
+jupytext==1.11.3
 MarkupSafe==2.0.1
 matplotlib-inline==0.1.2
 MIDIUtil==1.2.1
