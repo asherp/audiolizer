@@ -1,3 +1,6 @@
+
+### 2021-07-03 12:14:24.538693: clock-in
+
 ### 2021-07-03 00:53:49.489949: clock-out
 
 * looking at umbrel submission procedure
