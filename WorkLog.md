@@ -1,3 +1,4 @@
+* removing src mount from production
 ### 2021-07-03 14:35:53.010888: clock-out
 
 * adding gunicorn
