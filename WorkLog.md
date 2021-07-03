@@ -1,3 +1,5 @@
+### 2021-07-03 00:53:49.489949: clock-out
+
 * looking at umbrel submission procedure
 * How to build cross-platform
 ```console
