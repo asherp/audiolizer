@@ -1,3 +1,9 @@
+* looking at umbrel submission procedure
+* How to build cross-platform
+```console
+docker buildx build --platform linux/arm64,linux/amd64 --tag apembroke/audiolizer:0.4.1 --output "type=registry" .
+```
+* added LICENSE file
 
 ### 2021-07-02 23:58:07.637725: clock-in
 
