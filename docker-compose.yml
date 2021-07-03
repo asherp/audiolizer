@@ -3,12 +3,12 @@ version: "3.2"
 
 services:
   audiolizer:
-    image: apembroke/audiolizer
+    image: apembroke/audiolizer:latest
     ports:
-      - "8051:8051"
+      - "5000:5000"
     environment:
       AUDIOLIZER_TEMP: /home/audiolizer/audiolizer/history
-    command: ["python", "audiolizer.py"]
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "audiolizer:server"]
     volumes:
       - type: bind
         source: ${AUDIOLIZER_ASSETS}
@@ -16,8 +16,9 @@ services:
       - type: bind
         source: ${AUDIOLIZER_PRICES}
         target: /home/audiolizer/audiolizer/history
+    working_dir: /home/audiolizer/audiolizer
   audiolizer-dev:
-    image: apembroke/audiolizer
+    image: apembroke/audiolizer:latest
     ports:
       - "8051:8051"
       - "8888:8888"
@@ -34,5 +35,6 @@ services:
       - type: bind
         source: ${AUDIOLIZER_SRC}
         target: /home/audiolizer
+    working_dir: /home/audiolizer/audiolizer
 
         

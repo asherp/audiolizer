@@ -1,3 +1,5 @@
+* adding gunicorn
+* `gunicorn==20.1.0`
 
 ### 2021-07-03 12:14:24.538693: clock-in
 

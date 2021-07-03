@@ -27,6 +27,8 @@ from Historic_Crypto import Cryptocurrencies
 # +
 from Historic_Crypto import Cryptocurrencies
 
+import flask
+
 data = Cryptocurrencies(coin_search = '', extended_output=True).find_crypto_pairs()
 # -
 
@@ -349,7 +351,21 @@ def clear_files(fname_glob="assets/*.wav", max_storage=10e6):
 # +
 
 conf = load_conf('../audiolizer.yaml')
+
+# app = dash.Dash(__name__, server=server) # call flask server
+
+import dash
+
+server = flask.Flask(__name__) # define flask app.server
+
+conf['app']['server'] = server
+
 app = load_dash(__name__, conf['app'], conf.get('import'))
+
+# app = dash.Dash(__name__, server=server) # call flask server
+
+# app = dash.Dash(__name__, server=server) # how we need to initialize
+
 app.layout = load_components(conf['layout'], conf.get('import'))
 
 if 'callbacks' in conf:
@@ -497,6 +513,8 @@ def play(base, quote, start, end, cadence, log_freq_range,
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
     return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+
+server = app.server
 
 if __name__ == '__main__':
     app.run_server(
