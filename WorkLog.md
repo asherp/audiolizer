@@ -1,3 +1,6 @@
+
+### 2021-07-02 23:58:07.637725: clock-in
+
 ### 2021-07-02 02:38:04.026531: clock-out: T-30m 
 
 * activating jupytext
