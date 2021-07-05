@@ -1,3 +1,4 @@
+* fixed logo favicon
 
 ### 2021-07-05 12:33:12.753795: clock-in
 

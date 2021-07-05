@@ -36,19 +36,22 @@ nav:
       - html.A:
           children:
             - dbc.Row:
+                align: center
                 justify: between
                 children:
                   - dbc.Col:
                       width: 4
                       children:
                       - html.Img:
-                          src: /assets/favicon.ico
-                          height: 30px
+                          id: logo
+                          src: https://github.com/asherp/audiolizer/raw/master/docs/assets/audiolizer_icon.jpg
+                          height: 35px
                   - dbc.Col:
                       width: 4
                       children:
                       - dbc.NavbarBrand:
-                          children: How It Works
+                          children:
+                            html.H6: How It Works
                           # className: ml-3
           href: https://asherp.github.io/audiolizer/About/
     dark: True
