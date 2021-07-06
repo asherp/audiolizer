@@ -1,0 +1,77 @@
+# This is a basic workflow to help you get started with Actions
+
+name: TEMPLATE.yml
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    paths:
+      - '.github/workflows/TEMPLATE.yml'
+      - '.github/workflows/TEMPLATE.sh'
+    schedule:
+      - cron: "*/5 * * * *"
+
+    branches:       #[ master ]
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - 'master'    # includes master
+      - 'main'      # includes main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  github-workspace:
+    name: github-workspace
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Print github workspace
+        run: |
+          printenv
+
+  run-automate-sh:
+    runs-on: ubuntu-18.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          make docs
+          git diff
+
+  ubuntu-18-host:
+    runs-on: ubuntu-18.04
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          make docs
+          git diff
+
+# Cross Compile 
+  macos-10-host:
+    runs-on: macos-10.15
+    steps:
+      ## REF: https://githubmemory.com/repo/Gisleburt/cancel-workflow-action
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          make docs
+          git diff
+
