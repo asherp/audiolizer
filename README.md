@@ -48,6 +48,13 @@ You may hear a startup sound when the application starts. If you don't, that's o
 
 # Running from Docker
 
+From the base of this repo
+
+```console
+docker-compose up audiolizer
+```
+Open your browser to `localhost:80`
+
 Running without temp directories:
 ```console
 docker run -p 8051:8051 -it apembroke/audiolizer
