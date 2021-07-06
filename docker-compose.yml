@@ -10,11 +10,8 @@ services:
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "audiolizer:server"]
     volumes:
       - type: bind
-        source: ${AUDIOLIZER_ASSETS}
-        target: /home/audiolizer/audiolizer/assets
-      - type: bind
-        source: ${AUDIOLIZER_PRICES}
-        target: /home/audiolizer/audiolizer/history
+        source: ${PWD}
+        target: /home/audiolizer
     working_dir: /home/audiolizer/audiolizer
 #dev config
   audiolizer-dev:
@@ -28,13 +25,7 @@ services:
     # command: ["jupyter", "notebook", "audiolizer.py", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
     volumes:
       - type: bind
-        source: ${AUDIOLIZER_ASSETS}
-        target: /home/audiolizer/audiolizer/assets
-      - type: bind
-        source: ${AUDIOLIZER_PRICES}
-        target: /home/audiolizer/audiolizer/history
-      - type: bind
-        source: ${AUDIOLIZER_SRC}
+        source: ${PWD}
         target: /home/audiolizer
     working_dir: /home/audiolizer/audiolizer
 

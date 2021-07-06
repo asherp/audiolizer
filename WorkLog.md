@@ -1,3 +1,4 @@
+* mounting pwd into container instead of temporary directories
 * adding .env instructions
 * updating docker-compose instructions
 
