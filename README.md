@@ -1,7 +1,8 @@
 
-# About
+## [AUDIOLIZER](https://github.com/Audiolizer/audiolizer)
+#### Market audiolization dashboard
 
-Market audiolization dashboard
+
 
 ![Market audiolizer screenshot](https://github.com/asherp/audiolizer/raw/master/audiolizer0.2_screen_shot.png)
 
@@ -19,30 +20,31 @@ Visit the documenation site to learn [how it works](https://asherp.github.io/aud
 * audiogen (pip)
 
 docs dependences (optional)
+
 * mkdocs (pip)
 * tabulate (pip)
 
 # Running from python
 
-```console
-git clone https://github.com/asherp/audiolizer
-cd audiolizer
+```shell
+git clone https://github.com/asherp/audiolizer \
+cd audiolizer \
 python audiolizer.py
 ```
 
 You should see something like the following output
+
 ```
 audiolizer temp data: ./history/
 Dash is running on http://0.0.0.0:8051/
-
- * Serving Flask app 'audiolizer' (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: on
+* Serving Flask app 'audiolizer' (lazy loading)
+* Environment: production
+	- WARNING: This is a development server. Do not use it in a production deployment.
+	- Use a production WSGI server instead.
+* Debug mode: on
 
 ```
-Open your browser to localhost:8051.
+Open your browser to [http://localhost:8051](http://localhost:8051)
 
 You may hear a startup sound when the application starts. If you don't, that's ok - the dashboard will still play through the browser! 
 
@@ -71,7 +73,7 @@ docker run -p 8051:8051 -it apembroke/audiolizer
 
 Running with mounted temp directories:
 
-```console
+```shell
 docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
 ```
 
