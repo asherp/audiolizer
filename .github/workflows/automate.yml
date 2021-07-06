@@ -39,6 +39,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make
         run: |
+          AUDIOLIZER_ASSETS=~/audio_files
+          AUDIOLIZER_PRICES=~/price_data
+          AUDIOLIZER_SRC=~/audiolizer
+          JUPYTER_PASSWORD=changeme
+          export AUDIOLIZER_ASSETS
+          export AUDIOLIZER_PRICES
+          export AUDIOLIZER_SRC
+          export JUPYTER_PASSWORD
           sudo docker-compose up audiolizer
           #docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
 
@@ -54,8 +62,7 @@ jobs:
       - name: Make
         run: |
           brew install docker-compose
-          docker-compose up audiolizer
-          #docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
+          docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
 
   ubuntu-18-self-host:
     runs-on: self-hosted
@@ -66,10 +73,9 @@ jobs:
           access_token: ${{ github.token }}
 
       - uses: actions/checkout@v2
-      - name: Make
+      - name: docker-run
         run: |
-          sudo docker-compose up audiolizer
-          #docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
+          sudo docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
 
   ubuntu-18-self-host2:
     runs-on: self-hosted
@@ -83,5 +89,15 @@ jobs:
       - name: Make
         run: |
           #docker-compose up audiolizer
-          sudo docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
+          AUDIOLIZER_ASSETS=~/audio_files
+          AUDIOLIZER_PRICES=~/price_data
+          AUDIOLIZER_SRC=~/audiolizer
+          JUPYTER_PASSWORD=changeme
+          PUBLIC_PORT=80
+          export AUDIOLIZER_ASSETS
+          export AUDIOLIZER_PRICES
+          export AUDIOLIZER_SRC
+          export JUPYTER_PASSWORD
+          export PUBLIC_PORT
+          sudo docker run -v $(AUDIOLIZER_ASSETS):/home/audiolizer/audiolizer/assets -v $(AUDIOLIZER_PRICES):/home/audiolizer/audiolizer/history -p $(PUBLIC_PORT):8051 -it apembroke/audiolizer
 
