@@ -1,3 +1,4 @@
+* adding .env instructions
 * updating docker-compose instructions
 
 ### 2021-07-05 23:03:23.315253: clock-in

@@ -48,7 +48,16 @@ You may hear a startup sound when the application starts. If you don't, that's o
 
 # Running from Docker
 
-From the base of this repo
+From the base of this repo, create a `.env` file and define the following variables
+
+```bash
+AUDIOLIZER_ASSETS=/full/path/to/temporary/audio_files
+AUDIOLIZER_PRICES=/full/path/to/temporary/price_data
+AUDIOLIZER_SRC=/full/path/to/audiolizer/repo
+JUPYTER_PASSWORD=
+```
+
+Now run the audiolizer application:
 
 ```console
 docker-compose up audiolizer
@@ -65,3 +74,4 @@ Running with mounted temp directories:
 ```console
 docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer
 ```
+
