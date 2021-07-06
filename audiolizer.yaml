@@ -95,36 +95,36 @@ player_settings:
         lg: 3
         xl: 3
       children:
-        - html.H4: Cache settings
-        - dbc.Row:
-            children:
-              - dbc.Col:
-                  width: 4
-                  children:
-                  - daq.NumericInput:
-                      id: price_threshold
-                      max: 50
-                      value: 10
-                      label: price [Mb]
-                      labelPosition: bottom
-              - dbc.Col:
-                  width: 4
-                  children:
-                  - daq.NumericInput:
-                      id: wav_threshold
-                      max: 50
-                      value: 10
-                      label: wav [Mb]
-                      labelPosition: bottom
-              - dbc.Col:
-                  width: 4
-                  children:
-                  - daq.NumericInput:
-                      id: midi_threshold
-                      max: 50
-                      value: 10
-                      label: midi [Mb]
-                      labelPosition: bottom
+        # - html.H4: Cache settings
+        # - dbc.Row:
+        #     children:
+        #       - dbc.Col:
+        #           width: 4
+        #           children:
+        #           - daq.NumericInput:
+        #               id: price_threshold
+        #               max: 50
+        #               value: 10
+        #               label: price [Mb]
+        #               labelPosition: bottom
+        #       - dbc.Col:
+        #           width: 4
+        #           children:
+        #           - daq.NumericInput:
+        #               id: wav_threshold
+        #               max: 50
+        #               value: 10
+        #               label: wav [Mb]
+        #               labelPosition: bottom
+        #       - dbc.Col:
+        #           width: 4
+        #           children:
+        #           - daq.NumericInput:
+        #               id: midi_threshold
+        #               max: 50
+        #               value: 10
+        #               label: midi [Mb]
+        #               labelPosition: bottom
 
 date_settings:
   - dbc.Row:
@@ -435,12 +435,12 @@ callbacks:
         attr: value
       - id: candlestick-chart
         attr: selectedData
-      - id: wav_threshold
-        attr: value
-      - id: midi_threshold
-        attr: value
-      - id: price_threshold
-        attr: value
+      # - id: wav_threshold
+      #   attr: value
+      # - id: midi_threshold
+      #   attr: value
+      # - id: price_threshold
+      #   attr: value
       - id: price_type
         attr: value
     output:

@@ -43,8 +43,14 @@ from midiutil import MIDIFile
 
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
 print('audiolizer temp data:', audiolizer_temp_dir)
+granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
-granularity = 300 # seconds
+# wav_threshold, midi_threshold, price_threshold,
+wav_threshold = int(os.environ.get('AUDIOLIZER_WAV_CACHE_SIZE', 10)) # megabytes
+midi_threshold = int(os.environ.get('AUDIOLIZER_MIDI_CACHE_SIZE', 10))
+price_threshold = int(os.environ.get('AUDIOLIZER_PRICE_CACHE_SIZE', 10))
+
+print('cache sizes: \n wav:{}\n midi:{}\n price:{}')
 
 
 def load_date(ticker, granularity, int_):
@@ -406,7 +412,8 @@ def update_date_range(date_select):
 def play(base, quote, start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
          tempo, toggle_merge, silence, selectedData,
-         wav_threshold, midi_threshold, price_threshold, price_type):
+         # wav_threshold, midi_threshold, price_threshold,
+         price_type):
 
     ticker = '{}-{}'.format(base, quote)
     print('ticker: {}'.format(ticker))
