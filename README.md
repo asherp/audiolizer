@@ -59,7 +59,7 @@ docker-compose up audiolizer
 ```
 This will automatically mount the audiolizer repo into the container's `/home/audiolizer` directory.
 
-Open your browser to `localhost:80`
+Open your browser to [http://localhost:80](http://localhost:80)
 
 ## option 2: docker run
 

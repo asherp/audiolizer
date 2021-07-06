@@ -1,3 +1,4 @@
+* hyperlinking localhost
 * clarification of mounting options
 * mounting pwd into container instead of temporary directories
 * adding .env instructions
