@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#about" class="md-skip">
+        <a href="#audiolizer" class="md-skip">
           Skip to content
         </a>
       
@@ -177,8 +177,6 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           Home
@@ -194,8 +192,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -204,9 +200,70 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#audiolizer" class="md-nav__link">
+    AUDIOLIZER
+  </a>
+  
+    <nav class="md-nav" aria-label="AUDIOLIZER">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#market-audiolization-dashboard" class="md-nav__link">
+    Market audiolization dashboard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     Requirements
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-from-python" class="md-nav__link">
+    Running from python
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-from-docker" class="md-nav__link">
+    Running from Docker
+  </a>
+  
+    <nav class="md-nav" aria-label="Running from Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-docker-compose" class="md-nav__link">
+    option 1: docker-compose
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-docker-run" class="md-nav__link">
+    option 2: docker run
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-3-docker-run-with-temp-directories-mounted" class="md-nav__link">
+    option 3: docker run with temp directories mounted
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -264,8 +321,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -274,9 +329,70 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#audiolizer" class="md-nav__link">
+    AUDIOLIZER
+  </a>
+  
+    <nav class="md-nav" aria-label="AUDIOLIZER">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#market-audiolization-dashboard" class="md-nav__link">
+    Market audiolization dashboard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     Requirements
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-from-python" class="md-nav__link">
+    Running from python
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-from-docker" class="md-nav__link">
+    Running from Docker
+  </a>
+  
+    <nav class="md-nav" aria-label="Running from Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-docker-compose" class="md-nav__link">
+    option 1: docker-compose
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-docker-run" class="md-nav__link">
+    option 2: docker run
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-3-docker-run-with-temp-directories-mounted" class="md-nav__link">
+    option 3: docker run with temp directories mounted
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -293,8 +409,8 @@
               
                 
                 
-                <h1 id="about">About<a class="headerlink" href="#about" title="Permanent link">&para;</a></h1>
-<p>Market audiolization dashboard</p>
+                <h2 id="audiolizer"><a href="https://github.com/Audiolizer/audiolizer">AUDIOLIZER</a><a class="headerlink" href="#audiolizer" title="Permanent link">&para;</a></h2>
+<h4 id="market-audiolization-dashboard">Market audiolization dashboard<a class="headerlink" href="#market-audiolization-dashboard" title="Permanent link">&para;</a></h4>
 <p><img alt="Market audiolizer screenshot" src="https://github.com/asherp/audiolizer/raw/master/audiolizer0.2_screen_shot.png" /></p>
 <p>Here is the <a href="https://github.com/asherp/audiolizer/raw/master/docs/assets/BTC_2020-09-01_2021-06-21_1W_C3_C5_pitch_25_75_240bpm_merged_rests.midi">midi file</a> for the above plot.</p>
 <p>Visit the documenation site to learn <a href="https://asherp.github.io/audiolizer/About/">how it works</a>!</p>
@@ -307,32 +423,41 @@
 <li>pyaudio (conda)</li>
 <li>audiogen (pip)</li>
 </ul>
-<p>docs dependences (optional)
-* mkdocs (pip)
-* tabulate (pip)</p>
+<p>docs dependences (optional)</p>
+<ul>
+<li>mkdocs (pip)</li>
+<li>tabulate (pip)</li>
+</ul>
 <h1 id="running-from-python">Running from python<a class="headerlink" href="#running-from-python" title="Permanent link">&para;</a></h1>
-<div class="highlight"><pre><span></span><code><span class="go">git clone https://github.com/asherp/audiolizer</span>
-<span class="go">cd audiolizer</span>
-<span class="go">python audiolizer.py</span>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/asherp/audiolizer <span class="se">\</span>
+<span class="nb">cd</span> audiolizer <span class="se">\</span>
+python audiolizer.py
 </code></pre></div>
-<p>You should see something like the following output
-<div class="highlight"><pre><span></span><code>audiolizer temp data: ./history/
+<p>You should see something like the following output</p>
+<p><div class="highlight"><pre><span></span><code>audiolizer temp data: ./history/
 Dash is running on http://0.0.0.0:8051/
-
- * Serving Flask app &#39;audiolizer&#39; (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: on
+* Serving Flask app &#39;audiolizer&#39; (lazy loading)
+* Environment: production
+    - WARNING: This is a development server. Do not use it in a production deployment.
+    - Use a production WSGI server instead.
+* Debug mode: on
 </code></pre></div>
-Open your browser to localhost:8051.</p>
+Open your browser to <a href="http://localhost:8051">http://localhost:8051</a></p>
 <p>You may hear a startup sound when the application starts. If you don't, that's ok - the dashboard will still play through the browser! </p>
 <h1 id="running-from-docker">Running from Docker<a class="headerlink" href="#running-from-docker" title="Permanent link">&para;</a></h1>
-<p>Running without temp directories:
+<h2 id="option-1-docker-compose">option 1: docker-compose<a class="headerlink" href="#option-1-docker-compose" title="Permanent link">&para;</a></h2>
+<p>Now run the audiolizer application:</p>
+<p><div class="highlight"><pre><span></span><code><span class="go">docker-compose up audiolizer</span>
+</code></pre></div>
+This will automatically mount the audiolizer repo into the container's <code>/home/audiolizer</code> directory.</p>
+<p>Open your browser to <a href="http://localhost:80">http://localhost:80</a></p>
+<h2 id="option-2-docker-run">option 2: docker run<a class="headerlink" href="#option-2-docker-run" title="Permanent link">&para;</a></h2>
+<p>Running without mounting the repo into container:</p>
 <div class="highlight"><pre><span></span><code><span class="go">docker run -p 8051:8051 -it apembroke/audiolizer</span>
-</code></pre></div></p>
+</code></pre></div>
+<h2 id="option-3-docker-run-with-temp-directories-mounted">option 3: docker run with temp directories mounted<a class="headerlink" href="#option-3-docker-run-with-temp-directories-mounted" title="Permanent link">&para;</a></h2>
 <p>Running with mounted temp directories:</p>
-<div class="highlight"><pre><span></span><code><span class="go">docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p 8051:8051 -it apembroke/audiolizer</span>
+<div class="highlight"><pre><span></span><code>docker run -v /tmp/audio_files:/home/audiolizer/audiolizer/assets -v /tmp/price_data:/home/audiolizer/audiolizer/history -p <span class="m">8051</span>:8051 -it apembroke/audiolizer
 </code></pre></div>
                 
               
