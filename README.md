@@ -50,26 +50,26 @@ You may hear a startup sound when the application starts. If you don't, that's o
 
 # Running from Docker
 
-From the base of this repo, create a `.env` file and define the following variables
-
-```bash
-AUDIOLIZER_ASSETS=/full/path/to/temporary/audio_files
-AUDIOLIZER_PRICES=/full/path/to/temporary/price_data
-AUDIOLIZER_SRC=/full/path/to/audiolizer/repo
-JUPYTER_PASSWORD=
-```
+## option 1: docker-compose
 
 Now run the audiolizer application:
 
 ```console
 docker-compose up audiolizer
 ```
+This will automatically mount the audiolizer repo into the container's `/home/audiolizer` directory.
+
 Open your browser to `localhost:80`
 
-Running without temp directories:
+## option 2: docker run
+
+Running without mounting the repo into container:
+
 ```console
 docker run -p 8051:8051 -it apembroke/audiolizer
 ```
+
+## option 3: docker run with temp directories mounted
 
 Running with mounted temp directories:
 
