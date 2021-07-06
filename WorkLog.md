@@ -1,3 +1,6 @@
+
+### 2021-07-06 11:38:02.823668: clock-in: T-10m 
+
 ### 2021-07-06 01:58:45.464038: clock-out
 
 * worked with Randy to set up audiolizer.ariagora.com
