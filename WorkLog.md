@@ -1,3 +1,4 @@
+* running docker-compose in background. not sure why april keeps loading
 
 ### 2021-07-06 20:28:36.899523: clock-in: T-20m 
 
