@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://0.0.0.0:8000/</loc>
-         <lastmod>2021-07-06</lastmod>
+         <lastmod>2021-07-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://0.0.0.0:8000/About/</loc>
-         <lastmod>2021-07-06</lastmod>
+         <lastmod>2021-07-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://0.0.0.0:8000/WorkLog/</loc>
-         <lastmod>2021-07-06</lastmod>
+         <lastmod>2021-07-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
