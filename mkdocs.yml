@@ -1,6 +1,8 @@
 site_name: Market Audiolizer
 
-site_url: http://0.0.0.0:8000
+site_url: http://audiolizer.ariagora.com/
+
+repo_url: https://github.com/Audiolizer/audiolizer
 
 nav:
 - Home: README.md
