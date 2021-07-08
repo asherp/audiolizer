@@ -1,3 +1,5 @@
+### 2021-07-08 01:54:10.939607: clock-out
+
 * querying in batches
 * added link to ariagora
 
