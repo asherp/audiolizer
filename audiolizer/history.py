@@ -15,11 +15,8 @@
 
 # Objective: get_history should fetch all the data at once then save it to separate files.
 
-
-
 # +
 from Historic_Crypto import HistoricalData
-from audiolizer import granularity, audiolizer_temp_dir
 import pandas as pd
 import os
 

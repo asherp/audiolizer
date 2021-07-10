@@ -1,3 +1,4 @@
+* manual sync
 * refactoring history
 
 ### 2021-07-10 15:05:23.859541: clock-in
