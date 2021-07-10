@@ -418,9 +418,9 @@ def play(base, quote, start, end, cadence, log_freq_range,
             if mode == 'tone':
                 pass
             elif mode == 'pitch':
-                freq_ = freq(pitch(freq_)) 
+                freq_ = freq(pitch(freq_))
             else:
-                raise NotImplementedError(mode)   
+                raise NotImplementedError(mode)
             beep = freq_, volume_/max_vol, duration
             beeps.append(beep)
         else:
@@ -444,7 +444,7 @@ def play(base, quote, start, end, cadence, log_freq_range,
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
-    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
+    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, ''
 
 server = app.server
 
@@ -460,6 +460,5 @@ if __name__ == '__main__':
 
 # -
 # ! jupytext --sync audiolizer.ipynb
-
 
 

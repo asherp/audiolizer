@@ -1,3 +1,4 @@
+* removing gap logic for now
 * manual sync
 * refactoring history
 

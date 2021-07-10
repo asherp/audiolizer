@@ -91,7 +91,7 @@ def fetch_missing(files_status, ticker, granularity):
         df = fetch_data(ticker, granularity, *endpoints)
         write_data(df, ticker)
 
-def get_history(ticker, start_date, end_date = None, granularity=granularity):
+def get_history(ticker, start_date, end_date=None, granularity=granularity):
     """Fetch/load historical data from Coinbase API at specified granularity
     
     Data loaded from start_date through end of end_date
@@ -134,19 +134,19 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
 
     df = pd.concat(map(lambda file: pd.read_csv(file, index_col='time', parse_dates=True),
                          fnames)).drop_duplicates()
-    gaps = get_gaps(df, granularity)
-
-    if len(gaps) > 0:
-        print('found {} data gaps'.format(len(gaps)))
-        # fetch the data for each date
-        for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
-            print('\tfetching {}'.format(start_date))
-            int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
-            int_ = pd.Interval(int_.left[0], int_.right[0])
-            int_df = load_date(ticker, granularity, int_)
-            fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
-                ticker, int_.left.strftime('%Y-%m-%d'))
-            int_df.to_csv(fname, compression='gzip')
+    
+    # gaps = get_gaps(df, granularity)
+    # if len(gaps) > 0:
+    #     print('found {} data gaps'.format(len(gaps)))
+    #     # fetch the data for each date
+    #     for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
+    #         print('\tfetching {}'.format(start_date))
+    #         int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
+    #         int_ = pd.Interval(int_.left[0], int_.right[0])
+    #         int_df = load_date(ticker, granularity, int_)
+    #         fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
+    #             ticker, int_.left.strftime('%Y-%m-%d'))
+    #         int_df.to_csv(fname, compression='gzip')
 
     df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True, compression='gzip'),
                          fnames)).drop_duplicates()

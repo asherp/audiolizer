@@ -61,6 +61,13 @@ player_settings:
       width: 5
       children: 
         - html.H2: Market Audiolizer
+        - dcc.Loading:
+            id: loading
+            type: default
+            children:
+              - html.Div:
+                  id: loading-output
+                  children: loading output
   - dbc.Col:
       width:
         xs: 12
@@ -178,7 +185,7 @@ date_settings:
                   - label: '6M'
                     value: '180D-1D'
                   - label: '1Y'
-                    value: '365D-1W'
+                    value: '365D-7D'
                 value: '24H-20T'
                 inline: True
   - dbc.Row:
@@ -203,7 +210,7 @@ date_settings:
               id: cadence
               options:
                 - label: weekly
-                  value: 1W
+                  value: 7D
                 - label: daily
                   value: 1D
                 - label: 3hour
@@ -213,7 +220,7 @@ date_settings:
                 - label: 20m
                   value: 20T
               required: True
-              value: 1W
+              value: 7D
               bs_size: lg
 
 scale_settings:
@@ -452,6 +459,8 @@ callbacks:
         attr: href
       - id: midi_download
         attr: download
+      - id: loading-output
+        attr: children
   slider_marks:
     input:
       - id: url
