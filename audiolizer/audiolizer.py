@@ -46,7 +46,7 @@ print('audiolizer temp data:', audiolizer_temp_dir)
 granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
 # wav_threshold, midi_threshold, price_threshold,
-wav_threshold = int(os.environ.get('AUDIOLIZER_WAV_CACHE_SIZE', 10)) # megabytes
+wav_threshold = int(os.environ.get('AUDIOLIZER_WAV_CACHE_SIZE', 100)) # megabytes
 midi_threshold = int(os.environ.get('AUDIOLIZER_MIDI_CACHE_SIZE', 10))
 price_threshold = int(os.environ.get('AUDIOLIZER_PRICE_CACHE_SIZE', 10))
 
@@ -73,9 +73,43 @@ def get_gaps(df, granularity):
 
 
 # +
+def fetch_data(ticker, granularity, start_, end_):
+    """Need dates in this format %Y-%m-%d-%H-%M"""
+    try:
+        return HistoricalData(ticker,
+                              granularity,
+                              start_,
+                              end_,
+                              ).retrieve_data()
+    except:
+        print('could not load using {} {}'.format(start_, end_))
+        raise
+
+
+def write_data(df, ticker):
+    for t, day in df.groupby(pd.Grouper(freq='1D')):
+        tstr = t.strftime('%Y-%m-%d-%H-%M')
+        fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
+                ticker, t.strftime('%Y-%m-%d'))
+        if len(day) > 1:
+            day.to_csv(fname, compression='gzip')
+            print('wrote {}'.format(fname))
+        
+def fetch_missing(files_status, ticker, granularity):
+    """Iterate over batches of missing dates"""
+    for batch, g in files_status[files_status.found==0].groupby('batch', sort=False):
+        t1, t2 = g.iloc[[0, -1]].index
+        # extend by 1 day whether or not t1 == t2
+        t2 += pd.Timedelta('1D')
+        endpoints = [t.strftime('%Y-%m-%d-%H-%M') for t in [t1, t2]]
+        print('fetching {}, {}'.format(len(g), endpoints))
+        df = fetch_data(ticker, granularity, *endpoints)
+        write_data(df, ticker)
+
 def get_history(ticker, start_date, end_date = None, granularity=granularity):
     """Fetch/load historical data from Coinbase API at specified granularity
-
+    
+    Data loaded from start_date through end of end_date
     params:
         start_date: (str) (see pandas.to_datetime for acceptable formats)
         end_date: (str)
@@ -89,23 +123,36 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
     if end_date is None:
         end_date = today + pd.Timedelta('1D')
     else:
-        end_date = min(today, pd.to_datetime(end_date).tz_localize(None))
+        end_date = min(today, pd.to_datetime(end_date).tz_localize(None)) + pd.Timedelta('1D')
         
     fnames = []
-    for int_ in pd.interval_range(start_date,
-                                  end_date):
+    foundlings = []
+    dates = []
+    batch = []
+    batch_number = 0
+    last_found = -1
+    for int_ in pd.interval_range(start_date, end_date):
+        dates.append(int_.left)
         fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
             ticker, int_.left.strftime('%Y-%m-%d'))
-        if not os.path.exists(fname):
-            int_df = load_date(ticker, granularity, int_)
-            int_df.to_csv(fname, compression='gzip')
+        found = int(os.path.exists(fname))
+        foundlings.append(found)
+        if found != last_found:
+            batch_number += 1
+        last_found = found
+        batch.append(batch_number)
         fnames.append(fname)
-    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
+    
+    
+    files_status = pd.DataFrame(dict(files=fnames, found=foundlings, batch=batch), index=dates)
+    fetch_missing(files_status, ticker, granularity)
+
+    df = pd.concat(map(lambda file: pd.read_csv(file, index_col='time', parse_dates=True),
                          fnames)).drop_duplicates()
     gaps = get_gaps(df, granularity)
 
     if len(gaps) > 0:
-        print('found data gaps')
+        print('found {} data gaps'.format(len(gaps)))
         # fetch the data for each date
         for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
             print('\tfetching {}'.format(start_date))
@@ -154,22 +201,22 @@ import plotly.graph_objs as go
 
 
 # +
-def refactor(df, frequency = '1W'):
+def refactor(df, frequency='1W'):
     """Refactor/rebin the data to a lower cadence
 
     The data is regrouped using pd.Grouper
     """
-    
+
     low = df.low.groupby(pd.Grouper(freq=frequency)).min()
-    
+
     high = df.high.groupby(pd.Grouper(freq=frequency)).max()
-    
+
     close = df.close.groupby(pd.Grouper(freq=frequency)).last()
-    
+
     open_ = df.open.groupby(pd.Grouper(freq=frequency)).first()
-    
+
     volume = df.volume.groupby(pd.Grouper(freq=frequency)).sum()
-    
+
     return pd.DataFrame(dict(low=low, high=high, open=open_, close=close, volume=volume))
 
 def candlestick_plot(df, base, quote):    
@@ -217,14 +264,14 @@ C0 = A4*pow(2, -4.75)
 frequencies = dict(
 #     A4 = A4,
 #     C0 = C0,
-    A0 = 27.5,
-    C2 = 65.40639,
-    C3 = 130.8128,
-    C4 = 262,
-    C5 = 523.2511,
-    C6 = 1046.502,
-    C7 = 2093.005,
-    C8 = 4186, # high C on piano
+    A0=27.5,
+    C2=65.40639,
+    C3=130.8128,
+    C4=262,
+    C5=523.2511,
+    C6=1046.502,
+    C7=2093.005,
+    C8=4186, # high C on piano
 )
 # -
 
@@ -475,7 +522,7 @@ def play(base, quote, start, end, cadence, log_freq_range,
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):
-        return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+        return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
 
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
 
@@ -519,7 +566,7 @@ def play(base, quote, start, end, cadence, log_freq_range,
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
-    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
 
 server = app.server
 

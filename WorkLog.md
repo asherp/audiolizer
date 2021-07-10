@@ -1,3 +1,4 @@
+* fixed date fetching
 
 ### 2021-07-09 19:31:56.325477: clock-in
 
