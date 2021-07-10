@@ -21,8 +21,8 @@ services:
       - "8888:8888"
     environment:
       AUDIOLIZER_TEMP: /home/audiolizer/audiolizer/history
-    command: ["python", "audiolizer.py"]
-    # command: ["jupyter", "notebook", "audiolizer.py", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+    # command: ["python", "audiolizer.py"]
+    command: ["jupyter", "notebook", "audiolizer.py", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
     volumes:
       - type: bind
         source: ${PWD}
