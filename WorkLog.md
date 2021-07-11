@@ -1,3 +1,7 @@
+### 2021-07-11 00:19:27.392712: clock-out: T-30m 
+
+* Relaxshi latin percrussion instruments
+* dxy indicator - the dollar?
 
 ### 2021-07-10 22:39:03.298483: clock-in
 
