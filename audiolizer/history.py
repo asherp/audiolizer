@@ -19,12 +19,16 @@
 from Historic_Crypto import HistoricalData
 import pandas as pd
 import os
+from datetime import datetime
+
 
 granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
 print('audiolizer temp data:', audiolizer_temp_dir)
 
+max_age = pd.Timedelta(os.environ.get('AUDIOLIZER_MAX_AGE', '5m'))
+print('audiolizer max daily age {}'.format(max_age))
 
 def refactor(df, frequency='1W'):
     """Refactor/rebin the data to a lower cadence
@@ -40,6 +44,7 @@ def refactor(df, frequency='1W'):
 
 
 def load_date(ticker, granularity, int_):
+    print('loading single date {}'.format(int_))
     start_ = int_.left.strftime('%Y-%m-%d-%H-%M')
     end_ = int_.right.strftime('%Y-%m-%d-%H-%M')
     try:
@@ -91,25 +96,8 @@ def fetch_missing(files_status, ticker, granularity):
         df = fetch_data(ticker, granularity, *endpoints)
         write_data(df, ticker)
 
-def get_history(ticker, start_date, end_date=None, granularity=granularity):
-    """Fetch/load historical data from Coinbase API at specified granularity
-    
-    Data loaded from start_date through end of end_date
-    params:
-        start_date: (str) (see pandas.to_datetime for acceptable formats)
-        end_date: (str)
-        granularity: (int) seconds (default: 300)
-
-    price data is saved by ticker and date and stored in audiolizer_temp_dir
-    """
-    start_date = pd.to_datetime(start_date).tz_localize(None)
-    
-    today = pd.Timestamp.now().tz_localize(None)
-    if end_date is None:
-        end_date = today + pd.Timedelta('1D')
-    else:
-        end_date = min(today, pd.to_datetime(end_date).tz_localize(None)) + pd.Timedelta('1D')
         
+def get_files_status(ticker, start_date, end_date):
     fnames = []
     foundlings = []
     dates = []
@@ -127,35 +115,89 @@ def get_history(ticker, start_date, end_date=None, granularity=granularity):
         last_found = found
         batch.append(batch_number)
         fnames.append(fname)
-    
-    
     files_status = pd.DataFrame(dict(files=fnames, found=foundlings, batch=batch), index=dates)
-    fetch_missing(files_status, ticker, granularity)
+    return files_status
 
-    df = pd.concat(map(lambda file: pd.read_csv(file, index_col='time', parse_dates=True),
-                         fnames)).drop_duplicates()
+
+def get_today(ticker, granularity):
+    today = pd.Timestamp.now().tz_localize(None)
+    tomorrow = today + pd.Timedelta('1D')
+    start_ = '{}-00-00'.format(today.strftime('%Y-%m-%d'))
+    end_ = '{}-00-00'.format(tomorrow.strftime('%Y-%m-%d'))
+    try:
+        return HistoricalData(ticker,
+                              granularity,
+                              start_,
+                              end_,
+                              ).retrieve_data()
+    except:
+        print('could not load using {} {}'.format(start_, end_))
+        raise
+
+
+def get_age(fname):
+    """Get the age of a given a file"""
+    st=os.stat(fname)    
+    mtime=st.st_mtime
+    return pd.Timestamp.now() - datetime.fromtimestamp(mtime)
     
-    # gaps = get_gaps(df, granularity)
-    # if len(gaps) > 0:
-    #     print('found {} data gaps'.format(len(gaps)))
-    #     # fetch the data for each date
-    #     for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
-    #         print('\tfetching {}'.format(start_date))
-    #         int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
-    #         int_ = pd.Interval(int_.left[0], int_.right[0])
-    #         int_df = load_date(ticker, granularity, int_)
-    #         fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
-    #             ticker, int_.left.strftime('%Y-%m-%d'))
-    #         int_df.to_csv(fname, compression='gzip')
+        
+def get_history(ticker, start_date, end_date = None, granularity=granularity):
+    """Fetch/load historical data from Coinbase API at specified granularity
+    
+    Data loaded from start_date through end of end_date
+    params:
+        start_date: (str) (see pandas.to_datetime for acceptable formats)
+        end_date: (str)
+        granularity: (int) seconds (default: 300)
 
-    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True, compression='gzip'),
-                         fnames)).drop_duplicates()
+    price data is saved by ticker and date and stored in audiolizer_temp_dir
+    """
+    start_date = pd.to_datetime(start_date).tz_localize(None)
+    
+    today = pd.Timestamp.now().tz_localize(None)
+    if end_date is None:
+        # don't include today
+        end_date = today # + pd.Timedelta('1D')
+    else:
+        end_date = min(today, pd.to_datetime(end_date).tz_localize(None))
+        
+    files_status = get_files_status(ticker, start_date, end_date)
+    fetch_missing(files_status, ticker, granularity)
+        
+
+    df = pd.concat(map(lambda file: pd.read_csv(file, index_col='time', parse_dates=True, compression='gzip'),
+                         files_status.files)).drop_duplicates()
+
+    if end_date == today:
+        print('end date is today!')
+        # check age of today's data. If it's old, fetch the new one
+        today_fname = audiolizer_temp_dir + '/{}-today.csv.gz'.format(ticker)
+        if os.path.exists(today_fname):
+            if get_age(today_fname) > max_age:
+                print('{} is too old, fetching new data'.format(today_fname))
+                today_data = get_today(ticker, granularity)
+                today_data.to_csv(today_fname, compression='gzip')
+            else:
+                print('{} is not that old, loading from disk'.format(today_fname))
+                today_data = pd.read_csv(today_fname, index_col='time', parse_dates=True, compression='gzip')
+        else:
+            print('{} not present. loading'.format(today_fname))
+            today_data = get_today(ticker, granularity)
+            today_data.to_csv(today_fname, compression='gzip')
+        df = pd.concat([df, today_data]).drop_duplicates()
+        
     return df
 
 
 # + active="ipynb"
-# hist = get_history('BTC-USD', '2020-04-20', '2020-05-18')
+# hist = get_history('BTC-USD',
+#                    pd.Timestamp.now().tz_localize(None)-pd.Timedelta('5D'),
+# #                   pd.Timestamp.now().tz_localize(None)-pd.Timedelta('3D'),
+#                   )
 # hist
 # -
 
 # !jupytext --sync history.ipynb
+
+

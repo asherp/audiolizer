@@ -1,3 +1,4 @@
+* separating today from history
 
 ### 2021-07-11 17:13:25.693903: clock-in
 
