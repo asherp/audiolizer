@@ -1,3 +1,6 @@
+
+### 2021-07-10 22:39:03.298483: clock-in
+
 ### 2021-07-10 16:53:52.536370: clock-out
 
 * removing gap logic for now
