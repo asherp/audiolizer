@@ -1,14 +1,14 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: py:light
+#     formats: ipynb,py
 #     text_representation:
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
 #       jupytext_version: 1.11.3
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -18,13 +18,11 @@ import numpy as np
 import os
 from plotly.offline import plot
 
-from dash.exceptions import PreventUpdate
-
-from Historic_Crypto import HistoricalData
-
-from Historic_Crypto import Cryptocurrencies
+from history import get_history
 
 # +
+from dash.exceptions import PreventUpdate
+
 from Historic_Crypto import Cryptocurrencies
 
 import flask
@@ -43,81 +41,14 @@ from midiutil import MIDIFile
 
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
 print('audiolizer temp data:', audiolizer_temp_dir)
+granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
-granularity = 300 # seconds
+# wav_threshold, midi_threshold, price_threshold,
+wav_threshold = int(os.environ.get('AUDIOLIZER_WAV_CACHE_SIZE', 100)) # megabytes
+midi_threshold = int(os.environ.get('AUDIOLIZER_MIDI_CACHE_SIZE', 10))
+price_threshold = int(os.environ.get('AUDIOLIZER_PRICE_CACHE_SIZE', 10))
 
-
-def load_date(ticker, granularity, int_):
-    start_ = int_.left.strftime('%Y-%m-%d-%H-%M')
-    end_ = int_.right.strftime('%Y-%m-%d-%H-%M')
-    try:
-        return HistoricalData(ticker,
-                              granularity,
-                              start_,
-                              end_,
-                              ).retrieve_data()
-    except:
-        print('could not load using {} {}'.format(start_, end_))
-        raise
-
-
-def get_gaps(df, granularity):
-    new_ = refactor(df, '{}s'.format(granularity))
-    return new_[new_.close.isna()]
-
-
-# +
-def get_history(ticker, start_date, end_date = None, granularity=granularity):
-    """Fetch/load historical data from Coinbase API at specified granularity
-
-    params:
-        start_date: (str) (see pandas.to_datetime for acceptable formats)
-        end_date: (str)
-        granularity: (int) seconds (default: 300)
-
-    price data is saved by ticker and date and stored in audiolizer_temp_dir
-    """
-    start_date = pd.to_datetime(start_date).tz_localize(None)
-    
-    today = pd.Timestamp.now().tz_localize(None)
-    if end_date is None:
-        end_date = today + pd.Timedelta('1D')
-    else:
-        end_date = min(today, pd.to_datetime(end_date).tz_localize(None))
-        
-    fnames = []
-    for int_ in pd.interval_range(start_date,
-                                  end_date):
-        fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
-            ticker, int_.left.strftime('%Y-%m-%d'))
-        if not os.path.exists(fname):
-            int_df = load_date(ticker, granularity, int_)
-            int_df.to_csv(fname, compression='gzip')
-        fnames.append(fname)
-    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True),
-                         fnames)).drop_duplicates()
-    gaps = get_gaps(df, granularity)
-
-    if len(gaps) > 0:
-        print('found data gaps')
-        # fetch the data for each date
-        for start_date in gaps.groupby(pd.Grouper(freq='1d')).first().index:
-            print('\tfetching {}'.format(start_date))
-            int_ = pd.interval_range(start=start_date, periods=1, freq='1d')
-            int_ = pd.Interval(int_.left[0], int_.right[0])
-            int_df = load_date(ticker, granularity, int_)
-            fname = audiolizer_temp_dir + '/{}-{}.csv.gz'.format(
-                ticker, int_.left.strftime('%Y-%m-%d'))
-            int_df.to_csv(fname, compression='gzip')
-
-    df = pd.concat(map(lambda file: pd.read_csv(file,index_col='time', parse_dates=True, compression='gzip'),
-                         fnames)).drop_duplicates()
-
-    return df
-
-
-# new = get_history(ticker, start_date)
-# new
+print('cache sizes: \n wav:{}\n midi:{}\n price:{}')
 
 # +
 import audiogen_p3
@@ -148,22 +79,22 @@ import plotly.graph_objs as go
 
 
 # +
-def refactor(df, frequency = '1W'):
+def refactor(df, frequency='1W'):
     """Refactor/rebin the data to a lower cadence
 
     The data is regrouped using pd.Grouper
     """
-    
+
     low = df.low.groupby(pd.Grouper(freq=frequency)).min()
-    
+
     high = df.high.groupby(pd.Grouper(freq=frequency)).max()
-    
+
     close = df.close.groupby(pd.Grouper(freq=frequency)).last()
-    
+
     open_ = df.open.groupby(pd.Grouper(freq=frequency)).first()
-    
+
     volume = df.volume.groupby(pd.Grouper(freq=frequency)).sum()
-    
+
     return pd.DataFrame(dict(low=low, high=high, open=open_, close=close, volume=volume))
 
 def candlestick_plot(df, base, quote):    
@@ -211,14 +142,14 @@ C0 = A4*pow(2, -4.75)
 frequencies = dict(
 #     A4 = A4,
 #     C0 = C0,
-    A0 = 27.5,
-    C2 = 65.40639,
-    C3 = 130.8128,
-    C4 = 262,
-    C5 = 523.2511,
-    C6 = 1046.502,
-    C7 = 2093.005,
-    C8 = 4186, # high C on piano
+    A0=27.5,
+    C2=65.40639,
+    C3=130.8128,
+    C4=262,
+    C5=523.2511,
+    C6=1046.502,
+    C7=2093.005,
+    C8=4186, # high C on piano
 )
 # -
 
@@ -406,7 +337,8 @@ def update_date_range(date_select):
 def play(base, quote, start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
          tempo, toggle_merge, silence, selectedData,
-         wav_threshold, midi_threshold, price_threshold, price_type):
+         # wav_threshold, midi_threshold, price_threshold,
+         price_type):
 
     ticker = '{}-{}'.format(base, quote)
     print('ticker: {}'.format(ticker))
@@ -468,7 +400,7 @@ def play(base, quote, start, end, cadence, log_freq_range,
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):
-        return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+        return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
 
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
 
@@ -486,9 +418,9 @@ def play(base, quote, start, end, cadence, log_freq_range,
             if mode == 'tone':
                 pass
             elif mode == 'pitch':
-                freq_ = freq(pitch(freq_)) 
+                freq_ = freq(pitch(freq_))
             else:
-                raise NotImplementedError(mode)   
+                raise NotImplementedError(mode)
             beep = freq_, volume_/max_vol, duration
             beeps.append(beep)
         else:
@@ -512,7 +444,7 @@ def play(base, quote, start, end, cadence, log_freq_range,
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
-    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset
+    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, ''
 
 server = app.server
 
@@ -527,5 +459,6 @@ if __name__ == '__main__':
         )
 
 # -
+# ! jupytext --sync audiolizer.ipynb
 
 

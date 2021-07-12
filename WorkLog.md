@@ -1,3 +1,63 @@
+### 2021-07-11 20:01:48.592014: clock-out
+
+* pushed 0.4.4
+* fetching to current time
+* separating today from history
+
+### 2021-07-11 17:13:25.693903: clock-in
+
+### 2021-07-11 00:19:27.392712: clock-out: T-30m 
+
+* Relaxshi latin percrussion instruments
+* dxy indicator - the dollar?
+
+### 2021-07-10 22:39:03.298483: clock-in
+
+### 2021-07-10 16:53:52.536370: clock-out
+
+* removing gap logic for now
+* manual sync
+* refactoring history
+
+### 2021-07-10 15:05:23.859541: clock-in
+
+### 2021-07-09 20:23:02.366858: clock-out
+
+* fixed date fetching
+
+### 2021-07-09 19:31:56.325477: clock-in
+
+### 2021-07-09 02:12:29.621803: clock-out: T-1h 
+
+* fetching in batch
+
+### 2021-07-08 23:10:17.085199: clock-in
+
+### 2021-07-08 01:54:10.939607: clock-out
+
+* querying in batches
+* added link to ariagora
+
+### 2021-07-07 23:29:29.646292: clock-in
+
+### 2021-07-06 23:42:37.763553: clock-out: T-15m 
+
+* creating ssl cert
+
+### 2021-07-06 23:05:10.961610: clock-in
+
+### 2021-07-06 20:42:59.070321: clock-out
+
+* running docker-compose in background. not sure why april keeps loading
+
+### 2021-07-06 20:28:36.899523: clock-in: T-20m 
+
+### 2021-07-06 11:58:10.830539: clock-out
+
+* removing cache sizes from production
+
+### 2021-07-06 11:38:02.823668: clock-in: T-10m 
+
 ### 2021-07-06 01:58:45.464038: clock-out
 
 * worked with Randy to set up audiolizer.ariagora.com

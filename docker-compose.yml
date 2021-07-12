@@ -21,8 +21,11 @@ services:
       - "8888:8888"
     environment:
       AUDIOLIZER_TEMP: /home/audiolizer/audiolizer/history
-    command: ["python", "audiolizer.py"]
+    command: ["python", "audiolizer.py"] # runs on port 8051
     # command: ["jupyter", "notebook", "audiolizer.py", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+    ports:
+      - "80:8051"
+      - "8888:8888"
     volumes:
       - type: bind
         source: ${PWD}
