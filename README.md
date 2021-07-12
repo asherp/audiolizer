@@ -18,6 +18,7 @@ Visit the documenation site to learn [how it works](https://asherp.github.io/aud
 * Historic-Crypto (pip)
 * pyaudio (conda)
 * audiogen (pip)
+* psidash `pip install git+git@github.com:predsci/psidash.git`
 
 docs dependences (optional)
 
