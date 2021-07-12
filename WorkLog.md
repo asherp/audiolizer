@@ -1,3 +1,6 @@
+
+### 2021-07-12 13:12:50.258447: clock-in
+
 ### 2021-07-11 22:18:53.811305: clock-out
 
 * looking for better source of price data
