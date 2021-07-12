@@ -1,3 +1,5 @@
+### 2021-07-11 20:01:48.592014: clock-out
+
 * pushed 0.4.4
 * fetching to current time
 * separating today from history
