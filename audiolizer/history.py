@@ -123,7 +123,7 @@ def get_today(ticker, granularity):
     today = pd.Timestamp.now().tz_localize(None)
     tomorrow = today + pd.Timedelta('1D')
     start_ = '{}-00-00'.format(today.strftime('%Y-%m-%d'))
-    end_ = '{}-00-00'.format(tomorrow.strftime('%Y-%m-%d'))
+    end_ = today.strftime('%Y-%m-%d-%H-%M')
     try:
         return HistoricalData(ticker,
                               granularity,
