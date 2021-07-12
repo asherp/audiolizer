@@ -1,3 +1,4 @@
+* looking for better source of price data
 
 ### 2021-07-11 22:09:08.999063: clock-in
 
