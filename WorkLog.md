@@ -1,3 +1,4 @@
+* pushed 0.4.4
 * fetching to current time
 * separating today from history
 
