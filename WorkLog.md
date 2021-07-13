@@ -1,3 +1,6 @@
+
+### 2021-07-13 18:23:27.424677: clock-in
+
 ### 2021-07-12 17:26:13.055340: clock-out
 
 * add random walk . start at 100, add or subtract %5
