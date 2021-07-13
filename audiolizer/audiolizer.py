@@ -1,14 +1,14 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py
+#     formats: py:light
 #     text_representation:
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.11.3
+#       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
@@ -448,17 +448,13 @@ def play(base, quote, start, end, cadence, log_freq_range,
 
 server = app.server
 
+
 if __name__ == '__main__':
     app.run_server(
-        host='0.0.0.0',
-        port=8051,
+        host=conf['run_server']['host'],
+        port=conf['run_server']['port'],
         mode='external',
         debug=True,
         dev_tools_hot_reload=False,
         extra_files=['../audiolizer.yaml']
         )
-
-# -
-# ! jupytext --sync audiolizer.ipynb
-
-

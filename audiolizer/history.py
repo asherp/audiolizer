@@ -1,14 +1,13 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py
 #     text_representation:
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.11.3
+#       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
@@ -196,8 +195,3 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
 # #                   pd.Timestamp.now().tz_localize(None)-pd.Timedelta('3D'),
 #                   )
 # hist
-# -
-
-# !jupytext --sync history.ipynb
-
-

@@ -1,3 +1,4 @@
+* using scripts only
 
 ### 2021-07-13 18:23:27.424677: clock-in
 
