@@ -13,6 +13,16 @@
 #     name: python3
 # ---
 
+# +
+import logging
+logging.basicConfig(filename='audiolizer.log')
+logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.DEBUG)
+
+logger.info("hey")
+# -
+
 import pandas as pd
 import numpy as np
 import os
@@ -40,15 +50,15 @@ import pandas as pd
 from midiutil import MIDIFile
 
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
-print('audiolizer temp data:', audiolizer_temp_dir)
+logger.info('audiolizer temp data:{}'.format(audiolizer_temp_dir))
 granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
 # wav_threshold, midi_threshold, price_threshold,
 wav_threshold = int(os.environ.get('AUDIOLIZER_WAV_CACHE_SIZE', 100)) # megabytes
 midi_threshold = int(os.environ.get('AUDIOLIZER_MIDI_CACHE_SIZE', 10))
-price_threshold = int(os.environ.get('AUDIOLIZER_PRICE_CACHE_SIZE', 10))
+price_threshold = int(os.environ.get('AUDIOLIZER_PRICE_CACHE_SIZE', 100))
 
-print('cache sizes: \n wav:{}\n midi:{}\n price:{}')
+logger.info('cache sizes: \n wav:{}Mb\n midi:{}Mb\n price:{}Mb'.format(wav_threshold, midi_threshold, price_threshold))
 
 # +
 import audiogen_p3
@@ -63,7 +73,7 @@ try:
         *[beeper(100*(1+i), 1./(1+i)) for i in range(8)]
     ))
 except:
-    print('could not play sampler')
+    logger.warning('could not play sampler')
     pass
 # -
 
@@ -97,15 +107,15 @@ def refactor(df, frequency='1W'):
 
     return pd.DataFrame(dict(low=low, high=high, open=open_, close=close, volume=volume))
 
-def candlestick_plot(df, base, quote):    
+def candlestick_plot(df, base, quote, timezone):
+    logger.info('timezone is {}'.format(timezone))
+    try:
+        df.index = df.index.tz_convert(timezone)
+        logger.info('localized')
+    except: # already has tz
+        df.index = df.index.tz_localize(timezone)
+        logger.info('localized')
     return go.Figure(data=[
-        go.Bar(
-            x=df.index,
-            y=df.volume,
-            marker_color='rgba(158,202,225,.5)',
-            yaxis='y2',
-            showlegend=False,
-        ),
         go.Candlestick(
             x=df.index,
             open=df.open,
@@ -113,8 +123,14 @@ def candlestick_plot(df, base, quote):
             low=df.low,
             close=df.close,
             showlegend=False),
+        go.Bar(
+            x=df.index,
+            y=df.volume,
+            marker_color='rgba(158,202,225,.5)',
+            yaxis='y2',
+            showlegend=False,
+        ),
         ],
-        
         layout=dict(yaxis=dict(title='{} price [{}]'.format(base, quote)),
                     yaxis2=dict(
                         title='{base} volume [{base}]'.format(base=base),
@@ -133,7 +149,7 @@ def write_plot(fig, fname):
 
 # -
 
-from psidash.psidash import get_callbacks, load_conf, load_dash, load_components
+from psidash.psidash import get_callbacks, load_conf, load_dash, load_components, assign_callbacks
 
 # +
 A4 = 440 # tuning
@@ -301,6 +317,7 @@ app.layout = load_components(conf['layout'], conf.get('import'))
 
 if 'callbacks' in conf:
     callbacks = get_callbacks(app, conf['callbacks'])
+    assign_callbacks(callbacks, conf['callbacks'])
 
 def beeper(freq, amplitude=1, duration=.25):
     return (amplitude*_ for _ in audiogen_p3.beep(freq, duration))
@@ -338,20 +355,21 @@ def play(base, quote, start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
          tempo, toggle_merge, silence, selectedData,
          # wav_threshold, midi_threshold, price_threshold,
-         price_type):
-
+         price_type,
+         timezone):
+    logger.info('timezone = {}'.format(timezone))
     ticker = '{}-{}'.format(base, quote)
-    print('ticker: {}'.format(ticker))
+    logger.info('ticker: {}'.format(ticker))
     cleared = clear_files('assets/*.wav', max_storage=wav_threshold*1e6)
     if len(cleared) > 0:
-        print('cleared {} wav files'.format(len(cleared)))
+        logger.info('cleared {} wav files'.format(len(cleared)))
     cleared = clear_files('assets/*.midi', max_storage=midi_threshold*1e6)
     if len(cleared) > 0:
-        print('cleared {} midi files'.format(len(cleared)))
+        logger.info('cleared {} midi files'.format(len(cleared)))
     cleared = clear_files('history/*.csv.gz', max_storage=price_threshold*1e6)
     if len(cleared) > 0:
-        print('cleared {} price files'.format(len(cleared)))
-    print('start, end {} {}'.format(start, end))
+        logger.info('cleared {} price files'.format(len(cleared)))
+    logger.info('start, end {} {}'.format(start, end))
     new = get_history(ticker, start, end)
     start_, end_ = new.index[[0, -1]]
 
@@ -392,15 +410,15 @@ def play(base, quote, start, end, cadence, log_freq_range,
         # number of beats from beginning to end_select
         end_time = duration*(get_beats(start_, end_select, cadence)-1)
         total_time = duration*(get_beats(start_, end_, cadence)-1)
-#         print('selected start, end time, total time:', start_time, end_time, total_time)
+#         logger.info('selected start, end time, total time:', start_time, end_time, total_time)
         play_time = '#t={},{}'.format(start_time, end_time)
-#         print(start_select, end_select, play_time)
+#         logger.info(start_select, end_select, play_time)
 
     new_ = refactor(new[start_:end_], cadence)
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):
-        return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
+        return candlestick_plot(new_, base, quote, timezone), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
 
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
 
@@ -427,14 +445,14 @@ def play(base, quote, start, end, cadence, log_freq_range,
             freq_ = get_frequency(min_price, min_price, max_price, log_freq_range)
             beep = freq_, 0, duration
             beeps.append(beep)
-            print('Warning: found nan price {}, {}, {}'.format(t, price, volume_))
+            logger.warning('found nan price {}, {}, {}'.format(t, price, volume_))
     if mode == 'pitch':
         if toggle_merge:
             beeps = merge_pitches(beeps, amp_min)
         if silence:
             beeps = quiet(beeps, min_vol/max_vol)
 
-#     print(mode, 'unique frequencies:', len(np.unique([_[0] for _ in beeps])))
+#     logger.info(mode, 'unique frequencies:', len(np.unique([_[0] for _ in beeps])))
 
     audio = [beeper(*beep) for beep in beeps]
 
@@ -444,7 +462,7 @@ def play(base, quote, start, end, cadence, log_freq_range,
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
-    return candlestick_plot(new_, base, quote), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, ''
+    return candlestick_plot(new_, base, quote, timezone), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, ''
 
 server = app.server
 
@@ -458,3 +476,6 @@ if __name__ == '__main__':
         dev_tools_hot_reload=False,
         extra_files=['../audiolizer.yaml']
         )
+# -
+
+

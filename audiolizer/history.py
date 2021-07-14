@@ -14,20 +14,30 @@
 
 # Objective: get_history should fetch all the data at once then save it to separate files.
 
+import logging
+logging.basicConfig(filename='audiolizer.log')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 # +
+import pytz
+
 from Historic_Crypto import HistoricalData
 import pandas as pd
 import os
 from datetime import datetime
 
+def get_timezones(url):
+    return [dict(label=v, value=v) for v in pytz.all_timezones]
+
 
 granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
 audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
-print('audiolizer temp data:', audiolizer_temp_dir)
+logger.info('audiolizer temp data: {}'.format(audiolizer_temp_dir))
 
 max_age = pd.Timedelta(os.environ.get('AUDIOLIZER_MAX_AGE', '5m'))
-print('audiolizer max daily age {}'.format(max_age))
+logger.info('audiolizer max daily age {}'.format(max_age))
 
 def refactor(df, frequency='1W'):
     """Refactor/rebin the data to a lower cadence
@@ -43,7 +53,7 @@ def refactor(df, frequency='1W'):
 
 
 def load_date(ticker, granularity, int_):
-    print('loading single date {}'.format(int_))
+    logger.info('loading single date {}'.format(int_))
     start_ = int_.left.strftime('%Y-%m-%d-%H-%M')
     end_ = int_.right.strftime('%Y-%m-%d-%H-%M')
     try:
@@ -53,7 +63,7 @@ def load_date(ticker, granularity, int_):
                               end_,
                               ).retrieve_data()
     except:
-        print('could not load using {} {}'.format(start_, end_))
+        logger.warning('could not load using {} {}'.format(start_, end_))
         raise
 
 
@@ -71,7 +81,7 @@ def fetch_data(ticker, granularity, start_, end_):
                               end_,
                               ).retrieve_data()
     except:
-        print('could not load using {} {}'.format(start_, end_))
+        logger.warning('could not load using {} {}'.format(start_, end_))
         raise
 
 
@@ -82,7 +92,7 @@ def write_data(df, ticker):
                 ticker, t.strftime('%Y-%m-%d'))
         if len(day) > 1:
             day.to_csv(fname, compression='gzip')
-            print('wrote {}'.format(fname))
+            logger.info('wrote {}'.format(fname))
         
 def fetch_missing(files_status, ticker, granularity):
     """Iterate over batches of missing dates"""
@@ -91,7 +101,7 @@ def fetch_missing(files_status, ticker, granularity):
         # extend by 1 day whether or not t1 == t2
         t2 += pd.Timedelta('1D')
         endpoints = [t.strftime('%Y-%m-%d-%H-%M') for t in [t1, t2]]
-        print('fetching {}, {}'.format(len(g), endpoints))
+        logger.info('fetching {}, {}'.format(len(g), endpoints))
         df = fetch_data(ticker, granularity, *endpoints)
         write_data(df, ticker)
 
@@ -130,7 +140,7 @@ def get_today(ticker, granularity):
                               end_,
                               ).retrieve_data()
     except:
-        print('could not load using {} {}'.format(start_, end_))
+        logger.warning('could not load using {} {}'.format(start_, end_))
         raise
 
 
@@ -169,29 +179,37 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
                          files_status.files)).drop_duplicates()
 
     if end_date == today:
-        print('end date is today!')
+        logger.info('end date is today!')
         # check age of today's data. If it's old, fetch the new one
         today_fname = audiolizer_temp_dir + '/{}-today.csv.gz'.format(ticker)
         if os.path.exists(today_fname):
             if get_age(today_fname) > max_age:
-                print('{} is too old, fetching new data'.format(today_fname))
+                logger.info('{} is too old, fetching new data'.format(today_fname))
                 today_data = get_today(ticker, granularity)
                 today_data.to_csv(today_fname, compression='gzip')
             else:
-                print('{} is not that old, loading from disk'.format(today_fname))
+                logger.info('{} is not that old, loading from disk'.format(today_fname))
                 today_data = pd.read_csv(today_fname, index_col='time', parse_dates=True, compression='gzip')
         else:
-            print('{} not present. loading'.format(today_fname))
+            logger.info('{} not present. loading'.format(today_fname))
             today_data = get_today(ticker, granularity)
             today_data.to_csv(today_fname, compression='gzip')
         df = pd.concat([df, today_data]).drop_duplicates()
         
     return df
 
-
 # + active="ipynb"
 # hist = get_history('BTC-USD',
-#                    pd.Timestamp.now().tz_localize(None)-pd.Timedelta('5D'),
+#                    pd.Timestamp.now().tz_localize(None)-pd.Timedelta('1D'),
 # #                   pd.Timestamp.now().tz_localize(None)-pd.Timedelta('3D'),
 #                   )
 # hist
+
+# + active="ipynb"
+# from audiolizer import candlestick_plot
+
+# + active="ipynb"
+# candlestick_plot(hist, 'BTC', 'USD', 'Africa/Cairo')
+
+# + active="ipynb"
+# candlestick_plot(hist, 'BTC', 'USD', 'America/Chicago')
