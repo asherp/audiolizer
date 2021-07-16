@@ -1,3 +1,6 @@
+
+### 2021-07-15 22:00:42.033750: clock-in
+
 ### 2021-07-13 21:58:44.866482: clock-out
 
 * timezone not updating
