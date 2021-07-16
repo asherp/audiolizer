@@ -28,7 +28,7 @@ import numpy as np
 import os
 from plotly.offline import plot
 
-from history import get_history
+from history import get_history, get_today_GMT
 
 # +
 from dash.exceptions import PreventUpdate
@@ -107,14 +107,7 @@ def refactor(df, frequency='1W'):
 
     return pd.DataFrame(dict(low=low, high=high, open=open_, close=close, volume=volume))
 
-def candlestick_plot(df, base, quote, timezone):
-    logger.info('timezone is {}'.format(timezone))
-    try:
-        df.index = df.index.tz_convert(timezone)
-        logger.info('localized')
-    except: # already has tz
-        df.index = df.index.tz_localize(timezone)
-        logger.info('localized')
+def candlestick_plot(df, base, quote):
     return go.Figure(data=[
         go.Candlestick(
             x=df.index,
@@ -344,16 +337,18 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.update_date_range
-def update_date_range(date_select):
+def update_date_range(date_select, timezone):
     period, cadence = date_select.split('-')
-    today = pd.Timestamp.now().tz_localize(None)
+    today = get_today_GMT().tz_convert(timezone)
     start_date = (today-pd.Timedelta(period)).strftime('%Y-%m-%d')
-    return start_date, cadence, start_date
+    end_date = today.strftime('%Y-%m-%d')
+    return start_date, end_date, cadence, start_date
 
 @callbacks.play
 def play(base, quote, start, end, cadence, log_freq_range,
          mode, drop_quantile, beat_quantile,
-         tempo, toggle_merge, silence, selectedData,
+         tempo, toggle_merge, silence,
+         selectedData,
          # wav_threshold, midi_threshold, price_threshold,
          price_type,
          timezone):
@@ -370,7 +365,11 @@ def play(base, quote, start, end, cadence, log_freq_range,
     if len(cleared) > 0:
         logger.info('cleared {} price files'.format(len(cleared)))
     logger.info('start, end {} {}'.format(start, end))
-    new = get_history(ticker, start, end)
+    try:
+        new = get_history(ticker, timezone, start, end)
+    except:
+        logger.info('cannot get history for {} {} {} {}'.format(ticker, timezone, start, end))
+        raise
     start_, end_ = new.index[[0, -1]]
 
     if toggle_merge:
@@ -418,7 +417,9 @@ def play(base, quote, start, end, cadence, log_freq_range,
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):
-        return candlestick_plot(new_, base, quote, timezone), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset
+        
+        return (candlestick_plot(new_, base, quote),
+                app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset)
 
 #     assert get_beats(*new_.index[[0,-1]], cadence) == len(new_)
 
@@ -462,7 +463,8 @@ def play(base, quote, start, end, cadence, log_freq_range,
 
     write_midi(beeps, tempo, 'assets/' + midi_file)
 
-    return candlestick_plot(new_, base, quote, timezone), app.get_asset_url(fname)+play_time, midi_asset, midi_asset, ''
+    return (candlestick_plot(new_, base, quote),
+            app.get_asset_url(fname)+play_time, midi_asset, midi_asset, '')
 
 server = app.server
 

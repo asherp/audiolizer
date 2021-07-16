@@ -128,8 +128,12 @@ def get_files_status(ticker, start_date, end_date):
     return files_status
 
 
+# + active="ipynb"
+# get_files_status('BTC-USD', get_today_GMT() - pd.Timedelta('10d'), get_today_GMT())
+
+# +
 def get_today(ticker, granularity):
-    today = pd.Timestamp.now().tz_localize(None)
+    today = get_today_GMT()
     tomorrow = today + pd.Timedelta('1D')
     start_ = '{}-00-00'.format(today.strftime('%Y-%m-%d'))
     end_ = today.strftime('%Y-%m-%d-%H-%M')
@@ -149,9 +153,14 @@ def get_age(fname):
     st=os.stat(fname)    
     mtime=st.st_mtime
     return pd.Timestamp.now() - datetime.fromtimestamp(mtime)
-    
+
+def get_today_GMT():
+    # convert from system time to GMT
+    system_time = pd.Timestamp(datetime.now().astimezone())
+    today = system_time.tz_convert('GMT')
+    return today
         
-def get_history(ticker, start_date, end_date = None, granularity=granularity):
+def get_history(ticker, user_tz, start_date, end_date = None, granularity=granularity):
     """Fetch/load historical data from Coinbase API at specified granularity
     
     Data loaded from start_date through end of end_date
@@ -161,22 +170,38 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
         granularity: (int) seconds (default: 300)
 
     price data is saved by ticker and date and stored in audiolizer_temp_dir
-    """
-    start_date = pd.to_datetime(start_date).tz_localize(None)
     
-    today = pd.Timestamp.now().tz_localize(None)
+    There are three timezones to keep track of!
+    user timezone: the timezone the user is in (display time)
+    system timezone: the timezone of the machine the audiolizer is run from
+    GMT: the timezone that price history is fetched/stored in
+    """
+    logger.info('user timzeone: {}'.format(user_tz))
+    start_date = pd.to_datetime(start_date).tz_localize(user_tz).tz_convert('GMT')
+
+    today = get_today_GMT()
+
     if end_date is None:
         # don't include today
-        end_date = today # + pd.Timedelta('1D')
+        end_date = today
     else:
-        end_date = min(today, pd.to_datetime(end_date).tz_localize(None))
-        
+        # convert the user-specified date and timezone to GMT
+        end_date = pd.to_datetime(end_date).tz_localize(user_tz).tz_convert('GMT')
+        # prevent queries from the future
+        end_date = min(today, end_date)
+    
+    assert start_date < end_date
+    
+    logger.info('getting {} files status: {} -> {}'.format(ticker, start_date, end_date))
     files_status = get_files_status(ticker, start_date, end_date)
     fetch_missing(files_status, ticker, granularity)
+    
+    if len(files_status) == 0:
+        raise IOError('Could not get file status for {}'.format(ticker, start_date, end_date))
         
-
     df = pd.concat(map(lambda file: pd.read_csv(file, index_col='time', parse_dates=True, compression='gzip'),
                          files_status.files)).drop_duplicates()
+
 
     if end_date == today:
         logger.info('end date is today!')
@@ -195,12 +220,12 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
             today_data = get_today(ticker, granularity)
             today_data.to_csv(today_fname, compression='gzip')
         df = pd.concat([df, today_data]).drop_duplicates()
-        
+    df.index = df.index.tz_localize('GMT').tz_convert(user_tz)
     return df
 
 # + active="ipynb"
-# hist = get_history('BTC-USD',
-#                    pd.Timestamp.now().tz_localize(None)-pd.Timedelta('1D'),
+# hist = get_history('BTC-USD', 'EST',
+#                    '2021-07-09',
 # #                   pd.Timestamp.now().tz_localize(None)-pd.Timedelta('3D'),
 #                   )
 # hist
@@ -209,7 +234,4 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
 # from audiolizer import candlestick_plot
 
 # + active="ipynb"
-# candlestick_plot(hist, 'BTC', 'USD', 'Africa/Cairo')
-
-# + active="ipynb"
-# candlestick_plot(hist, 'BTC', 'USD', 'America/Chicago')
+# candlestick_plot(hist, 'BTC', 'USD')

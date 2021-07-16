@@ -420,9 +420,13 @@ callbacks:
     input:
       - id: date-select
         attr: value
+      - id: timezone
+        attr: value
     output:
       - id: date-range
         attr: start_date
+      - id: date-range
+        attr: end_date
       - id: cadence
         attr: value
       - id: date-range

@@ -1,3 +1,5 @@
+* fixed timezone bugs
+* making the candlestick div an output of a callback
 
 ### 2021-07-15 22:00:42.033750: clock-in
 
