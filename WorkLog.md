@@ -1,3 +1,4 @@
+* nans are getting into time history
 
 ### 2021-07-16 17:48:06.108243: clock-in
 
