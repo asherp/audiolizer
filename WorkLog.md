@@ -1,3 +1,6 @@
+
+### 2021-07-16 21:55:02.014683: clock-in
+
 ### 2021-07-16 18:42:02.356385: clock-out
 
 * nans are getting into time history
