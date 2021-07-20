@@ -222,20 +222,18 @@ date_settings:
                 required: True
                 value: 7D
                 bs_size: lg
-        - dbc.Col:
-            width:
-              size: 6
-            children:
-            - dbc.Select:
-                id: timezone
-                options:
-                  - label: GMT
-                    value: GMT
-                  - label: EST
-                    value: EST
-                required: True
-                value: EST
-                bs_size: lg
+        # - dbc.Col:
+        #     width:
+        #       size: 6
+        #     children:
+        #     - dbc.Select:
+        #         id: timezone
+        #         options:
+        #           - label: GMT
+        #             value: GMT
+        #         required: True
+        #         value: GMT
+        #         bs_size: lg
 scale_settings:
   - dbc.Row:
       children:
@@ -391,7 +389,6 @@ layout:
     - dbc.Row:
         children:
           - dbc.Col:
-              width: 12
               children:
               - dcc.Graph:
                   id: candlestick-chart
@@ -420,8 +417,8 @@ callbacks:
     input:
       - id: date-select
         attr: value
-      - id: timezone
-        attr: value
+      # - id: timezone
+      #   attr: value
     output:
       - id: date-range
         attr: start_date
@@ -431,14 +428,15 @@ callbacks:
         attr: value
       - id: date-range
         attr: initial_visible_month
-  update_timezone_options:
-    input:
-      - id: url
-        attr: pathname
-    output:
-      - id: timezone
-        attr: options
-    callback: history.get_timezones
+        
+  # update_timezone_options:
+  #   input:
+  #     - id: url
+  #       attr: pathname
+  #   output:
+  #     - id: timezone
+  #       attr: options
+  #   callback: history.get_timezones
   play:
     input:
       - id: base
@@ -475,8 +473,8 @@ callbacks:
       #   attr: value
       - id: price_type
         attr: value
-      - id: timezone
-        attr: value
+      # - id: timezone
+        # attr: value
     output:
       - id: candlestick-chart
         attr: figure

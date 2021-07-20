@@ -7,7 +7,7 @@ services:
       - "80:5000"
     environment:
       AUDIOLIZER_TEMP: /home/audiolizer/audiolizer/history
-    command: ["gunicorn", "--bind", "0.0.0.0:5000", "audiolizer:server"]
+    command: ["gunicorn", "--workers=4", "--bind", "0.0.0.0:5000", "audiolizer:server"]
     volumes:
       - type: bind
         source: ${PWD}
@@ -17,15 +17,12 @@ services:
   audiolizer-dev:
     image: apembroke/audiolizer:latest
     ports:
-      - "80:8051"
+      - "80:8050"
       - "8888:8888"
     environment:
       AUDIOLIZER_TEMP: /home/audiolizer/audiolizer/history
     command: ["python", "audiolizer.py"] # runs on port 8051
     # command: ["jupyter", "notebook", "audiolizer.py", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
-    ports:
-      - "80:8051"
-      - "8888:8888"
     volumes:
       - type: bind
         source: ${PWD}

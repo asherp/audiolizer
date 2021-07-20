@@ -337,12 +337,18 @@ def update_marks(url):
     return frequency_marks
 
 @callbacks.update_date_range
-def update_date_range(date_select, timezone):
+def update_date_range(date_select,
+    # timezone
+    ):
     period, cadence = date_select.split('-')
-    today = get_today_GMT().tz_convert(timezone)
+    today = get_today_GMT().tz_localize('GMT') #.tz_convert(timezone)
     start_date = (today-pd.Timedelta(period)).strftime('%Y-%m-%d')
-    end_date = today.strftime('%Y-%m-%d')
-    return start_date, end_date, cadence, start_date
+    end_date = (today+pd.Timedelta('1d')).strftime('%Y-%m-%d')
+
+    date_range_start = start_date
+    date_range_end = end_date
+    initial_visible_month = start_date
+    return date_range_start, date_range_end, cadence, initial_visible_month
 
 @callbacks.play
 def play(base, quote, start, end, cadence, log_freq_range,
@@ -351,8 +357,9 @@ def play(base, quote, start, end, cadence, log_freq_range,
          selectedData,
          # wav_threshold, midi_threshold, price_threshold,
          price_type,
-         timezone):
-    logger.info('timezone = {}'.format(timezone))
+         # timezone,
+         ):
+    # logger.info('timezone = {}'.format(timezone))
     ticker = '{}-{}'.format(base, quote)
     logger.info('ticker: {}'.format(ticker))
     cleared = clear_files('assets/*.wav', max_storage=wav_threshold*1e6)
@@ -366,9 +373,10 @@ def play(base, quote, start, end, cadence, log_freq_range,
         logger.info('cleared {} price files'.format(len(cleared)))
     logger.info('start, end {} {}'.format(start, end))
     try:
-        new = get_history(ticker, timezone, start, end)
+        # new = get_history(ticker, timezone, start, end)
+        new = get_history(ticker, start, end)
     except:
-        logger.info('cannot get history for {} {} {} {}'.format(ticker, timezone, start, end))
+        logger.info('cannot get history for {} {} {}'.format(ticker, start, end))
         raise
     start_, end_ = new.index[[0, -1]]
 
@@ -417,7 +425,6 @@ def play(base, quote, start, end, cadence, log_freq_range,
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):
-        
         return (candlestick_plot(new_, base, quote),
                 app.get_asset_url(fname)+play_time, midi_asset, midi_asset, midi_asset)
 

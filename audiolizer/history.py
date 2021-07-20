@@ -15,8 +15,11 @@
 # Objective: get_history should fetch all the data at once then save it to separate files.
 
 import logging
-logging.basicConfig(filename='audiolizer.log')
 logger = logging.getLogger(__name__)
+fhandler = logging.FileHandler(filename='audiolizer.log', mode='a')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fhandler.setFormatter(formatter)
+logger.addHandler(fhandler)
 logger.setLevel(logging.DEBUG)
 
 # +
@@ -128,6 +131,18 @@ def get_files_status(ticker, start_date, end_date):
     return files_status
 
 
+# -
+
+def get_today_GMT():
+    # convert from system time to GMT
+    system_time = pd.Timestamp(datetime.now().astimezone())
+    today = system_time.tz_convert('GMT').tz_localize(None)
+    return today
+
+
+# + active="ipynb"
+# get_today_GMT()
+
 # + active="ipynb"
 # get_files_status('BTC-USD', get_today_GMT() - pd.Timedelta('10d'), get_today_GMT())
 
@@ -138,11 +153,12 @@ def get_today(ticker, granularity):
     start_ = '{}-00-00'.format(today.strftime('%Y-%m-%d'))
     end_ = today.strftime('%Y-%m-%d-%H-%M')
     try:
-        return HistoricalData(ticker,
-                              granularity,
-                              start_,
-                              end_,
-                              ).retrieve_data()
+        df = HistoricalData(ticker,
+                            granularity,
+                            start_,
+                            end_,
+                            ).retrieve_data()
+        return df
     except:
         logger.warning('could not load using {} {}'.format(start_, end_))
         raise
@@ -154,13 +170,8 @@ def get_age(fname):
     mtime=st.st_mtime
     return pd.Timestamp.now() - datetime.fromtimestamp(mtime)
 
-def get_today_GMT():
-    # convert from system time to GMT
-    system_time = pd.Timestamp(datetime.now().astimezone())
-    today = system_time.tz_convert('GMT')
-    return today
         
-def get_history(ticker, user_tz, start_date, end_date = None, granularity=granularity):
+def get_history(ticker, start_date, end_date = None, granularity=granularity):
     """Fetch/load historical data from Coinbase API at specified granularity
     
     Data loaded from start_date through end of end_date
@@ -171,26 +182,26 @@ def get_history(ticker, user_tz, start_date, end_date = None, granularity=granul
 
     price data is saved by ticker and date and stored in audiolizer_temp_dir
     
-    There are three timezones to keep track of!
-    user timezone: the timezone the user is in (display time)
+    There are two timezones to keep track of. Assume input in GMT
     system timezone: the timezone of the machine the audiolizer is run from
     GMT: the timezone that price history is fetched/stored in
     """
-    logger.info('user timzeone: {}'.format(user_tz))
-    start_date = pd.to_datetime(start_date).tz_localize(user_tz).tz_convert('GMT')
+    start_date = pd.to_datetime(start_date)
 
-    today = get_today_GMT()
+    today = get_today_GMT() #tz-naive but value matches GMT
 
     if end_date is None:
         # don't include today
         end_date = today
+        logger.info('no end_date provided, using {}'.format(end_date))
     else:
         # convert the user-specified date and timezone to GMT
-        end_date = pd.to_datetime(end_date).tz_localize(user_tz).tz_convert('GMT')
+        end_date = pd.to_datetime(end_date)
         # prevent queries from the future
         end_date = min(today, end_date)
+        logger.info('using end_date {}'.format(end_date))
     
-    assert start_date < end_date
+    assert start_date <= end_date
     
     logger.info('getting {} files status: {} -> {}'.format(ticker, start_date, end_date))
     files_status = get_files_status(ticker, start_date, end_date)
@@ -220,18 +231,30 @@ def get_history(ticker, user_tz, start_date, end_date = None, granularity=granul
             today_data = get_today(ticker, granularity)
             today_data.to_csv(today_fname, compression='gzip')
         df = pd.concat([df, today_data]).drop_duplicates()
-    df.index = df.index.tz_localize('GMT').tz_convert(user_tz)
     return df
+# -
+
+to = get_today('BTC-USD', 300)
+
+to.index
 
 # + active="ipynb"
-# hist = get_history('BTC-USD', 'EST',
-#                    '2021-07-09',
+# hist = get_history('BTC-USD',
+#                    '2021-07-18',
 # #                   pd.Timestamp.now().tz_localize(None)-pd.Timedelta('3D'),
 #                   )
 # hist
 
 # + active="ipynb"
 # from audiolizer import candlestick_plot
+# from plotly import graph_objs as go
 
 # + active="ipynb"
 # candlestick_plot(hist, 'BTC', 'USD')
+# -
+
+# Show today's prices
+
+# + active="ipynb"
+# today_file = 'history/BTC-USD-today.csv.gz'
+# pd.read_csv(today_file, index_col='time', parse_dates=True, compression='gzip')
