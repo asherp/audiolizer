@@ -1,3 +1,5 @@
+* fixed data gap
+* yesterday's date gets overwritten when switching from `1d` -> `1w`
 
 ### 2021-07-20 22:11:47.205082: clock-in
 

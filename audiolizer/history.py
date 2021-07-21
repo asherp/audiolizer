@@ -36,7 +36,7 @@ def get_timezones(url):
 
 granularity = int(os.environ.get('AUDIOLIZER_GRANULARITY', 300)) # seconds
 
-audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history/')
+audiolizer_temp_dir = os.environ.get('AUDIOLIZER_TEMP', './history')
 logger.info('audiolizer temp data: {}'.format(audiolizer_temp_dir))
 
 max_age = pd.Timedelta(os.environ.get('AUDIOLIZER_MAX_AGE', '5m'))
@@ -105,11 +105,13 @@ def fetch_missing(files_status, ticker, granularity):
         t2 += pd.Timedelta('1D')
         endpoints = [t.strftime('%Y-%m-%d-%H-%M') for t in [t1, t2]]
         logger.info('fetching {}, {}'.format(len(g), endpoints))
-        df = fetch_data(ticker, granularity, *endpoints)
+        df = fetch_data(ticker, granularity, *endpoints).loc[t1:t2] # only grab data between endpoints
         write_data(df, ticker)
 
         
 def get_files_status(ticker, start_date, end_date):
+    start_date = pd.to_datetime(start_date.date())
+    end_date = pd.to_datetime(end_date.date())
     fnames = []
     foundlings = []
     dates = []
@@ -142,9 +144,37 @@ def get_today_GMT():
 
 # + active="ipynb"
 # get_today_GMT()
+# -
 
-# + active="ipynb"
-# get_files_status('BTC-USD', get_today_GMT() - pd.Timedelta('10d'), get_today_GMT())
+# * getting BTC-USD files status: 2021-07-20 00:00:00 -> 2021-07-21 03:50:49.619707
+# * INFO:history:getting BTC-USD files status: 2021-07-20 00:00:00 -> 2021-07-21 04:07:48.872110
+# * 2021-07-14 00:00:00 -> 2021-07-21 04:07:22.738431
+
+files_status = get_files_status('BTC-USD', pd.to_datetime('2021-07-14 00:00:00'), pd.to_datetime('2021-07-21 04:07:22.738431'))
+
+files_status
+
+# +
+for batch, g in files_status[files_status.found==0].groupby('batch', sort=False):
+    t1, t2 = g.iloc[[0, -1]].index
+    # extend by 1 day whether or not t1 == t2
+    t2 += pd.Timedelta('1D')
+    endpoints = [t.strftime('%Y-%m-%d-%H-%M') for t in [t1, t2]]
+    print('fetching {}, {}'.format(len(g), endpoints))
+    df = fetch_data('BTC-USD', granularity, *endpoints)
+#     write_data(df, ticker)
+
+        
+# -
+
+df.tail()
+
+endpoints
+
+pd.to_datetime(endpoints[-1]).tz_localize(None)
+
+df.loc[:pd.to_datetime(endpoints[-1]).tz_localize(None)]
+
 
 # +
 def get_today(ticker, granularity):
