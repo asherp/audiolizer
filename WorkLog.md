@@ -1,3 +1,6 @@
+
+### 2021-07-20 22:11:47.205082: clock-in
+
 ### 2021-07-19 22:33:01.462182: clock-out
 
 * reverting timezone selection, too buggy
