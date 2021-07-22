@@ -342,8 +342,10 @@ def update_date_range(date_select,
     ):
     period, cadence = date_select.split('-')
     today = get_today_GMT().tz_localize('GMT') #.tz_convert(timezone)
+    logger.info('Period was {}'.format(period))
     start_date = (today-pd.Timedelta(period)).strftime('%Y-%m-%d')
-    end_date = (today+pd.Timedelta('1d')).strftime('%Y-%m-%d')
+#     end_date = (today+pd.Timedelta('1d')).strftime('%Y-%m-%d')
+    end_date = today.strftime('%Y-%m-%d')
 
     date_range_start = start_date
     date_range_end = end_date
@@ -379,6 +381,11 @@ def play(base, quote, start, end, cadence, log_freq_range,
         logger.info('cannot get history for {} {} {}'.format(ticker, start, end))
         raise
     start_, end_ = new.index[[0, -1]]
+
+    if (end_-start_).days == 1:
+        # make sure we get exactly 24 hrs of data
+        logger.info('make sure we get exactly 24 hrs of data')
+        start_ = end_ - pd.Timedelta('1d')
 
     if toggle_merge:
         merged = 'merged'
@@ -422,6 +429,8 @@ def play(base, quote, start, end, cadence, log_freq_range,
 #         logger.info(start_select, end_select, play_time)
 
     new_ = refactor(new[start_:end_], cadence)
+    logger.info('{}->{}'.format(*new_.index[[0,-1]]))
+    
     midi_asset = app.get_asset_url(midi_file)
 
     if os.path.exists(fname):

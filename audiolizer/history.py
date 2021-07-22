@@ -154,7 +154,6 @@ files_status = get_files_status('BTC-USD', pd.to_datetime('2021-07-14 00:00:00')
 
 files_status
 
-# +
 for batch, g in files_status[files_status.found==0].groupby('batch', sort=False):
     t1, t2 = g.iloc[[0, -1]].index
     # extend by 1 day whether or not t1 == t2
@@ -163,18 +162,6 @@ for batch, g in files_status[files_status.found==0].groupby('batch', sort=False)
     print('fetching {}, {}'.format(len(g), endpoints))
     df = fetch_data('BTC-USD', granularity, *endpoints)
 #     write_data(df, ticker)
-
-        
-# -
-
-df.tail()
-
-endpoints
-
-pd.to_datetime(endpoints[-1]).tz_localize(None)
-
-df.loc[:pd.to_datetime(endpoints[-1]).tz_localize(None)]
-
 
 # +
 def get_today(ticker, granularity):
@@ -228,7 +215,7 @@ def get_history(ticker, start_date, end_date = None, granularity=granularity):
         # convert the user-specified date and timezone to GMT
         end_date = pd.to_datetime(end_date)
         # prevent queries from the future
-        end_date = min(today, end_date)
+        end_date = min(today, end_date) + pd.Timedelta('1d')
         logger.info('using end_date {}'.format(end_date))
     
     assert start_date <= end_date
@@ -270,7 +257,7 @@ to.index
 
 # + active="ipynb"
 # hist = get_history('BTC-USD',
-#                    '2021-07-18',
+#                    '07/21/2021',
 # #                   pd.Timestamp.now().tz_localize(None)-pd.Timedelta('3D'),
 #                   )
 # hist

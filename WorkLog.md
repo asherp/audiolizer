@@ -1,3 +1,4 @@
+* fixed date range to match candlestick, viewing exactly 24 hrs
 
 ### 2021-07-21 21:12:39.575147: clock-in
 
