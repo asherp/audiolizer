@@ -1,3 +1,6 @@
+# ARCHIVING THIS REPO
+
+The official repo has moved over here https://github.com/Audiolizer/audiolizer
 
 ## [AUDIOLIZER](https://github.com/Audiolizer/audiolizer)
 #### Market audiolization dashboard
